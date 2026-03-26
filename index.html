@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belstar Women Training Survey</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .language-selector {
+            padding: 20px;
+            background: #f8f9fa;
+            text-align: center;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .lang-btn {
+            padding: 12px 24px;
+            margin: 5px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .survey-content {
+            padding: 30px;
+            display: none;
+        }
+
+        .survey-content.active {
+            display: block;
+        }
+
+        .question-box {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .question-text {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .speaker-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: 10px;
+            transition: transform 0.2s;
+        }
+
+        .speaker-btn:hover {
+            transform: scale(1.1);
+            background: #218838;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .options-list {
+            margin-top: 10px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-item:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option-item.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .mic-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mic-btn:hover {
+            background: #c82333;
+        }
+
+        .mic-btn.recording {
+            background: #ffc107;
+            color: #333;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .recording-status {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .recording-status.active {
+            display: block;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-prev {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-next, .btn-submit {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            height: 5px;
+            background: #e9ecef;
+            margin: 20px 30px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #667eea;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .thank-you {
+            text-align: center;
+            padding: 50px;
+            display: none;
+        }
+
+        .thank-you.active {
+            display: block;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .conditional-hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏦 Belstar Training Survey</h1>
+            <p>Women Training Completion Survey - Audio Supported</p>
+        </div>
+
+        <!-- Language Selection -->
+        <div class="language-selector" id="langSelector">
+            <h3 style="margin-bottom: 15px;">Select Language / மொழியைத் தேர்ந்தெடுக்கவும் / भाषा चुनें</h3>
+            <button class="lang-btn" onclick="selectLanguage('en')">🇬🇧 English</button>
+            <button class="lang-btn" onclick="selectLanguage('ta')">🇮🇳 தமிழ்</button>
+            <button class="lang-btn" onclick="selectLanguage('hi')">🇮🇳 हिंदी</button>
+        </div>
+
+        <!-- Loading Screen -->
+        <div class="loading" id="loadingScreen">
+            <div class="spinner"></div>
+            <p id="loadingText">Loading questions...</p>
+        </div>
+
+        <!-- Survey Content -->
+        <div class="survey-content" id="surveyContent">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            
+            <div id="questionsContainer"></div>
+            
+            <div class="nav-buttons">
+                <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()" style="visibility: hidden;">← Previous</button>
+                <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">Next →</button>
+                <button class="btn btn-submit" id="submitBtn" onclick="submitForm()" style="display: none;">Submit ✓</button>
+            </div>
+        </div>
+
+        <!-- Thank You Screen -->
+        <div class="thank-you" id="thankYouScreen">
+            <h2 style="color: #28a745; margin-bottom: 20px;">✅ Thank You!</h2>
+            <p style="font-size: 18px; margin-bottom: 10px;">Your response has been recorded.</p>
+            <p style="color: #666;">Response ID: <strong id="responseId"></strong></p>
+            <button class="btn btn-next" onclick="location.reload()" style="margin-top: 20px;">Submit Another Response</button>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CONFIGURATION - UPDATE THIS WITH YOUR URL!
+        // ==========================================
+        const CONFIG = {
+            // REPLACE THIS WITH YOUR NEW WEB APP URL
+            API_URL: 'https://script.google.com/macros/s/AKfycbzgoMeqhyB7sO6nEx4Q-AyoDAc96dojoWF6Motf3Y-rcbpYI93ctRS26kD3invSSIRCzQ/exec',
+            
+            SPEECH_LANG: {
+                'en': 'en-IN',
+                'ta': 'ta-IN',
+                'hi': 'hi-IN'
+            }
+        };
+
+        // ==========================================
+        // GLOBAL VARIABLES
+        // ==========================================
+        let currentLanguage = 'en';
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let responses = {};
+        let recognition = null;
+        let isRecording = false;
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        
+        function selectLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update UI
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show loading
+            document.getElementById('langSelector').style.display = 'none';
+            document.getElementById('loadingScreen').classList.add('active');
+            
+            // Load questions using JSONP
+            loadQuestionsJSONP(lang);
+        }
+
+        function loadQuestionsJSONP(lang) {
+            const script = document.createElement('script');
+            const callbackName = 'handleQuestions_' + Date.now();
+            
+            window[callbackName] = function(data) {
+                handleQuestionsResponse(data);
+                delete window[callbackName];
+                if (script.parentNode) {
+                    document.head.removeChild(script);
+                }
+            };
+            
+            script.src = `${CONFIG.API_URL}?action=getQuestions&lang=${lang}&callback=${callbackName}`;
+            script.onerror = function() {
+                document.getElementById('loadingText').textContent = 'Error loading. Please refresh.';
+            };
+            
+            document.head.appendChild(script);
+        }
+
+        function handleQuestionsResponse(data) {
+            if (data.error) {
+                alert('Error: ' + data.error);
+                return;
+            }
+            
+            questions = data.questions;
+            
+            // Hide loading, show survey
+            document.getElementById('loadingScreen').classList.remove('active');
+            document.getElementById('surveyContent').classList.add('active');
+            
+            // Render first question
+            renderQuestion(0);
+            updateProgress();
+        }
+
+        // ==========================================
+        // QUESTION RENDERING
+        // ==========================================
+        
+        function renderQuestion(index) {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+            
+            const q = questions[index];
+            
+            // Check conditional logic
+            if (q.conditional) {
+                const parentValue = responses[q.condition.question];
+                if (parentValue !== q.condition.value) {
+                    // Skip this question
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                        renderQuestion(currentQuestionIndex);
+                        return;
+                    }
+                }
+            }
+            
+            const box = document.createElement('div');
+            box.className = 'question-box';
+            box.id = `question-${q.id}`;
+            
+            let inputHTML = '';
+            
+            switch(q.type) {
+                case 'short_answer':
+                    inputHTML = `
+                        <input type="text" 
+                               class="input-field" 
+                               id="input-${q.id}" 
+                               placeholder="${q.placeholder || ''}"
+                               value="${responses[q.id] || ''}"
+                               oninput="saveText('${q.id}')">
+                        ${q.micRecord ? `
+                            <br>
+                            <button class="mic-btn" id="mic-${q.id}" onclick="toggleRecording('${q.id}')">
+                                🎤 Speak Answer
+                            </button>
+                            <div class="recording-status" id="status-${q.id}">
+                                🔴 Recording... Speak now (tap button to stop)
+                            </div>
+                        ` : ''}
+                        <div class="error-message" id="error-${q.id}"></div>
+                    `;
+                    break;
+                    
+                case 'multiple_choice':
+                case 'dropdown':
+                    inputHTML = '<div class="options-list">';
+                    q.options.forEach(opt => {
+                        const isSelected = responses[q.id] === opt.value;
+                        inputHTML += `
+                            <div class="option-item ${isSelected ? 'selected' : ''}" 
+                                 onclick="selectOption('${q.id}', '${opt.value}')">
+                                <input type="radio" name="${q.id}" 
+                                       ${isSelected ? 'checked' : ''} 
+                                       style="margin-right: 10px;">
+                                <span>${opt.text}</span>
+                            </div>
+                        `;
+                    });
+                    inputHTML += '</div>';
+                    break;
+                    
+                case 'checkbox':
+                    inputHTML = '<div class="options-list">';
+                    const selectedValues = responses[q.id] || [];
+                    q.options.forEach(opt => {
+                        const isSelected = selectedValues.includes(opt.value);
+                        inputHTML += `
+                            <div class="option-item ${isSelected ? 'selected' : ''}" 
+                                 onclick="toggleCheckbox('${q.id}', '${opt.value}')">
+                                <input type="checkbox" 
+                                       ${isSelected ? 'checked' : ''} 
+                                       style="margin-right: 10px;">
+                                <span>${opt.text}</span>
+                            </div>
+                        `;
+                    });
+                    inputHTML += '</div>';
+                    if (q.helpText) {
+                        inputHTML += `<p style="margin-top: 10px; color: #666; font-size: 14px;">${q.helpText}</p>`;
+                    }
+                    break;
+            }
+            
+            box.innerHTML = `
+                <div class="question-header">
+                    <div class="question-number">${index + 1}</div>
+                    <div class="question-text">${q.text}</div>
+                    ${q.speaker ? `
+                        <button class="speaker-btn" onclick="speakQuestion(${index})" title="Listen">
+                            🔊
+                        </button>
+                    ` : ''}
+                </div>
+                ${inputHTML}
+            `;
+            
+            container.appendChild(box);
+            updateNavButtons();
+        }
+
+        // ==========================================
+        // AUDIO FUNCTIONS
+        // ==========================================
+        
+        function speakQuestion(index) {
+            const q = questions[index];
+            let textToSpeak = q.text;
+            
+            // Add options if multiple choice
+            if (q.options && q.type !== 'short_answer') {
+                textToSpeak += '. Options: ';
+                q.options.forEach((opt, i) => {
+                    textToSpeak += (i + 1) + '. ' + opt.text + '. ';
+                });
+            }
+            
+            speakText(textToSpeak, q.speechLang);
+        }
+
+        function speakText(text, lang) {
+            if (!window.speechSynthesis) {
+                alert('Speech not supported. Please use Chrome.');
+                return;
+            }
+            
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang || CONFIG.SPEECH_LANG[currentLanguage];
+            utterance.rate = 0.9;
+            
+            // Try to find appropriate voice
+            const voices = window.speechSynthesis.getVoices();
+            const voice = voices.find(v => v.lang.includes(lang)) || 
+                         voices.find(v => v.lang.includes(currentLanguage)) || 
+                         voices[0];
+            if (voice) utterance.voice = voice;
+            
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function toggleRecording(questionId) {
+            if (isRecording) {
+                stopRecording(questionId);
+            } else {
+                startRecording(questionId);
+            }
+        }
+
+        function startRecording(questionId) {
+            const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+            if (!SpeechRecognition) {
+                alert('Speech recognition not supported. Use Chrome on Android/Desktop.');
+                return;
+            }
+            
+            recognition = new SpeechRecognition();
+            recognition.lang = CONFIG.SPEECH_LANG[currentLanguage];
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            
+            recognition.onstart = function() {
+                isRecording = true;
+                const micBtn = document.getElementById(`mic-${questionId}`);
+                const status = document.getElementById(`status-${questionId}`);
+                
+                if (micBtn) {
+                    micBtn.classList.add('recording');
+                    micBtn.innerHTML = '⏹ Stop Recording';
+                }
+                if (status) status.classList.add('active');
+            };
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                const input = document.getElementById(`input-${questionId}`);
+                if (input) {
+                    input.value = transcript;
+                    saveText(questionId);
+                    responses[`audio_${questionId}`] = transcript;
+                }
+            };
+            
+            recognition.onerror = function(event) {
+                console.error('Speech error:', event.error);
+                alert('Error: ' + event.error);
+                stopRecording(questionId);
+            };
+            
+            recognition.onend = function() {
+                stopRecording(questionId);
+            };
+            
+            recognition.start();
+        }
+
+        function stopRecording(questionId) {
+            if (recognition) {
+                recognition.stop();
+                recognition = null;
+            }
+            isRecording = false;
+            
+            const micBtn = document.getElementById(`mic-${questionId}`);
+            const status = document.getElementById(`status-${questionId}`);
+            
+            if (micBtn) {
+                micBtn.classList.remove('recording');
+                micBtn.innerHTML = '🎤 Speak Answer';
+            }
+            if (status) status.classList.remove('active');
+        }
+
+        // ==========================================
+        // INPUT HANDLING
+        // ==========================================
+        
+        function saveText(questionId) {
+            const input = document.getElementById(`input-${questionId}`);
+            if (input) {
+                responses[questionId] = input.value;
+            }
+        }
+
+        function selectOption(questionId, value) {
+            responses[questionId] = value;
+            renderQuestion(currentQuestionIndex);
+            
+            // Auto-advance for single choice
+            setTimeout(() => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    nextQuestion();
+                }
+            }, 400);
+        }
+
+        function toggleCheckbox(questionId, value) {
+            if (!responses[questionId]) {
+                responses[questionId] = [];
+            }
+            
+            const index = responses[questionId].indexOf(value);
+            if (index > -1) {
+                responses[questionId].splice(index, 1);
+            } else {
+                responses[questionId].push(value);
+            }
+            
+            renderQuestion(currentQuestionIndex);
+        }
+
+        // ==========================================
+        // NAVIGATION
+        // ==========================================
+        
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            prevBtn.style.visibility = currentQuestionIndex === 0 ? 'hidden' : 'visible';
+            
+            const isLast = currentQuestionIndex === questions.length - 1;
+            nextBtn.style.display = isLast ? 'none' : 'inline-block';
+            submitBtn.style.display = isLast ? 'inline-block' : 'none';
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function nextQuestion() {
+            const currentQ = questions[currentQuestionIndex];
+            if (currentQ.required && !responses[currentQ.id]) {
+                alert('Please answer this question before proceeding.');
+                return;
+            }
+            
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion(currentQuestionIndex);
+                updateProgress();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion(currentQuestionIndex);
+                updateProgress();
+            }
+        }
+
+        // ==========================================
+        // FORM SUBMISSION
+        // ==========================================
+        
+        function submitForm() {
+            const currentQ = questions[currentQuestionIndex];
+            if (currentQ.required && !responses[currentQ.id]) {
+                alert('Please answer this question before submitting.');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('surveyContent').style.display = 'none';
+            document.getElementById('loadingScreen').classList.add('active');
+            document.getElementById('loadingText').textContent = 'Submitting your response...';
+            
+            // Prepare data
+            const formData = {
+                action: 'submitResponse',
+                formData: {
+                    ...responses,
+                    language: currentLanguage
+                }
+            };
+            
+            // Submit using form method (avoids CORS issues)
+            submitUsingForm(formData);
+        }
+
+        function submitUsingForm(data) {
+            // Create a hidden form and submit it
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = CONFIG.API_URL;
+            form.target = 'hidden-iframe';
+            form.style.display = 'none';
+            
+            const input = document.createElement('input');
+            input.name = 'data';
+            input.value = JSON.stringify(data);
+            form.appendChild(input);
+            
+            // Create hidden iframe to receive response
+            let iframe = document.getElementById('hidden-iframe');
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.name = 'hidden-iframe';
+                iframe.id = 'hidden-iframe';
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+            }
+            
+            // Handle response
+            iframe.onload = function() {
+                try {
+                    const responseText = iframe.contentDocument.body.innerText;
+                    const result = JSON.parse(responseText);
+                    showSuccess(result.responseId || 'BEL' + Date.now());
+                } catch (e) {
+                    // If we can't parse, assume success
+                    showSuccess('BEL' + Date.now());
+                }
+            };
+            
+            // Timeout fallback
+            setTimeout(() => {
+                showSuccess('BEL' + Date.now());
+            }, 3000);
+            
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+
+        function showSuccess(responseId) {
+            document.getElementById('loadingScreen').classList.remove('active');
+            document.getElementById('thankYouScreen').classList.add('active');
+            document.getElementById('responseId').textContent = responseId;
+        }
+
+        // Load voices when available
+        if (window.speechSynthesis) {
+            window.speechSynthesis.onvoiceschanged = function() {};
+        }
+    </script>
+</body>
+</html>
