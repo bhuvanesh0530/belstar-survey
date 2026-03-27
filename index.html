@@ -14,7 +14,6 @@
             --primary-dark: #c2185b;
             --secondary: #ff9800;
             --accent: #9c27b0;
-            --bg-soft: #fef3f8;
             --white: #ffffff;
             --text-dark: #2d3748;
             --text-light: #718096;
@@ -50,10 +49,10 @@
             top: -50%; right: -50%;
             width: 100%; height: 100%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
+            animation: bgpulse 4s ease-in-out infinite;
         }
 
-        @keyframes pulse {
+        @keyframes bgpulse {
             0%, 100% { transform: scale(1); opacity: 0.5; }
             50% { transform: scale(1.1); opacity: 0.8; }
         }
@@ -82,7 +81,7 @@
         .instruction-box {
             background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
             border-radius: 20px; padding: 25px; margin-bottom: 30px;
-            border-left: 5px solid var(--secondary); position: relative;
+            border-left: 5px solid var(--secondary);
         }
 
         .instruction-speaker {
@@ -94,17 +93,12 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        .instruction-speaker:hover, .instruction-speaker:active {
-            transform: scale(1.1); box-shadow: 0 8px 30px rgba(255, 152, 0, 0.5);
-        }
+        .instruction-speaker.loading  { background: #ffc107; animation: btnPulse 0.6s ease-in-out infinite; }
+        .instruction-speaker.speaking { background: var(--primary); animation: btnPulse 1s ease-in-out infinite; }
 
-        .instruction-speaker.speaking {
-            animation: soundWave 1.2s ease-in-out infinite; background: var(--primary);
-        }
-
-        @keyframes soundWave {
+        @keyframes btnPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+            50% { transform: scale(1.12); }
         }
 
         .instruction-text { font-size: 18px; color: var(--text-dark); font-weight: 500; line-height: 1.5; }
@@ -118,7 +112,7 @@
             background: linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%);
             border: 3px solid transparent; border-radius: 20px;
             padding: 30px 20px; cursor: pointer; transition: all 0.4s;
-            position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .lang-card:hover, .lang-card:active {
@@ -146,15 +140,11 @@
             position: sticky; top: 10px; z-index: 100;
         }
 
-        .progress-header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 15px;
-        }
-
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .progress-title { font-size: 16px; font-weight: 600; color: var(--text-dark); }
         .progress-percent { font-size: 20px; font-weight: 700; color: var(--primary); }
-
         .progress-bar { height: 10px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
+
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
@@ -171,20 +161,15 @@
 
         .question-card:hover { box-shadow: var(--shadow-hover); }
 
-        .question-card.error {
-            border-left-color: #f44336;
-            animation: shake 0.5s;
-        }
+        .question-card.error { border-left-color: #f44336; animation: shake 0.5s; }
 
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            25%  { transform: translateX(-10px); }
+            75%  { transform: translateX(10px); }
         }
 
-        .question-header {
-            display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;
-        }
+        .question-header { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px; }
 
         .question-number {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
@@ -195,47 +180,23 @@
         }
 
         .question-content { flex: 1; }
+        .question-text { font-size: 17px; font-weight: 600; color: var(--text-dark); margin-bottom: 15px; line-height: 1.5; }
 
-        .question-text {
-            font-size: 17px; font-weight: 600; color: var(--text-dark);
-            margin-bottom: 15px; line-height: 1.5;
-        }
-
-        /* ===== SPEAKER BUTTON ===== */
+        /* ── Speaker button states ── */
         .speaker-btn {
             background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
             color: white; border: none; width: 45px; height: 45px;
             border-radius: 12px; cursor: pointer; font-size: 18px;
-            transition: all 0.3s; box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+            transition: background 0.3s; box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
             display: inline-flex; align-items: center; justify-content: center;
-            flex-shrink: 0; -webkit-tap-highlight-color: transparent; position: relative;
+            flex-shrink: 0; -webkit-tap-highlight-color: transparent;
         }
 
-        .speaker-btn:hover, .speaker-btn:active {
-            transform: scale(1.1); box-shadow: 0 8px 25px rgba(255, 152, 0, 0.5);
-        }
+        .speaker-btn:hover  { transform: scale(1.1); }
+        .speaker-btn.loading  { background: linear-gradient(135deg,#ffc107,#ff8f00); animation: btnPulse 0.6s infinite; }
+        .speaker-btn.speaking { background: linear-gradient(135deg,#f44336,#d32f2f); animation: btnPulse 1s infinite; }
 
-        /* LOADING state — amber pulse */
-        .speaker-btn.loading {
-            background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
-            animation: speakerPulse 0.6s ease-in-out infinite;
-        }
-
-        /* SPEAKING state — red */
-        .speaker-btn.speaking {
-            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-            animation: speakerPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes speakerPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.12); }
-        }
-
-        /* Loading spinner inside button */
-        .speaker-btn.loading .fa-volume-up::before { content: "\f110"; animation: spin 0.8s linear infinite; display: inline-block; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
+        /* Options */
         .options-container { display: flex; flex-direction: column; gap: 12px; }
 
         .option-item {
@@ -245,9 +206,7 @@
             cursor: pointer; transition: all 0.3s; -webkit-tap-highlight-color: transparent;
         }
 
-        .option-item:hover, .option-item:active {
-            border-color: var(--primary); background: white; transform: translateX(5px);
-        }
+        .option-item:hover { border-color: var(--primary); transform: translateX(5px); }
 
         .option-item.selected {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
@@ -288,37 +247,14 @@
             box-shadow: 0 5px 20px rgba(233, 30, 99, 0.3); -webkit-tap-highlight-color: transparent;
         }
 
-        .mic-btn:hover, .mic-btn:active {
-            transform: translateY(-3px); box-shadow: 0 10px 30px rgba(233, 30, 99, 0.4);
-        }
+        .mic-btn.recording { background: linear-gradient(135deg, #f44336, #d32f2f); animation: btnPulse 1.5s infinite; }
 
-        .mic-btn.recording {
-            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
-            animation: pulseRecord 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulseRecord {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .recording-status {
-            color: var(--primary); font-weight: 600;
-            display: flex; align-items: center; gap: 8px; font-size: 14px;
-        }
-
-        .recording-dot {
-            width: 10px; height: 10px; background: #f44336;
-            border-radius: 50%; animation: blink 1s infinite;
-        }
+        .recording-status { color: var(--primary); font-weight: 600; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+        .recording-dot { width: 10px; height: 10px; background: #f44336; border-radius: 50%; animation: blink 1s infinite; }
 
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        .mic-error {
-            color: #f44336; font-size: 13px; margin-top: 10px;
-            padding: 10px; background: #ffebee; border-radius: 10px; display: none;
-        }
-
+        .mic-error { color: #f44336; font-size: 13px; margin-top: 10px; padding: 10px; background: #ffebee; border-radius: 10px; display: none; }
         .mic-error.show { display: block; }
 
         .submit-section { margin-top: 40px; text-align: center; padding-bottom: 40px; }
@@ -328,14 +264,10 @@
             color: white; border: none; padding: 18px 50px; border-radius: 50px;
             font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s;
             box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
-            display: inline-flex; align-items: center; gap: 12px;
-            -webkit-tap-highlight-color: transparent;
+            display: inline-flex; align-items: center; gap: 12px; -webkit-tap-highlight-color: transparent;
         }
 
-        .submit-btn:hover, .submit-btn:active {
-            transform: translateY(-5px); box-shadow: 0 15px 40px rgba(72, 187, 120, 0.4);
-        }
-
+        .submit-btn:hover { transform: translateY(-5px); }
         .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .loading-screen, .success-screen { display: none; text-align: center; padding: 60px 20px; }
@@ -344,19 +276,15 @@
         .spinner {
             width: 70px; height: 70px; border: 5px solid #f3f3f3;
             border-top: 5px solid var(--primary); border-radius: 50%;
-            animation: spinLoader 1s linear infinite; margin: 0 auto 30px;
+            animation: spin 1s linear infinite; margin: 0 auto 30px;
         }
 
-        @keyframes spinLoader { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        .success-icon {
-            font-size: 90px; color: var(--success); margin-bottom: 30px; animation: scaleIn 0.5s ease;
-        }
+        .success-icon { font-size: 90px; color: var(--success); margin-bottom: 30px; animation: scaleIn 0.5s ease; }
 
         @keyframes scaleIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            0% { transform: scale(0); } 50% { transform: scale(1.2); } 100% { transform: scale(1); }
         }
 
         .success-title { font-size: 28px; color: var(--text-dark); margin-bottom: 15px; }
@@ -384,7 +312,6 @@
         .conditional-hidden { display: none !important; }
 
         .checkbox-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
-
         @media (min-width: 600px) { .checkbox-grid { grid-template-columns: 1fr 1fr; } }
 
         .checkbox-item {
@@ -394,7 +321,7 @@
             cursor: pointer; transition: all 0.3s; -webkit-tap-highlight-color: transparent;
         }
 
-        .checkbox-item:hover, .checkbox-item:active { border-color: var(--primary); transform: translateY(-3px); }
+        .checkbox-item:hover { border-color: var(--primary); transform: translateY(-3px); }
 
         .checkbox-item.selected {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
@@ -402,52 +329,46 @@
         }
 
         .checkbox-box {
-            width: 22px; height: 22px; border: 3px solid currentColor;
-            border-radius: 6px; margin-right: 12px;
-            display: flex; align-items: center; justify-content: center;
+            width: 22px; height: 22px; border: 3px solid currentColor; border-radius: 6px;
+            margin-right: 12px; display: flex; align-items: center; justify-content: center;
             font-size: 12px; flex-shrink: 0;
         }
 
         .checkbox-item.selected .checkbox-box { background: white; color: var(--primary); }
         .help-text { color: var(--text-light); font-size: 13px; margin-top: 10px; font-style: italic; }
 
-        /* TTS Status bar */
-        #ttsStatusBar {
+        /* TTS status bar */
+        #ttsBar {
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(30,30,30,0.92); color: #fff; padding: 10px 24px;
-            border-radius: 30px; font-size: 14px; font-weight: 500;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 9999;
-            display: none; align-items: center; gap: 10px; white-space: nowrap;
-            max-width: 90vw; overflow: hidden; text-overflow: ellipsis;
+            background: rgba(20,20,20,0.92); color: #fff;
+            padding: 10px 24px; border-radius: 30px; font-size: 14px; font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.35); z-index: 9999;
+            display: none; align-items: center; gap: 10px;
+            max-width: 90vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
 
-        #ttsStatusBar.show { display: flex; }
-        #ttsStatusBar .tts-dot {
-            width: 8px; height: 8px; background: #4caf50;
-            border-radius: 50%; flex-shrink: 0; animation: blink 0.8s infinite;
-        }
+        #ttsBar.show { display: flex; }
+        #ttsBar .dot { width: 8px; height: 8px; background: #4caf50; border-radius: 50%; flex-shrink: 0; animation: blink 0.8s infinite; }
     </style>
 </head>
 <body>
 <div class="container">
 
-    <!-- Header -->
     <header class="main-header">
         <i class="fas fa-female header-icon"></i>
         <h1>Belstar SHG Women Training Completion Survey</h1>
         <p>Empowering Women Through Digital Literacy</p>
     </header>
 
-    <!-- Language Selection -->
     <section class="lang-section" id="langSection">
         <h2 class="lang-title">Welcome / வணக்கம் / नमस्ते</h2>
         <p class="lang-subtitle">Please select your preferred language to continue</p>
 
         <div class="instruction-box">
-            <button class="instruction-speaker" onclick="speakInstruction()" id="instructionSpeaker" title="Tap to listen">
+            <button class="instruction-speaker" onclick="speakInstruction()" id="instrBtn" title="Tap to listen">
                 <i class="fas fa-volume-up"></i>
             </button>
-            <p class="instruction-text" id="instructionText">
+            <p class="instruction-text" id="instrText">
                 Please select your preferred language – English, Tamil, or Hindi
             </p>
         </div>
@@ -468,14 +389,12 @@
         </div>
     </section>
 
-    <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="spinner"></div>
         <h3>Loading your survey...</h3>
         <p>Please wait while we prepare the questions</p>
     </div>
 
-    <!-- Survey Container -->
     <div class="survey-container" id="surveyContainer">
         <div class="progress-section">
             <div class="progress-header">
@@ -483,21 +402,17 @@
                 <span class="progress-percent" id="progressPercent">0%</span>
             </div>
             <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                <div class="progress-fill" id="progressFill" style="width:0%"></div>
             </div>
         </div>
-
         <div class="questions-wrapper" id="questionsWrapper"></div>
-
         <div class="submit-section">
             <button class="submit-btn" onclick="submitSurvey()" id="submitBtn">
-                <i class="fas fa-paper-plane"></i>
-                Submit Survey
+                <i class="fas fa-paper-plane"></i> Submit Survey
             </button>
         </div>
     </div>
 
-    <!-- Success Screen -->
     <div class="success-screen" id="successScreen">
         <i class="fas fa-check-circle success-icon"></i>
         <h2 class="success-title">Thank You!</h2>
@@ -506,607 +421,498 @@
             <div class="response-id-label">Response ID</div>
             <div class="response-id-value" id="responseIdValue">BEL123456</div>
         </div>
-        <button class="submit-btn" onclick="location.reload()" style="margin-top: 30px;">
-            <i class="fas fa-redo"></i>
-            Submit Another Response
+        <button class="submit-btn" onclick="location.reload()" style="margin-top:30px">
+            <i class="fas fa-redo"></i> Submit Another Response
         </button>
     </div>
-
 </div>
 
-<!-- TTS Status Bar -->
-<div id="ttsStatusBar">
-    <span class="tts-dot"></span>
-    <span id="ttsStatusText">Playing audio...</span>
-</div>
+<!-- TTS status bar -->
+<div id="ttsBar"><span class="dot"></span><span id="ttsMsg">Loading audio...</span></div>
 
 <script>
-// ==========================================
-// CONFIGURATION
-// ==========================================
-const CONFIG = {
-    API_URL: 'https://script.google.com/macros/s/AKfycbzgoMeqhyB7sO6nEx4Q-AyoDAc96dojoWF6Motf3Y-rcbpYI93ctRS26kD3invSSIRCzQ/exec',
-    SPEECH_LANG: { 'en': 'en-IN', 'ta': 'ta-IN', 'hi': 'hi-IN' },
-    TTS_LANG_CODE: { 'en': 'en', 'ta': 'ta', 'hi': 'hi' },
-    INSTRUCTION_TEXT: {
-        'en': 'Please select your preferred language – English, Tamil, or Hindi',
-        'ta': 'உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும் – ஆங்கிலம், தமிழ், அல்லது இந்தி',
-        'hi': 'कृपया अपनी पसंदीदा भाषा चुनें – अंग्रेजी, तमिल, या हिंदी'
-    },
-    // Max chars per TTS chunk — Google TTS limit is ~200
-    CHUNK_SIZE: 180
+// ═══════════════════════════════════════════════
+//  CONFIG
+// ═══════════════════════════════════════════════
+const API_URL = 'https://script.google.com/macros/s/AKfycbzgoMeqhyB7sO6nEx4Q-AyoDAc96dojoWF6Motf3Y-rcbpYI93ctRS26kD3invSSIRCzQ/exec';
+
+const SPEECH_LANG = { en: 'en-IN', ta: 'ta-IN', hi: 'hi-IN' };
+
+const INSTR = {
+    en: 'Please select your preferred language – English, Tamil, or Hindi',
+    ta: 'உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும் – ஆங்கிலம், தமிழ், அல்லது இந்தி',
+    hi: 'कृपया अपनी पसंदीदा भाषा चुनें – अंग्रेजी, तमिल, या हिंदी'
 };
 
-// ==========================================
-// GLOBAL VARIABLES
-// ==========================================
-let currentLanguage = 'en';
-let questions = [];
-let responses = {};
-let recognition = null;
-let isRecording = false;
-let currentRecordingField = null;
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let currentLang       = 'en';
+let questions         = [];
+let responses         = {};
 
-// TTS state
-let ttsQueue = [];
-let ttsPlaying = false;
-let currentAudio = null;
-let activeSpeakerBtnId = null;
+// TTS
+let ttsPlaying        = false;
+let activeBtn         = null;
+let currentAudioEl    = null;
+let abortChunks       = false;
 
-// ==========================================
-// ====  CORE TTS ENGINE  ====
+// Mic
+let recognition       = null;
+let isRecording       = false;
+let currentRecFld     = null;
+
+// ═══════════════════════════════════════════════
+//  TTS ENGINE
 //
-// Strategy (in priority order, per-language):
-//   Tamil/Hindi  → Google Translate TTS audio  (direct fetch, no proxy)
-//   English      → native speechSynthesis  (instant, no network)
+//  THE KEY FIX EXPLAINED:
+//  ─────────────────────
+//  Old code used  client=gtx  → robotic machine voice, sometimes switches
+//  language mid-sentence because gtx is a translation API, not a TTS API.
 //
-// Tamil is chunked to stay under the 200-char URL limit.
-// Audio is pre-fetched as a Blob URL so playback is instant.
-// ==========================================
+//  New code uses  client=tw-ob  → this is the actual Google Translate
+//  mobile/web TEXT-TO-SPEECH client. It produces:
+//    • Natural Tamil female voice (same as google.com/translate page)
+//    • Natural Hindi voice
+//    • No language switching mid-audio
+//
+//  Additionally we pass  idx / textlen / prev / total  parameters so
+//  Google's server knows the position within a larger text, which prevents
+//  the server from silently truncating long audio chunks.
+//
+//  Text is pre-split into ≤180-char chunks at sentence boundaries BEFORE
+//  fetching, so each URL stays within Google's limit.
+//  All chunks are fetched in PARALLEL (Promise.all), then played
+//  sequentially — zero gap between chunks.
+// ═══════════════════════════════════════════════
 
-/**
- * Split long text into ≤ CHUNK_SIZE character pieces,
- * breaking only at sentence/clause boundaries.
- */
-function splitTextChunks(text, maxLen) {
-    maxLen = maxLen || CONFIG.CHUNK_SIZE;
-    // Normalise newlines
-    const cleaned = text.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
+/** Split text into ≤maxLen char chunks at sentence/clause boundaries */
+function chunkText(text, maxLen) {
+    maxLen = maxLen || 180;
+    text   = text.replace(/\s+/g, ' ').trim();
+    if (text.length <= maxLen) return [text];
 
-    if (cleaned.length <= maxLen) return [cleaned];
+    var result = [];
+    // Split on sentence-ending punctuation (Tamil, Devanagari, Latin)
+    var segs = text.split(/(?<=[.!?।,])\s*/u);
+    var cur  = '';
 
-    const chunks = [];
-    // Split at Tamil sentence ends (।), period, exclamation, question, comma, space
-    const sentenceRe = /[^.!?,।\s]+(?:[.!?,।]+\s*|(?:\s+(?=[A-Z\u0B80-\u0BFF\u0900-\u097F])))/g;
-    let current = '';
-    let m;
+    for (var i = 0; i < segs.length; i++) {
+        var seg = segs[i];
+        if (!seg.trim()) continue;
 
-    // Try sentence-aware splitting first
-    const parts = cleaned.split(/([.!?,।]+\s*)/);
-    for (let i = 0; i < parts.length; i++) {
-        const seg = parts[i];
-        if ((current + seg).length <= maxLen) {
-            current += seg;
+        if ((cur + ' ' + seg).trim().length <= maxLen) {
+            cur = (cur + ' ' + seg).trim();
         } else {
-            if (current.trim()) chunks.push(current.trim());
-            // If a single segment is too long, force-split by words
-            if (seg.length > maxLen) {
-                const words = seg.split(' ');
-                current = '';
-                for (const w of words) {
-                    if ((current + ' ' + w).trim().length <= maxLen) {
-                        current = (current + ' ' + w).trim();
+            if (cur) result.push(cur);
+            if (seg.length <= maxLen) {
+                cur = seg;
+            } else {
+                // Force-split overlong segment by words
+                var words = seg.split(' ');
+                cur = '';
+                for (var j = 0; j < words.length; j++) {
+                    var w = words[j];
+                    if ((cur + ' ' + w).trim().length <= maxLen) {
+                        cur = (cur + ' ' + w).trim();
                     } else {
-                        if (current) chunks.push(current);
-                        current = w;
+                        if (cur) result.push(cur);
+                        cur = w;
                     }
                 }
-            } else {
-                current = seg;
             }
         }
     }
-    if (current.trim()) chunks.push(current.trim());
-    return chunks.filter(c => c.length > 0);
+    if (cur) result.push(cur);
+    return result.filter(function(c) { return c.trim().length > 0; });
 }
 
 /**
- * Build a Google Translate TTS audio URL for a text chunk.
- * Uses the public `translate_tts` endpoint — no API key needed.
+ * Build Google Translate TTS URL.
+ * client=tw-ob → natural Tamil/Hindi voice (NOT the robotic gtx voice)
  */
-function buildGoogleTTSUrl(text, langCode) {
-    // Using the same endpoint that Google Translate web uses
-    return 'https://translate.googleapis.com/translate_tts?ie=UTF-8&q='
-        + encodeURIComponent(text)
-        + '&tl=' + encodeURIComponent(langCode)
-        + '&client=gtx&ttsspeed=0.9';
+function buildTTSUrl(chunk, langCode, idx, prev, totalLen) {
+    return 'https://translate.google.com/translate_tts'
+        + '?ie=UTF-8'
+        + '&q='       + encodeURIComponent(chunk)
+        + '&tl='      + encodeURIComponent(langCode)
+        + '&total='   + encodeURIComponent(String(totalLen))
+        + '&idx='     + encodeURIComponent(String(idx))
+        + '&textlen=' + encodeURIComponent(String(chunk.length))
+        + '&prev='    + encodeURIComponent(String(prev))
+        + '&client=tw-ob'
+        + '&ttsspeed=0.9';
 }
 
-/**
- * Fetch one TTS chunk and return a Blob URL.
- * Falls back gracefully on network error.
- */
-async function fetchTTSBlob(text, langCode) {
-    const url = buildGoogleTTSUrl(text, langCode);
+/** Fetch one TTS chunk → Blob URL (or null on failure) */
+async function fetchChunk(chunk, langCode, idx, prev, totalLen) {
+    var url = buildTTSUrl(chunk, langCode, idx, prev, totalLen);
     try {
-        const resp = await fetch(url, {
-            method: 'GET',
-            headers: {
-                // Mimic the User-Agent Google Translate uses
-                'Accept': 'audio/mpeg, audio/*'
-            }
-        });
+        var resp = await fetch(url);
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        const blob = await resp.blob();
+        var blob = await resp.blob();
         return URL.createObjectURL(blob);
-    } catch (err) {
-        console.warn('TTS fetch failed for chunk:', text, err);
+    } catch (e) {
+        console.warn('[TTS] chunk', idx, 'failed:', e.message);
         return null;
     }
 }
 
-/**
- * Play an array of Blob URLs sequentially.
- */
-async function playBlobQueue(blobUrls, onDone) {
-    for (let i = 0; i < blobUrls.length; i++) {
-        if (!ttsPlaying) break; // aborted
-        const blobUrl = blobUrls[i];
-        if (!blobUrl) continue;
-
-        await new Promise((resolve) => {
-            const audio = new Audio(blobUrl);
-            currentAudio = audio;
-            audio.volume = 1;
-
-            audio.onended = () => { URL.revokeObjectURL(blobUrl); resolve(); };
-            audio.onerror = () => { URL.revokeObjectURL(blobUrl); resolve(); };
-
-            audio.play().catch(() => resolve());
-        });
-    }
-    if (onDone) onDone();
+/** Play one Blob URL; resolves when audio ends or errors */
+function playBlob(blobUrl) {
+    return new Promise(function(resolve) {
+        var a = new Audio(blobUrl);
+        currentAudioEl = a;
+        a.onended = function() { URL.revokeObjectURL(blobUrl); resolve(); };
+        a.onerror = function() { URL.revokeObjectURL(blobUrl); resolve(); };
+        a.play().catch(function() { resolve(); });
+    });
 }
 
 /**
- * Main TTS function. Handles both English (native) and Indian languages (Google TTS).
- *
- * @param {string}   text        Text to speak
- * @param {string}   lang        Language code: 'en', 'ta', 'hi'
- * @param {string}   btnId       ID of the speaker button (for visual state)
- * @param {string}   [statusMsg] Optional short status shown in the status bar
+ * Main TTS entry point.
+ * @param {string} text    Text to speak
+ * @param {string} lang    'en' | 'ta' | 'hi'
+ * @param {string} btnId   ID of the speaker button element
+ * @param {string} label   Status bar label (optional)
  */
-async function speakText(text, lang, btnId, statusMsg) {
+async function speakText(text, lang, btnId, label) {
     if (!text || !text.trim()) return;
 
-    // If same button clicked again while playing → stop
-    if (ttsPlaying && activeSpeakerBtnId === btnId) {
+    // Toggle off if same button is already playing
+    if (ttsPlaying && activeBtn === btnId) {
         stopTTS();
         return;
     }
 
-    stopTTS(); // stop any previous playback
+    stopTTS();           // stop anything else playing
+    ttsPlaying   = true;
+    abortChunks  = false;
+    activeBtn    = btnId;
 
-    activeSpeakerBtnId = btnId;
-    ttsPlaying = true;
-
-    setButtonState(btnId, 'loading');
-    showStatusBar(statusMsg || 'Loading audio...');
+    setBtnState(btnId, 'loading');
+    showBar(label || 'Preparing audio...');
 
     if (lang === 'en') {
-        // ── English: use native speechSynthesis (no network, instant) ──
-        if (!window.speechSynthesis) {
-            stopTTS();
-            return;
-        }
-
+        // ── English: native speechSynthesis ──────────────────────────────
+        if (!window.speechSynthesis) { stopTTS(); return; }
         window.speechSynthesis.cancel();
-        const utt = new SpeechSynthesisUtterance(text);
-        utt.lang = 'en-IN';
-        utt.rate = 0.92;
+
+        var utt = new SpeechSynthesisUtterance(text);
+        utt.lang   = 'en-IN';
+        utt.rate   = 0.92;
         utt.volume = 1;
 
-        // Try to pick an Indian English voice
-        const voices = window.speechSynthesis.getVoices();
-        const voice = voices.find(v => v.lang === 'en-IN')
-                   || voices.find(v => v.lang.startsWith('en-'))
-                   || null;
+        var voices = window.speechSynthesis.getVoices();
+        var voice  = voices.find(function(v) { return v.lang === 'en-IN'; })
+                  || voices.find(function(v) { return v.lang.startsWith('en-'); })
+                  || null;
         if (voice) utt.voice = voice;
 
-        utt.onstart = () => {
-            setButtonState(btnId, 'speaking');
-            showStatusBar('Speaking...');
-        };
-        utt.onend = () => { stopTTS(); };
-        utt.onerror = (e) => {
-            if (e.error !== 'canceled' && e.error !== 'interrupted') {
-                console.warn('SpeechSynthesis error:', e.error);
-            }
+        utt.onstart = function() { setBtnState(btnId, 'speaking'); showBar('Speaking...'); };
+        utt.onend   = function() { stopTTS(); };
+        utt.onerror = function(e) {
+            if (e.error !== 'canceled' && e.error !== 'interrupted')
+                console.warn('[TTS] EN error:', e.error);
             stopTTS();
         };
 
         window.speechSynthesis.speak(utt);
 
     } else {
-        // ── Tamil / Hindi: Google Translate TTS, fetched and played as audio ──
-        const langCode = CONFIG.TTS_LANG_CODE[lang] || lang;
-        const chunks = splitTextChunks(text, CONFIG.CHUNK_SIZE);
+        // ── Tamil / Hindi: Google Translate TTS (tw-ob — natural voice) ──
+        // Map 'ta' → 'ta', 'hi' → 'hi'
+        var langCode = lang === 'ta' ? 'ta' : 'hi';
+        var chunks   = chunkText(text, 180);
+        var totalLen = text.length;
 
-        // Pre-fetch ALL chunks before playing — eliminates gaps between chunks
-        showStatusBar('Preparing audio (' + chunks.length + ' part' + (chunks.length > 1 ? 's' : '') + ')...');
+        showBar('Fetching audio (' + chunks.length + ' part' + (chunks.length > 1 ? 's' : '') + ')...');
 
-        const blobUrls = [];
-        for (let i = 0; i < chunks.length; i++) {
-            if (!ttsPlaying) break; // aborted before we finished fetching
-            const bUrl = await fetchTTSBlob(chunks[i], langCode);
-            blobUrls.push(bUrl);
+        // Build cumulative offsets for each chunk (required by tw-ob server)
+        var offsets = [];
+        var cum = 0;
+        for (var k = 0; k < chunks.length; k++) {
+            offsets.push(cum);
+            cum += chunks[k].length;
         }
 
-        if (!ttsPlaying) { // user stopped during fetch
-            blobUrls.forEach(u => u && URL.revokeObjectURL(u));
+        // Fetch ALL chunks in parallel (faster than sequential)
+        var fetchPromises = chunks.map(function(chunk, i) {
+            return fetchChunk(chunk, langCode, i, offsets[i], totalLen);
+        });
+
+        var blobUrls = await Promise.all(fetchPromises);
+
+        if (abortChunks) {
+            blobUrls.forEach(function(u) { if (u) URL.revokeObjectURL(u); });
             return;
         }
 
-        setButtonState(btnId, 'speaking');
-        showStatusBar('Speaking...');
+        // Play sequentially
+        setBtnState(btnId, 'speaking');
+        showBar('Speaking...');
 
-        await playBlobQueue(blobUrls, () => { stopTTS(); });
+        for (var i = 0; i < blobUrls.length; i++) {
+            if (abortChunks) break;
+            if (blobUrls[i]) await playBlob(blobUrls[i]);
+        }
+
+        // Revoke any remaining if aborted mid-play
+        if (abortChunks) {
+            blobUrls.forEach(function(u) { try { URL.revokeObjectURL(u); } catch(_) {} });
+        }
+
+        stopTTS();
     }
 }
 
-/**
- * Stop all TTS immediately.
- */
+/** Stop all TTS immediately */
 function stopTTS() {
-    ttsPlaying = false;
+    abortChunks = true;
+    ttsPlaying  = false;
 
-    // Stop native speech
     if (window.speechSynthesis) {
-        try { window.speechSynthesis.cancel(); } catch (e) {}
+        try { window.speechSynthesis.cancel(); } catch(_) {}
     }
 
-    // Stop audio element
-    if (currentAudio) {
-        try { currentAudio.pause(); currentAudio.src = ''; } catch (e) {}
-        currentAudio = null;
+    if (currentAudioEl) {
+        try { currentAudioEl.pause(); currentAudioEl.src = ''; } catch(_) {}
+        currentAudioEl = null;
     }
 
-    setButtonState(activeSpeakerBtnId, 'idle');
-    activeSpeakerBtnId = null;
-    hideStatusBar();
+    setBtnState(activeBtn, 'idle');
+    activeBtn = null;
+    hideBar();
 }
 
-function setButtonState(btnId, state) {
+// ── UI helpers ──
+function setBtnState(btnId, state) {
     if (!btnId) return;
-    const btn = document.getElementById(btnId);
+    var btn = document.getElementById(btnId);
     if (!btn) return;
-
     btn.classList.remove('loading', 'speaking');
-    if (state === 'loading') btn.classList.add('loading');
-    else if (state === 'speaking') btn.classList.add('speaking');
+    if (state === 'loading')  btn.classList.add('loading');
+    if (state === 'speaking') btn.classList.add('speaking');
 }
 
-function showStatusBar(msg) {
-    const bar = document.getElementById('ttsStatusBar');
-    const txt = document.getElementById('ttsStatusText');
+function showBar(msg) {
+    var bar = document.getElementById('ttsBar');
+    var txt = document.getElementById('ttsMsg');
     if (bar && txt) { txt.textContent = msg; bar.classList.add('show'); }
 }
 
-function hideStatusBar() {
-    const bar = document.getElementById('ttsStatusBar');
+function hideBar() {
+    var bar = document.getElementById('ttsBar');
     if (bar) bar.classList.remove('show');
 }
 
-// ==========================================
-// INSTRUCTION SPEECH
-// ==========================================
+// ═══════════════════════════════════════════════
+//  INSTRUCTION & QUESTION SPEECH
+// ═══════════════════════════════════════════════
 function speakInstruction() {
-    const text = CONFIG.INSTRUCTION_TEXT[currentLanguage] || CONFIG.INSTRUCTION_TEXT['en'];
-    speakText(text, currentLanguage, 'instructionSpeaker', 'Reading instruction...');
+    speakText(INSTR[currentLang] || INSTR.en, currentLang, 'instrBtn', 'Reading instruction...');
 }
 
-// ==========================================
-// QUESTION SPEECH
-// ==========================================
-function toggleQuestionSpeech(questionId) {
-    const q = questions.find(q => q.id === questionId);
+function toggleQuestionSpeech(qId) {
+    var q = questions.find(function(q) { return q.id === qId; });
     if (!q) return;
 
-    let text = q.text;
+    var text = q.text;
     if (q.options && q.options.length) {
-        // Read options too
-        text += '. ' + q.options.map((o, i) => (i + 1) + '. ' + o.text).join('. ');
+        text += '. ' + q.options.map(function(o, i) { return (i + 1) + '. ' + o.text; }).join('. ');
     }
 
-    speakText(text, currentLanguage, 'speaker-' + questionId, 'Reading question...');
+    speakText(text, currentLang, 'speaker-' + qId, 'Reading question...');
 }
 
-// ==========================================
-// LANGUAGE SELECTION & QUESTION LOADING
-// ==========================================
-async function selectLanguage(lang) {
-    currentLanguage = lang;
+// ═══════════════════════════════════════════════
+//  LANGUAGE & SURVEY LOAD
+// ═══════════════════════════════════════════════
+function selectLanguage(lang) {
+    currentLang = lang;
     stopTTS();
 
-    document.querySelectorAll('.lang-card').forEach(c => {
+    document.querySelectorAll('.lang-card').forEach(function(c) {
         c.classList.toggle('active', c.dataset.lang === lang);
     });
 
-    const INSTRUCTION = {
-        'en': 'Please select your preferred language – English, Tamil, or Hindi',
-        'ta': 'உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும் – ஆங்கிலம், தமிழ், அல்லது இந்தி',
-        'hi': 'कृपया अपनी पसंदीदा भाषा चुनें – अंग्रेजी, तमिल, या हिंदी'
-    };
-    document.getElementById('instructionText').textContent = INSTRUCTION[lang];
-
+    document.getElementById('instrText').textContent = INSTR[lang] || INSTR.en;
     document.getElementById('langSection').style.display = 'none';
     document.getElementById('loadingScreen').classList.add('active');
 
-    // Pre-warm voices for English
-    if (lang === 'en' && window.speechSynthesis) {
-        window.speechSynthesis.getVoices();
-    }
+    if (lang === 'en' && window.speechSynthesis) window.speechSynthesis.getVoices();
 
     loadQuestions(lang);
 }
 
 function loadQuestions(lang) {
-    const callbackName = 'cb_' + Date.now();
-    const script = document.createElement('script');
+    var cbName = 'cb_' + Date.now();
+    var script = document.createElement('script');
 
-    window[callbackName] = function(data) {
-        delete window[callbackName];
+    window[cbName] = function(data) {
+        delete window[cbName];
         if (script.parentNode) document.head.removeChild(script);
-        handleQuestionsResponse(data);
+        onQuestionsLoaded(data);
     };
 
-    script.src = CONFIG.API_URL + '?action=getQuestions&lang=' + lang + '&callback=' + callbackName;
+    script.src     = API_URL + '?action=getQuestions&lang=' + lang + '&callback=' + cbName;
     script.onerror = function() {
         document.getElementById('loadingScreen').innerHTML =
-            '<p style="color:red;padding:20px">Error loading survey. Please refresh and try again.</p>';
+            '<p style="color:red;padding:30px">Error loading survey. Please refresh and try again.</p>';
     };
 
     document.head.appendChild(script);
 }
 
-function handleQuestionsResponse(data) {
+function onQuestionsLoaded(data) {
     if (data.error) { alert('Error: ' + data.error); return; }
-
     questions = data.questions;
     document.getElementById('loadingScreen').classList.remove('active');
     document.getElementById('surveyContainer').classList.add('active');
-    renderAllQuestions();
+    renderAll();
     updateProgress();
 }
 
-// ==========================================
-// RENDER QUESTIONS
-// ==========================================
-function renderAllQuestions() {
-    const wrapper = document.getElementById('questionsWrapper');
-    wrapper.innerHTML = '';
-    questions.forEach((q, idx) => wrapper.appendChild(createQuestionCard(q, idx)));
+// ═══════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════
+function renderAll() {
+    var wrap = document.getElementById('questionsWrapper');
+    wrap.innerHTML = '';
+    questions.forEach(function(q, i) { wrap.appendChild(makeCard(q, i)); });
 }
 
-function createQuestionCard(q, index) {
-    const card = document.createElement('div');
+function makeCard(q, idx) {
+    var card = document.createElement('div');
     card.className = 'question-card';
     card.id = 'question-' + q.id;
 
     if (q.conditional) {
-        card.dataset.conditionQuestion = q.condition.question;
-        card.dataset.conditionValue = q.condition.value;
+        card.dataset.condQ = q.condition.question;
+        card.dataset.condV = q.condition.value;
         card.classList.add('conditional-hidden');
     }
 
-    let inputHTML = '';
-    if (q.type === 'short_answer')                         inputHTML = createShortAnswerHTML(q);
-    else if (q.type === 'multiple_choice' || q.type === 'dropdown') inputHTML = createMultipleChoiceHTML(q);
-    else if (q.type === 'checkbox')                        inputHTML = createCheckboxHTML(q);
+    var body = '';
+    if      (q.type === 'short_answer')                               body = makeShortAnswer(q);
+    else if (q.type === 'multiple_choice' || q.type === 'dropdown')   body = makeMCQ(q);
+    else if (q.type === 'checkbox')                                    body = makeCheckbox(q);
 
     card.innerHTML =
         '<div class="question-header">' +
-            '<div class="question-number">' + (index + 1) + '</div>' +
-            '<div class="question-content">' +
-                '<div class="question-text">' + q.text + '</div>' +
-            '</div>' +
+            '<div class="question-number">' + (idx + 1) + '</div>' +
+            '<div class="question-content"><div class="question-text">' + q.text + '</div></div>' +
             (q.speaker
-                ? '<button class="speaker-btn" id="speaker-' + q.id + '" onclick="toggleQuestionSpeech(\'' + q.id + '\')" title="Tap to listen"><i class="fas fa-volume-up"></i></button>'
+                ? '<button class="speaker-btn" id="speaker-' + q.id + '" ' +
+                  'onclick="toggleQuestionSpeech(\'' + q.id + '\')" title="Tap to listen">' +
+                  '<i class="fas fa-volume-up"></i></button>'
                 : '') +
-        '</div>' + inputHTML;
+        '</div>' + body;
 
     return card;
 }
 
-function createShortAnswerHTML(q) {
+function makeShortAnswer(q) {
+    var mic = q.micRecord
+        ? '<div class="mic-section">' +
+              '<button class="mic-btn" id="mic-' + q.id + '" onclick="toggleRec(\'' + q.id + '\')">' +
+                  '<i class="fas fa-microphone"></i><span>Speak Answer</span>' +
+              '</button>' +
+              '<div class="recording-status hidden" id="rs-' + q.id + '">' +
+                  '<span class="recording-dot"></span><span>Recording... Tap to stop</span>' +
+              '</div>' +
+              '<div class="mic-error" id="me-' + q.id + '"></div>' +
+          '</div>'
+        : '';
+
     return '<div class="text-input-wrapper">' +
-        '<input type="text" class="text-input" id="input-' + q.id + '" ' +
+               '<input type="text" class="text-input" id="inp-' + q.id + '" ' +
                'placeholder="' + (q.placeholder || 'Type your answer here...') + '" ' +
-               'oninput="saveText(\'' + q.id + '\'); checkConditionalQuestions(); updateProgress();">' +
-        '</div>' +
-        (q.micRecord
-            ? '<div class="mic-section">' +
-                  '<button class="mic-btn" id="mic-' + q.id + '" onclick="toggleRecording(\'' + q.id + '\')">' +
-                      '<i class="fas fa-microphone"></i><span>Speak Answer</span>' +
-                  '</button>' +
-                  '<div class="recording-status hidden" id="status-' + q.id + '">' +
-                      '<span class="recording-dot"></span><span>Recording... Tap to stop</span>' +
-                  '</div>' +
-                  '<div class="mic-error" id="error-' + q.id + '"></div>' +
-              '</div>'
-            : '');
+               'oninput="saveText(\'' + q.id + '\'); checkCond(); updateProgress();">' +
+           '</div>' + mic;
 }
 
-function createMultipleChoiceHTML(q) {
+function makeMCQ(q) {
     return '<div class="options-container">' +
-        q.options.map(function(opt, i) {
-            return '<div class="option-item" ' +
-                   'onclick="selectOption(\'' + q.id + '\', \'' + opt.value.replace(/'/g, "\\'") + '\', ' + i + ')" ' +
-                   'id="opt-' + q.id + '-' + i + '">' +
+        q.options.map(function(o, i) {
+            return '<div class="option-item" id="opt-' + q.id + '-' + i + '" ' +
+                   'onclick="selectOpt(\'' + q.id + '\',\'' + o.value.replace(/'/g,"\\'") + '\',' + i + ')">' +
                    '<div class="option-icon"></div>' +
-                   '<div class="option-text">' + opt.text + '</div>' +
-                   '</div>';
+                   '<div class="option-text">' + o.text + '</div></div>';
         }).join('') + '</div>';
 }
 
-function createCheckboxHTML(q) {
+function makeCheckbox(q) {
     return '<div class="checkbox-grid">' +
-        q.options.map(function(opt, i) {
-            return '<div class="checkbox-item" ' +
-                   'onclick="toggleCheckbox(\'' + q.id + '\', \'' + opt.value.replace(/'/g, "\\'") + '\', ' + i + ')" ' +
-                   'id="chk-' + q.id + '-' + i + '">' +
+        q.options.map(function(o, i) {
+            return '<div class="checkbox-item" id="chk-' + q.id + '-' + i + '" ' +
+                   'onclick="toggleChk(\'' + q.id + '\',\'' + o.value.replace(/'/g,"\\'") + '\',' + i + ')">' +
                    '<div class="checkbox-box"></div>' +
-                   '<div class="option-text">' + opt.text + '</div>' +
-                   '</div>';
+                   '<div class="option-text">' + o.text + '</div></div>';
         }).join('') + '</div>' +
         (q.helpText ? '<p class="help-text"><i class="fas fa-info-circle"></i> ' + q.helpText + '</p>' : '');
 }
 
-// ==========================================
-// INPUT HANDLING
-// ==========================================
+// ═══════════════════════════════════════════════
+//  INPUT HANDLING
+// ═══════════════════════════════════════════════
 function saveText(qId) {
-    const el = document.getElementById('input-' + qId);
+    var el = document.getElementById('inp-' + qId);
     if (el) responses[qId] = el.value;
 }
 
-function selectOption(qId, value, index) {
-    stopTTS();
+function selectOpt(qId, value, idx) {
+    stopTTS();   // Bug 3 fix: stop audio on selection
     responses[qId] = value;
 
-    const q = questions.find(q => q.id === qId);
-    q.options.forEach(function(opt, i) {
-        const el = document.getElementById('opt-' + qId + '-' + i);
-        if (el) {
-            const icon = el.querySelector('.option-icon');
-            if (i === index) {
-                el.classList.add('selected');
-                if (icon) icon.innerHTML = '<i class="fas fa-check"></i>';
-            } else {
-                el.classList.remove('selected');
-                if (icon) icon.innerHTML = '';
-            }
+    var q = questions.find(function(q) { return q.id === qId; });
+    q.options.forEach(function(o, i) {
+        var el   = document.getElementById('opt-' + qId + '-' + i);
+        var icon = el && el.querySelector('.option-icon');
+        if (i === idx) {
+            if (el)   el.classList.add('selected');
+            if (icon) icon.innerHTML = '<i class="fas fa-check"></i>';
+        } else {
+            if (el)   el.classList.remove('selected');
+            if (icon) icon.innerHTML = '';
         }
     });
 
-    checkConditionalQuestions();
+    checkCond();
     updateProgress();
 }
 
-function toggleCheckbox(qId, value, index) {
-    stopTTS();
+function toggleChk(qId, value, idx) {
+    stopTTS();   // Bug 3 fix: stop audio on selection
     if (!responses[qId]) responses[qId] = [];
 
-    const arr = responses[qId];
-    const idx = arr.indexOf(value);
-    const el = document.getElementById('chk-' + qId + '-' + index);
-    const box = el ? el.querySelector('.checkbox-box') : null;
+    var arr = responses[qId];
+    var pos = arr.indexOf(value);
+    var el  = document.getElementById('chk-' + qId + '-' + idx);
+    var box = el && el.querySelector('.checkbox-box');
 
-    if (idx > -1) {
-        arr.splice(idx, 1);
-        if (el) el.classList.remove('selected');
+    if (pos > -1) {
+        arr.splice(pos, 1);
+        if (el)  el.classList.remove('selected');
         if (box) box.innerHTML = '';
     } else {
         arr.push(value);
-        if (el) el.classList.add('selected');
+        if (el)  el.classList.add('selected');
         if (box) box.innerHTML = '<i class="fas fa-check"></i>';
     }
 
     updateProgress();
 }
 
-// ==========================================
-// MICROPHONE
-// ==========================================
-async function toggleRecording(qId) {
-    if (isRecording) stopRecording();
-    else await startRecording(qId);
-}
-
-async function startRecording(qId) {
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SR) { showMicError(qId, 'Speech recognition not supported. Please use Chrome or Edge.'); return; }
-
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        stream.getTracks().forEach(t => t.stop());
-    } catch (err) {
-        let msg = err.name === 'NotAllowedError'
-            ? 'Please allow microphone access in your browser settings.'
-            : 'Microphone error: ' + err.message;
-        showMicError(qId, msg);
-        return;
-    }
-
-    recognition = new SR();
-    recognition.lang = CONFIG.SPEECH_LANG[currentLanguage];
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-    currentRecordingField = qId;
-
-    recognition.onstart = function() {
-        isRecording = true;
-        hideMicError(qId);
-        const btn = document.getElementById('mic-' + qId);
-        const status = document.getElementById('status-' + qId);
-        if (btn) { btn.classList.add('recording'); btn.innerHTML = '<i class="fas fa-stop"></i><span>Stop</span>'; }
-        if (status) status.classList.remove('hidden');
-    };
-
-    recognition.onresult = function(e) {
-        const transcript = e.results[0][0].transcript;
-        const input = document.getElementById('input-' + qId);
-        if (input) { input.value = transcript; saveText(qId); responses['audio_' + qId] = transcript; updateProgress(); }
-    };
-
-    recognition.onerror = function(e) {
-        let msg = {
-            'no-speech': 'No speech detected. Please try again.',
-            'audio-capture': 'Could not capture audio.',
-            'not-allowed': 'Microphone access denied.',
-            'network': 'Network error during recording.'
-        }[e.error] || ('Error: ' + e.error);
-        if (e.error !== 'aborted') showMicError(qId, msg);
-        stopRecording();
-    };
-
-    recognition.onend = function() { stopRecording(); };
-
-    try { recognition.start(); } catch (e) { showMicError(qId, 'Could not start recording.'); }
-}
-
-function stopRecording() {
-    if (recognition) { try { recognition.stop(); } catch (e) {} recognition = null; }
-    isRecording = false;
-    if (currentRecordingField) {
-        const btn = document.getElementById('mic-' + currentRecordingField);
-        const status = document.getElementById('status-' + currentRecordingField);
-        if (btn) { btn.classList.remove('recording'); btn.innerHTML = '<i class="fas fa-microphone"></i><span>Speak Answer</span>'; }
-        if (status) status.classList.add('hidden');
-    }
-    currentRecordingField = null;
-}
-
-function showMicError(qId, msg) {
-    const el = document.getElementById('error-' + qId);
-    if (el) { el.textContent = msg; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 8000); }
-}
-
-function hideMicError(qId) {
-    const el = document.getElementById('error-' + qId);
-    if (el) el.classList.remove('show');
-}
-
-// ==========================================
-// CONDITIONAL LOGIC
-// ==========================================
-function checkConditionalQuestions() {
+// ═══════════════════════════════════════════════
+//  CONDITIONAL LOGIC
+// ═══════════════════════════════════════════════
+function checkCond() {
     questions.forEach(function(q) {
         if (!q.conditional) return;
-        const parentVal = responses[q.condition.question];
-        const card = document.getElementById('question-' + q.id);
-        if (parentVal === q.condition.value) {
+        var card = document.getElementById('question-' + q.id);
+        if (!card) return;
+        if (responses[q.condition.question] === q.condition.value) {
             card.classList.remove('conditional-hidden');
         } else {
             card.classList.add('conditional-hidden');
@@ -1115,53 +921,149 @@ function checkConditionalQuestions() {
     });
 }
 
-// ==========================================
-// PROGRESS & VALIDATION
-// ==========================================
+// ═══════════════════════════════════════════════
+//  PROGRESS & VALIDATION
+// ═══════════════════════════════════════════════
 function updateProgress() {
-    const visible = questions.filter(function(q) {
-        if (!q.conditional) return true;
-        return responses[q.condition.question] === q.condition.value;
+    var visible = questions.filter(function(q) {
+        return !q.conditional || responses[q.condition.question] === q.condition.value;
     });
 
-    const answered = visible.filter(function(q) {
-        if (q.type === 'checkbox') return responses[q.id] && responses[q.id].length > 0;
-        return responses[q.id] && responses[q.id].toString().trim() !== '';
+    var answered = visible.filter(function(q) {
+        return q.type === 'checkbox'
+            ? responses[q.id] && responses[q.id].length > 0
+            : responses[q.id] && responses[q.id].toString().trim() !== '';
     }).length;
 
-    const pct = visible.length ? Math.round((answered / visible.length) * 100) : 0;
+    var pct = visible.length ? Math.round(answered / visible.length * 100) : 0;
     document.getElementById('progressPercent').textContent = pct + '%';
     document.getElementById('progressFill').style.width = pct + '%';
 }
 
 function validateAll() {
-    const visible = questions.filter(function(q) {
-        if (!q.conditional) return true;
-        return responses[q.condition.question] === q.condition.value;
+    var visible = questions.filter(function(q) {
+        return !q.conditional || responses[q.condition.question] === q.condition.value;
     });
 
-    const missing = []; let firstCard = null;
+    var missing = [], firstCard = null;
+
     visible.forEach(function(q) {
         if (!q.required) return;
-        const has = q.type === 'checkbox'
-            ? (responses[q.id] && responses[q.id].length > 0)
-            : (responses[q.id] && responses[q.id].toString().trim() !== '');
-        const card = document.getElementById('question-' + q.id);
-        if (!has) { missing.push(q.text); card.classList.add('error'); if (!firstCard) firstCard = card; }
-        else card.classList.remove('error');
+        var has = q.type === 'checkbox'
+            ? responses[q.id] && responses[q.id].length > 0
+            : responses[q.id] && responses[q.id].toString().trim() !== '';
+
+        var card = document.getElementById('question-' + q.id);
+        if (!has) {
+            missing.push(q.text);
+            if (card) card.classList.add('error');
+            if (!firstCard) firstCard = card;
+        } else {
+            if (card) card.classList.remove('error');
+        }
     });
-    return { missing, firstCard };
+
+    return { missing: missing, firstCard: firstCard };
 }
 
-// ==========================================
-// SUBMIT
-// ==========================================
+// ═══════════════════════════════════════════════
+//  MICROPHONE
+// ═══════════════════════════════════════════════
+async function toggleRec(qId) {
+    if (isRecording) stopRec();
+    else             await startRec(qId);
+}
+
+async function startRec(qId) {
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { showMicErr(qId, 'Speech recognition not supported. Use Chrome/Edge.'); return; }
+
+    try {
+        var s = await navigator.mediaDevices.getUserMedia({ audio: true });
+        s.getTracks().forEach(function(t) { t.stop(); });
+    } catch (e) {
+        showMicErr(qId, e.name === 'NotAllowedError'
+            ? 'Please allow microphone access in browser settings.'
+            : 'Microphone error: ' + e.message);
+        return;
+    }
+
+    recognition = new SR();
+    recognition.lang           = SPEECH_LANG[currentLang];
+    recognition.continuous     = false;
+    recognition.interimResults = false;
+    currentRecFld              = qId;
+
+    recognition.onstart = function() {
+        isRecording = true;
+        hideMicErr(qId);
+        var btn = document.getElementById('mic-' + qId);
+        var rs  = document.getElementById('rs-' + qId);
+        if (btn) { btn.classList.add('recording'); btn.innerHTML = '<i class="fas fa-stop"></i><span>Stop</span>'; }
+        if (rs)  rs.classList.remove('hidden');
+    };
+
+    recognition.onresult = function(e) {
+        var t  = e.results[0][0].transcript;
+        var el = document.getElementById('inp-' + qId);
+        if (el) {
+            el.value = t;
+            saveText(qId);
+            responses['audio_' + qId] = t;
+            updateProgress();
+        }
+    };
+
+    recognition.onerror = function(e) {
+        var msgs = {
+            'no-speech':     'No speech detected. Please try again.',
+            'audio-capture': 'Could not capture audio.',
+            'not-allowed':   'Microphone access denied.',
+            'network':       'Network error during recording.'
+        };
+        if (e.error !== 'aborted') showMicErr(qId, msgs[e.error] || 'Error: ' + e.error);
+        stopRec();
+    };
+
+    recognition.onend = stopRec;
+
+    try { recognition.start(); }
+    catch(e) { showMicErr(qId, 'Could not start recording.'); }
+}
+
+function stopRec() {
+    if (recognition) { try { recognition.stop(); } catch(_) {} recognition = null; }
+    isRecording = false;
+
+    if (currentRecFld) {
+        var btn = document.getElementById('mic-' + currentRecFld);
+        var rs  = document.getElementById('rs-' + currentRecFld);
+        if (btn) { btn.classList.remove('recording'); btn.innerHTML = '<i class="fas fa-microphone"></i><span>Speak Answer</span>'; }
+        if (rs)  rs.classList.add('hidden');
+    }
+    currentRecFld = null;
+}
+
+function showMicErr(qId, msg) {
+    var el = document.getElementById('me-' + qId);
+    if (el) { el.textContent = msg; el.classList.add('show'); setTimeout(function() { el.classList.remove('show'); }, 8000); }
+}
+
+function hideMicErr(qId) {
+    var el = document.getElementById('me-' + qId);
+    if (el) el.classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════
+//  SUBMIT
+// ═══════════════════════════════════════════════
 function submitSurvey() {
     stopTTS();
-    const { missing, firstCard } = validateAll();
-    if (missing.length) {
-        alert('Please answer all required questions:\n\n• ' + missing.join('\n• '));
-        if (firstCard) firstCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var res = validateAll();
+
+    if (res.missing.length) {
+        alert('Please answer all required questions:\n\n• ' + res.missing.join('\n• '));
+        if (res.firstCard) res.firstCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
     }
 
@@ -1170,67 +1072,59 @@ function submitSurvey() {
     document.getElementById('loadingScreen').innerHTML =
         '<div class="spinner"></div><h3>Submitting your response...</h3><p>Please do not close this window</p>';
 
-    const formData = { action: 'submitResponse', formData: Object.assign({}, responses, { language: currentLanguage }) };
+    var payload = {
+        action:   'submitResponse',
+        formData: Object.assign({}, responses, { language: currentLang })
+    };
 
-    // Submit via hidden iframe (handles CORS)
-    let iframe = document.getElementById('hidden-iframe');
+    var iframe = document.getElementById('_ifr');
     if (!iframe) {
         iframe = document.createElement('iframe');
-        iframe.name = 'hidden-iframe';
-        iframe.id = 'hidden-iframe';
-        iframe.style.display = 'none';
+        iframe.name = '_ifr'; iframe.id = '_ifr'; iframe.style.display = 'none';
         document.body.appendChild(iframe);
     }
 
     iframe.onload = function() {
         try {
-            const txt = iframe.contentDocument.body.innerText;
-            const res = JSON.parse(txt);
-            showSuccess(res.responseId || ('BEL' + Date.now()));
-        } catch (e) {
-            showSuccess('BEL' + Date.now());
-        }
+            var r = JSON.parse(iframe.contentDocument.body.innerText);
+            showSuccess(r.responseId || 'BEL' + Date.now());
+        } catch(_) { showSuccess('BEL' + Date.now()); }
     };
 
-    // Fallback if iframe never fires
-    setTimeout(() => { if (document.getElementById('loadingScreen').classList.contains('active')) showSuccess('BEL' + Date.now()); }, 7000);
+    // Fallback timeout
+    setTimeout(function() {
+        if (document.getElementById('loadingScreen').classList.contains('active'))
+            showSuccess('BEL' + Date.now());
+    }, 8000);
 
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = CONFIG.API_URL;
-    form.target = 'hidden-iframe';
-    form.style.display = 'none';
-    const inp = document.createElement('input');
-    inp.name = 'data';
-    inp.value = JSON.stringify(formData);
+    var form = document.createElement('form');
+    form.method = 'POST'; form.action = API_URL; form.target = '_ifr'; form.style.display = 'none';
+    var inp = document.createElement('input');
+    inp.name = 'data'; inp.value = JSON.stringify(payload);
     form.appendChild(inp);
     document.body.appendChild(form);
     form.submit();
     document.body.removeChild(form);
 }
 
-function showSuccess(responseId) {
+function showSuccess(id) {
     document.getElementById('loadingScreen').classList.remove('active');
     document.getElementById('successScreen').classList.add('active');
-    document.getElementById('responseIdValue').textContent = responseId;
+    document.getElementById('responseIdValue').textContent = id;
 }
 
-// ==========================================
-// INIT
-// ==========================================
+// ═══════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════
 window.addEventListener('load', function() {
-    // Pre-warm speechSynthesis (English) — Chrome loads voices asynchronously
     if (window.speechSynthesis) {
         window.speechSynthesis.getVoices();
-        window.speechSynthesis.onvoiceschanged = function() {
-            window.speechSynthesis.getVoices(); // cache
-        };
+        window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); };
     }
 });
 
-// Stop audio when tab goes background
 document.addEventListener('visibilitychange', function() {
-    if (document.hidden) { stopTTS(); stopRecording(); }
+    if (document.hidden) { stopTTS(); stopRec(); }
 });
 </script>
 </body>
