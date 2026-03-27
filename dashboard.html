@@ -752,8 +752,10 @@ function mkChart(id, type, labels, data, colors, opts = {}) {
         },
         tooltip: {
           callbacks: {
-            label: ctx => {
-              const val = ctx.parsed.y ?? ctx.parsed;
+           label: ctx => {
+              const val = (ctx.chart.config.options?.indexAxis === 'y')
+                ? ctx.parsed.x
+                : ctx.parsed.y ?? ctx.parsed;
               return `  ${val} beneficiar${val===1?'y':'ies'}`;
             }
           }
