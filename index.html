@@ -516,7 +516,7 @@
             box-shadow: 0 0 0 4px rgba(233, 30, 99, 0.1);
         }
 
-        /* Mic Button - FIXED */
+        /* Mic Button */
         .mic-section {
             margin-top: 20px;
             display: flex;
@@ -992,7 +992,7 @@
             </div>
 
             <div class="questions-wrapper" id="questionsWrapper">
-                <!-- Questions will be inserted here -->
+                <!-- All 9 Questions will be inserted here -->
             </div>
 
             <div class="submit-section">
@@ -1042,70 +1042,6 @@
                 'ta': { speak: '🎤 பேசி பதிவு செய்', stop: '⏹ நிறுத்து', recording: '🔴 பதிவாகிறது...' },
                 'hi': { speak: '🎤 बोलकर जवाब दें', stop: '⏹ रोकें', recording: '🔅 रिकॉर्डिंग...' }
             },
-            // COMPLETE TRAINING OPTIONS WITH FULL TRANSLATIONS
-            TRAINING_OPTIONS: {
-                'en': [
-                    'Financial Literacy Training',
-                    'Digital Literacy Training',
-                    'Business Motivation Training',
-                    'Leadership & Relationship Building Training',
-                    'Gender & Women Leadership Training',
-                    'Awareness & Access to Government Schemes',
-                    'Knowledge Volunteer Capacity Building Training',
-                    'Women Connect Program/Meetings'
-                ],
-                'ta': [
-                    'நிதி அறிவியல் பயிற்சி',
-                    'டிஜிட்டல் அறிவியல் பயிற்சி',
-                    'வணிக ஊக்க பயிற்சி',
-                    'தலைமை மற்றும் உறவுகள் கட்டமைப்பு பயிற்சி',
-                    'பாலினம் மற்றும் பெண்கள் தலைமை பயிற்சி',
-                    'அரசாங்க திட்டங்கள் பற்றிய அறிவு மற்றும் அணுகல் பயிற்சி',
-                    'அறிவு குழு உறுப்பினர்களுக்கான திறன் வளர்ப்பு பயிற்சி',
-                    'பெண்கள் இணைப்பு நிகழ்ச்சிகள்/மீட்டிங்குகள்'
-                ],
-                'hi': [
-                    'वित्तीय साक्षरता प्रशिक्षण',
-                    'डिजिटल साक्षरता प्रशिक्षण',
-                    'व्यवसाय प्रेरणा प्रशिक्षण',
-                    'नेतृत्व और संबंध निर्माण प्रशिक्षण',
-                    'लिंग और महिला नेतृत्व प्रशिक्षण',
-                    'सरकारी योजनाओं की जानकारी और उपयोग प्रशिक्षण',
-                    'ज्ञान स्वयंसेवक क्षमता विकास प्रशिक्षण',
-                    'महिला कनेक्ट कार्यक्रम/मीटिंग्स'
-                ]
-            },
-            // OCCUPATION OPTIONS WITH FULL TRANSLATIONS (NOT SHORTCUTS)
-            OCCUPATION_OPTIONS: {
-                'en': [
-                    'Homemaker (Not using training)',
-                    'Self-employed – Small business or livelihood activity',
-                    'SHG-based income activity',
-                    'Private job',
-                    'Daily wage worker',
-                    'Agriculture/Fishing work',
-                    'Unemployed'
-                ],
-                'ta': [
-                    'வீட்டு பெண்மணி (பயிற்சியை பயன்படுத்தவில்லை)',
-                    'சுய தொழில் – சிறிய வணிகம் அல்லது வாழ்வாதார செயல்',
-                    'சுய உதவிக் குழு (SHG) சார்ந்த வருமானம்',
-                    'தனியார் வேலை',
-                    'நாளாந்து வேலை',
-                    'விவசாயம் / மீன்வளம் வேலை',
-                    'வேலை செய்யவில்லை'
-                ],
-                'hi': [
-                    'गृहिणी (प्रशिक्षण का उपयोग नहीं कर रही)',
-                    'स्वरोज़गार – छोटा व्यवसाय या रोज़गार गतिविधि',
-                    'SHG आधारित आय गतिविधि',
-                    'निजी नौकरी',
-                    'दैनिक मजदूरी',
-                    'कृषि / मछली पकड़ने का काम',
-                    'बेरोज़गार'
-                ]
-            },
-            // SUCCESS MESSAGES IN ALL LANGUAGES
             SUCCESS_MESSAGES: {
                 'en': {
                     title: 'Thank You!',
@@ -1454,78 +1390,386 @@
             
             await initSpeechSynthesis();
             initGPS();
-            loadQuestions(lang);
+            loadAllQuestions(lang);
         }
 
-        function loadQuestions(lang) {
-            // For demo, create sample questions with the training options
+        // ==========================================
+        // ALL 9 QUESTIONS WITH COMPLETE TRANSLATIONS
+        // ==========================================
+        
+        function loadAllQuestions(lang) {
             questions = [
+                // Q1: Name
                 {
-                    id: 'trainings_completed',
-                    text: getQuestionText('trainings'),
-                    type: 'checkbox',
-                    speaker: true,
-                    speechLang: CONFIG.SPEECH_LANG[lang],
-                    options: CONFIG.TRAINING_OPTIONS[lang].map((text, idx) => ({
-                        text: text,
-                        value: CONFIG.TRAINING_OPTIONS['en'][idx] // Store English value for backend
-                    })),
-                    required: true
-                },
-                {
-                    id: 'current_occupation',
-                    text: getQuestionText('occupation'),
-                    type: 'multiple_choice',
-                    speaker: true,
-                    speechLang: CONFIG.SPEECH_LANG[lang],
-                    options: CONFIG.OCCUPATION_OPTIONS[lang].map((text, idx) => ({
-                        text: text,
-                        value: CONFIG.OCCUPATION_OPTIONS['en'][idx] // Store English value for backend
-                    })),
-                    required: true
-                },
-                {
-                    id: 'feedback',
-                    text: getFeedbackText(),
+                    id: 'q1_name',
+                    number: 1,
+                    text: getQuestionText('q1_name', lang),
                     type: 'short_answer',
+                    required: true,
                     speaker: true,
                     speechLang: CONFIG.SPEECH_LANG[lang],
                     micRecord: true,
-                    placeholder: getPlaceholderText(),
-                    required: false
+                    placeholder: getPlaceholder('name', lang)
+                },
+                // Q2: Age Group
+                {
+                    id: 'q2_age',
+                    number: 2,
+                    text: getQuestionText('q2_age', lang),
+                    type: 'multiple_choice',
+                    required: true,
+                    speaker: true,
+                    speechLang: CONFIG.SPEECH_LANG[lang],
+                    options: [
+                        { value: '18-25', text: getOptionText('18-25', lang) },
+                        { value: '26-35', text: getOptionText('26-35', lang) },
+                        { value: '36-45', text: getOptionText('36-45', lang) },
+                        { value: '46+', text: getOptionText('46+', lang) }
+                    ]
+                },
+                // Q3: Marital Status
+                {
+                    id: 'q3_marital',
+                    number: 3,
+                    text: getQuestionText('q3_marital', lang),
+                    type: 'multiple_choice',
+                    required: false,
+                    speaker: true,
+                    speechLang: CONFIG.SPEECH_LANG[lang],
+                    options: [
+                        { value: 'Single', text: getOptionText('Single', lang) },
+                        { value: 'Married', text: getOptionText('Married', lang) },
+                        { value: 'Widow', text: getOptionText('Widow', lang) },
+                        { value: 'Separated', text: getOptionText('Separated', lang) }
+                    ]
+                },
+                // Q4: Education
+                {
+                    id: 'q4_education',
+                    number: 4,
+                    text: getQuestionText('q4_education', lang),
+                    type: 'multiple_choice',
+                    required: false,
+                    speaker: true,
+                    speechLang: CONFIG.SPEECH_LANG[lang],
+                    options: [
+                        { value: 'No formal education', text: getOptionText('No formal education', lang) },
+                        { value: 'Primary education', text: getOptionText('Primary education', lang) },
+                        { value: 'High school', text: getOptionText('High school', lang) },
+                        { value: 'Higher secondary', text: getOptionText('Higher secondary', lang) },
+                        { value: 'Diploma', text: getOptionText('Diploma', lang) },
+                        { value: 'Degree', text: getOptionText('Degree', lang) }
+                    ]
+                },
+                // Q5: State
+                {
+                    id: 'q5_state',
+                    number: 5,
+                    text: getQuestionText('q5_state', lang),
+                    type: 'dropdown',
+                    required: true,
+                    speaker: true,
+                    speechLang: CONFIG.SPEECH_LANG[lang],
+                    options: [
+                        { value: 'Tamil Nadu', text: getOptionText('Tamil Nadu', lang) },
+                        { value: 'Telangana', text: getOptionText('Telangana', lang) },
+                        { value: 'Karnataka', text: getOptionText('Karnataka', lang) },
+                        { value: 'West Bengal', text: getOptionText('West Bengal', lang) },
+                        { value: 'Jharkhand', text: getOptionText('Jharkhand', lang) },
+                        { value: 'Bihar', text: getOptionText('Bihar', lang) }
+                    ]
+                },
+                // Q6: District
+                {
+                    id: 'q6_district',
+                    number: 6,
+                    text: getQuestionText('q6_district', lang),
+                    type: 'short_answer',
+                    required: true,
+                    speaker: true,
+                    speechLang: CONFIG.SPEECH_LANG[lang],
+                    micRecord: true,
+                    placeholder: getPlaceholder('district', lang)
+                },
+                // Q7: Loan Taken
+                {
+                    id: 'q7_loan',
+                    number: 7,
+                    text: getQuestionText('q7_loan', lang),
+                    type: 'multiple_choice',
+                    required: true,
+                    speaker: true,
+                    speechLang: CONFIG.SPEECH_LANG[lang],
+                    options: [
+                        { value: 'Yes', text: getOptionText('Yes', lang) },
+                        { value: 'No', text: getOptionText('No', lang) }
+                    ]
+                },
+                // Q7a: Loan Amount (Conditional)
+                {
+                    id: 'q7a_amount',
+                    number: '7a',
+                    text: getQuestionText('q7a_amount', lang),
+                    type: 'multiple_choice',
+                    required: false,
+                    conditional: true,
+                    condition: { question: 'q7_loan', value: 'Yes' },
+                    speaker: true,
+                    speechLang: CONFIG.SPEECH_LANG[lang],
+                    options: [
+                        { value: 'Below ₹20,000', text: getOptionText('Below 20000', lang) },
+                        { value: '₹20,000 - ₹40,000', text: getOptionText('20000-40000', lang) },
+                        { value: '₹40,000 - ₹60,000', text: getOptionText('40000-60000', lang) },
+                        { value: 'Above ₹60,000', text: getOptionText('Above 60000', lang) }
+                    ]
+                },
+                // Q8: Training Completed (COMPLETE TRANSLATIONS)
+                {
+                    id: 'q8_training',
+                    number: 8,
+                    text: getQuestionText('q8_training', lang),
+                    type: 'checkbox',
+                    required: true,
+                    speaker: true,
+                    speechLang: CONFIG.SPEECH_LANG[lang],
+                    options: [
+                        { value: 'Financial Literacy Training', text: getOptionText('Financial Literacy Training', lang) },
+                        { value: 'Digital Literacy Training', text: getOptionText('Digital Literacy Training', lang) },
+                        { value: 'Business Motivation Training', text: getOptionText('Business Motivation Training', lang) },
+                        { value: 'Leadership & Relationship Building Training', text: getOptionText('Leadership & Relationship Building Training', lang) },
+                        { value: 'Gender & Women Leadership Training', text: getOptionText('Gender & Women Leadership Training', lang) },
+                        { value: 'Awareness & Access to Government Schemes', text: getOptionText('Awareness & Access to Government Schemes', lang) },
+                        { value: 'Knowledge Volunteer Capacity Building Training', text: getOptionText('Knowledge Volunteer Capacity Building Training', lang) },
+                        { value: 'Women Connect Program/Meetings', text: getOptionText('Women Connect Program/Meetings', lang) }
+                    ],
+                    helpText: lang === 'en' ? 'Select all that apply' : lang === 'ta' ? 'பொருந்தும் அனைத்தையும் தேர்ந்தெடுக்கவும்' : 'सभी लागू विकल्प चुनें'
+                },
+                // Q9: Occupation (COMPLETE TRANSLATIONS)
+                {
+                    id: 'q9_occupation',
+                    number: 9,
+                    text: getQuestionText('q9_occupation', lang),
+                    type: 'multiple_choice',
+                    required: true,
+                    speaker: true,
+                    speechLang: CONFIG.SPEECH_LANG[lang],
+                    options: [
+                        { value: 'Homemaker (Not using training)', text: getOptionText('Homemaker (Not using training)', lang) },
+                        { value: 'Self-employed – Small business or livelihood activity', text: getOptionText('Self-employed – Small business or livelihood activity', lang) },
+                        { value: 'SHG-based income activity', text: getOptionText('SHG-based income activity', lang) },
+                        { value: 'Private job', text: getOptionText('Private job', lang) },
+                        { value: 'Daily wage worker', text: getOptionText('Daily wage worker', lang) },
+                        { value: 'Agriculture/Fishing work', text: getOptionText('Agriculture/Fishing work', lang) },
+                        { value: 'Unemployed', text: getOptionText('Unemployed', lang) }
+                    ]
                 }
             ];
             
             handleQuestionsResponse({ questions: questions });
         }
 
-        function getQuestionText(type) {
+        // ==========================================
+        // TRANSLATION FUNCTIONS
+        // ==========================================
+        
+        function getQuestionText(key, lang) {
             const texts = {
-                'en': {
-                    trainings: 'Which training(s) did you complete under the Belstar program?',
-                    occupation: 'What is your current occupation after completing Belstar training?'
+                'q1_name': {
+                    'en': 'What is your name?',
+                    'ta': 'உங்கள் பெயர் என்ன?',
+                    'hi': 'आपका नाम क्या है?'
                 },
-                'ta': {
-                    trainings: 'Belstar திட்டத்தின் கீழ் நீங்கள் எந்த பயிற்சி(களை) முடித்தீர்கள்?',
-                    occupation: 'Belstar பயிற்சி முடித்த பிறகு உங்கள் தற்போதைய தொழில் என்ன?'
+                'q2_age': {
+                    'en': 'What is your age group?',
+                    'ta': 'உங்கள் வயது பிரிவு என்ன?',
+                    'hi': 'आपकी आयु वर्ग क्या है?'
                 },
-                'hi': {
-                    trainings: 'Belstar कार्यक्रम के तहत आपने कौन सा प्रशिक्षण पूरा किया?',
-                    occupation: 'Belstar प्रशिक्षण पूरा करने के बाद आपका वर्तमान व्यवसाय क्या है?'
+                'q3_marital': {
+                    'en': 'What is your marital status?',
+                    'ta': 'உங்கள் திருமண நிலை என்ன?',
+                    'hi': 'आपकी वैवाहिक स्थिति क्या है?'
+                },
+                'q4_education': {
+                    'en': 'What is your education level?',
+                    'ta': 'உங்கள் கல்வி நிலை என்ன?',
+                    'hi': 'आपकी शिक्षा का स्तर क्या है?'
+                },
+                'q5_state': {
+                    'en': 'Which state do you belong to?',
+                    'ta': 'நீங்கள் எந்த மாநிலத்தைச் சேர்ந்தவர்?',
+                    'hi': 'आप किस राज्य से हैं?'
+                },
+                'q6_district': {
+                    'en': 'Which district do you belong to?',
+                    'ta': 'நீங்கள் எந்த மாவட்டத்தைச் சேர்ந்தவர்?',
+                    'hi': 'आप किस जिले से हैं?'
+                },
+                'q7_loan': {
+                    'en': 'Have you taken a Belstar loan?',
+                    'ta': 'நீங்கள் பெல்ஸ்டார் கடன் பெற்றுள்ளீர்களா?',
+                    'hi': 'क्या आपने बेलस्टार ऋण लिया है?'
+                },
+                'q7a_amount': {
+                    'en': 'What is your Belstar loan amount?',
+                    'ta': 'உங்கள் பெல்ஸ்டார் கடன் தொகை எவ்வளவு?',
+                    'hi': 'आपका बेलस्टार ऋण राशि क्या है?'
+                },
+                'q8_training': {
+                    'en': 'Which training(s) did you complete under the Belstar program?',
+                    'ta': 'Belstar திட்டத்தின் கீழ் நீங்கள் எந்த பயிற்சி(களை) முடித்தீர்கள்?',
+                    'hi': 'Belstar कार्यक्रम के तहत आपने कौन सा प्रशिक्षण पूरा किया?'
+                },
+                'q9_occupation': {
+                    'en': 'What is your current occupation after completing Belstar training?',
+                    'ta': 'Belstar பயிற்சி முடித்த பிறகு உங்கள் தற்போதைய தொழில் என்ன?',
+                    'hi': 'Belstar प्रशिक्षण पूरा करने के बाद आपका वर्तमान व्यवसाय क्या है?'
                 }
             };
-            return texts[currentLanguage][type];
+            return texts[key][lang] || texts[key]['en'];
         }
 
-        function getFeedbackText() {
-            const texts = {
-                'en': 'Please share your feedback about the training program',
-                'ta': 'பயிற்சி திட்டம் பற்றிய உங்கள் கருத்துக்களை பகிரவும்',
-                'hi': 'कृपया प्रशिक्षण कार्यक्रम के बारे में अपनी प्रतिक्रिया साझा करें'
+        function getPlaceholder(type, lang) {
+            const placeholders = {
+                'name': {
+                    'en': 'Enter your name',
+                    'ta': 'பெயரை உள்ளிடவும்',
+                    'hi': 'नाम दर्ज करें'
+                },
+                'district': {
+                    'en': 'Enter your district',
+                    'ta': 'மாவட்டத்தை உள்ளிடவும்',
+                    'hi': 'जिला दर्ज करें'
+                }
             };
-            return texts[currentLanguage];
+            return placeholders[type][lang] || placeholders[type]['en'];
         }
 
+        function getOptionText(key, lang) {
+            const options = {
+                // Age Groups
+                '18-25': { 'en': '18-25 years', 'ta': '18-25 வயது', 'hi': '18-25 साल' },
+                '26-35': { 'en': '26-35 years', 'ta': '26-35 வயது', 'hi': '26-35 साल' },
+                '36-45': { 'en': '36-45 years', 'ta': '36-45 வயது', 'hi': '36-45 साल' },
+                '46+': { 'en': '46 and above', 'ta': '46 மேல்', 'hi': '46 से अधिक' },
+                
+                // Marital Status
+                'Single': { 'en': 'Single', 'ta': 'திருமணமாகாதவர்', 'hi': 'अविवाहित' },
+                'Married': { 'en': 'Married', 'ta': 'திருமணமானவர்', 'hi': 'विवाहित' },
+                'Widow': { 'en': 'Widow', 'ta': 'விதவை', 'hi': 'विधवा' },
+                'Separated': { 'en': 'Separated', 'ta': 'பிரிந்தவர்', 'hi': 'अलग' },
+                
+                // Education
+                'No formal education': { 'en': 'No formal education', 'ta': 'கல்வி இல்லை', 'hi': 'कोई शिक्षा नहीं' },
+                'Primary education': { 'en': 'Primary education', 'ta': 'ஆரம்ப கல்வி', 'hi': 'प्राथमिक शिक्षा' },
+                'High school': { 'en': 'High school', 'ta': 'உயர்நிலை பள்ளி', 'hi': 'हाई स्कूल' },
+                'Higher secondary': { 'en': 'Higher secondary', 'ta': 'மேல்நிலை பள்ளி', 'hi': 'हायर सेकेंडरी' },
+                'Diploma': { 'en': 'Diploma', 'ta': 'டிப்ளோமா', 'hi': 'डिप्लोमा' },
+                'Degree': { 'en': 'Degree', 'ta': 'பட்டம்', 'hi': 'डिग्री' },
+                
+                // States
+                'Tamil Nadu': { 'en': 'Tamil Nadu', 'ta': 'தமிழ்நாடு', 'hi': 'तमिलनाडु' },
+                'Telangana': { 'en': 'Telangana', 'ta': 'தெலங்கானா', 'hi': 'तेलंगाना' },
+                'Karnataka': { 'en': 'Karnataka', 'ta': 'கர்நாடகா', 'hi': 'कर्नाटक' },
+                'West Bengal': { 'en': 'West Bengal', 'ta': 'மேற்கு வங்காளம்', 'hi': 'पश्चिम बंगाल' },
+                'Jharkhand': { 'en': 'Jharkhand', 'ta': 'ஜார்க்கண்ட்', 'hi': 'झारखंड' },
+                'Bihar': { 'en': 'Bihar', 'ta': 'பீகார்', 'hi': 'बिहार' },
+                
+                // Yes/No
+                'Yes': { 'en': 'Yes', 'ta': 'ஆம்', 'hi': 'हाँ' },
+                'No': { 'en': 'No', 'ta': 'இல்லை', 'hi': 'नहीं' },
+                
+                // Loan Amounts
+                'Below 20000': { 'en': 'Below ₹20,000', 'ta': '₹20,000 க்கு கீழ்', 'hi': '₹20,000 से कम' },
+                '20000-40000': { 'en': '₹20,000 - ₹40,000', 'ta': '₹20,000 - ₹40,000', 'hi': '₹20,000 - ₹40,000' },
+                '40000-60000': { 'en': '₹40,000 - ₹60,000', 'ta': '₹40,000 - ₹60,000', 'hi': '₹40,000 - ₹60,000' },
+                'Above 60000': { 'en': 'Above ₹60,000', 'ta': '₹60,000 மேல்', 'hi': '₹60,000 से अधिक' },
+                
+                // ========== COMPLETE TRAINING OPTIONS (FULL NAMES) ==========
+                'Financial Literacy Training': { 
+                    'en': 'Financial Literacy Training', 
+                    'ta': 'நிதி அறிவியல் பயிற்சி', 
+                    'hi': 'वित्तीय साक्षरता प्रशिक्षण' 
+                },
+                'Digital Literacy Training': { 
+                    'en': 'Digital Literacy Training', 
+                    'ta': 'டிஜிட்டல் அறிவியல் பயிற்சி', 
+                    'hi': 'डिजिटल साक्षरता प्रशिक्षण' 
+                },
+                'Business Motivation Training': { 
+                    'en': 'Business Motivation Training', 
+                    'ta': 'வணிக ஊக்க பயிற்சி', 
+                    'hi': 'व्यवसाय प्रेरणा प्रशिक्षण' 
+                },
+                'Leadership & Relationship Building Training': { 
+                    'en': 'Leadership & Relationship Building Training', 
+                    'ta': 'தலைமை மற்றும் உறவுகள் கட்டமைப்பு பயிற்சி', 
+                    'hi': 'नेतृत्व और संबंध निर्माण प्रशिक्षण' 
+                },
+                'Gender & Women Leadership Training': { 
+                    'en': 'Gender & Women Leadership Training', 
+                    'ta': 'பாலினம் மற்றும் பெண்கள் தலைமை பயிற்சி', 
+                    'hi': 'लिंग और महिला नेतृत्व प्रशिक्षण' 
+                },
+                'Awareness & Access to Government Schemes': { 
+                    'en': 'Awareness & Access to Government Schemes', 
+                    'ta': 'அரசாங்க திட்டங்கள் பற்றிய அறிவு மற்றும் அணுகல் பயிற்சி', 
+                    'hi': 'सरकारी योजनाओं की जानकारी और उपयोग प्रशिक्षण' 
+                },
+                'Knowledge Volunteer Capacity Building Training': { 
+                    'en': 'Knowledge Volunteer Capacity Building Training', 
+                    'ta': 'அறிவு குழு உறுப்பினர்களுக்கான திறன் வளர்ப்பு பயிற்சி', 
+                    'hi': 'ज्ञान स्वयंसेवक क्षमता विकास प्रशिक्षण' 
+                },
+                'Women Connect Program/Meetings': { 
+                    'en': 'Women Connect Program/Meetings', 
+                    'ta': 'பெண்கள் இணைப்பு நிகழ்ச்சிகள்/மீட்டிங்குகள்', 
+                    'hi': 'महिला कनेक्ट कार्यक्रम/मीटिंग्स' 
+                },
+                
+                // ========== COMPLETE OCCUPATION OPTIONS (FULL PHRASES) ==========
+                'Homemaker (Not using training)': { 
+                    'en': 'Homemaker (Not using training)', 
+                    'ta': 'வீட்டு பெண்மணி (பயிற்சியை பயன்படுத்தவில்லை)', 
+                    'hi': 'गृहिणी (प्रशिक्षण का उपयोग नहीं कर रही)' 
+                },
+                'Self-employed – Small business or livelihood activity': { 
+                    'en': 'Self-employed – Small business or livelihood activity', 
+                    'ta': 'சுய தொழில் – சிறிய வணிகம் அல்லது வாழ்வாதார செயல்', 
+                    'hi': 'स्वरोज़गार – छोटा व्यवसाय या रोज़गार गतिविधि' 
+                },
+                'SHG-based income activity': { 
+                    'en': 'SHG-based income activity', 
+                    'ta': 'சுய உதவிக் குழு (SHG) சார்ந்த வருமானம்', 
+                    'hi': 'SHG आधारित आय गतिविधि' 
+                },
+                'Private job': { 
+                    'en': 'Private job', 
+                    'ta': 'தனியார் வேலை', 
+                    'hi': 'निजी नौकरी' 
+                },
+                'Daily wage worker': { 
+                    'en': 'Daily wage worker', 
+                    'ta': 'நாளாந்து வேலை', 
+                    'hi': 'दैनिक मजदूरी' 
+                },
+                'Agriculture/Fishing work': { 
+                    'en': 'Agriculture/Fishing work', 
+                    'ta': 'விவசாயம் / மீன்வளம் வேலை', 
+                    'hi': 'कृषि / मछली पकड़ने का काम' 
+                },
+                'Unemployed': { 
+                    'en': 'Unemployed', 
+                    'ta': 'வேலை செய்யவில்லை', 
+                    'hi': 'बेरोज़गार' 
+                }
+            };
+            return options[key][lang] || options[key]['en'];
+        }
+
+        // ==========================================
+        // RENDER QUESTIONS
+        // ==========================================
+        
         function handleQuestionsResponse(data) {
             if (data.error) {
                 alert('Error: ' + data.error);
@@ -1542,10 +1786,6 @@
             updateProgress();
         }
 
-        // ==========================================
-        // RENDER QUESTIONS
-        // ==========================================
-        
         function renderAllQuestions() {
             const wrapper = document.getElementById('questionsWrapper');
             wrapper.innerHTML = '';
@@ -1584,7 +1824,7 @@
             
             card.innerHTML = `
                 <div class="question-header">
-                    <div class="question-number">${index + 1}</div>
+                    <div class="question-number">${q.number}</div>
                     <div class="question-content">
                         <div class="question-text">${q.text}</div>
                     </div>
@@ -1603,7 +1843,7 @@
         function createShortAnswerHTML(q) {
             const micLabels = CONFIG.MIC_LABELS[currentLanguage];
             
-            const tamilNotice = isTamilMobile ? 
+            const tamilNotice = isTamilMobile && q.micRecord ? 
                 `<div class="tamil-notice show" id="tamil-notice-${q.id}">
                     <i class="fas fa-info-circle"></i> 
                     Tamil voice recognition may not work on all mobile devices. Please type your answer if recording fails.
@@ -1619,7 +1859,7 @@
                     <input type="text" 
                            class="text-input" 
                            id="input-${q.id}" 
-                           placeholder="${q.placeholder || getPlaceholderText()}"
+                           placeholder="${q.placeholder || ''}"
                            oninput="saveText('${q.id}'); checkConditionalQuestions(); updateProgress();">
                 </div>
                 ${q.micRecord ? `
@@ -1637,15 +1877,6 @@
                     </div>
                 ` : ''}
             `;
-        }
-
-        function getPlaceholderText() {
-            const placeholders = {
-                'en': 'Type your answer here...',
-                'ta': 'உங்கள் பதிலை இங்கே தட்டச்சு செய்யவும்...',
-                'hi': 'अपना जवाब यहां टाइप करें...'
-            };
-            return placeholders[currentLanguage] || placeholders['en'];
         }
 
         function createMultipleChoiceHTML(q) {
@@ -1981,6 +2212,7 @@
                 }
             });
         }
+
         // ==========================================
         // PROGRESS & VALIDATION
         // ==========================================
@@ -2077,20 +2309,24 @@
                 <p>${loadingTexts[currentLanguage].subtitle}</p>
             `;
             
-            // Prepare data for Google Sheets
+            // Prepare data for Google Sheets - MATCHING Code.gs EXPECTED FORMAT
             const submissionData = {
-                timestamp: new Date().toISOString(),
-                language: currentLanguage,
-                gps_lat: gpsLatitude || 'Not captured',
-                gps_lng: gpsLongitude || 'Not captured',
-                user_agent: navigator.userAgent,
-                // Add all responses
-                trainings_completed: Array.isArray(responses['trainings_completed']) 
-                    ? responses['trainings_completed'].join(', ') 
-                    : (responses['trainings_completed'] || ''),
-                current_occupation: responses['current_occupation'] || '',
-                feedback: responses['feedback'] || '',
-                feedback_audio: responses['audio_feedback'] || ''
+                action: 'submitResponse',
+                formData: {
+                    language: currentLanguage,
+                    q1_name: responses['q1_name'] || '',
+                    q2_age: responses['q2_age'] || '',
+                    q3_marital: responses['q3_marital'] || '',
+                    q4_education: responses['q4_education'] || '',
+                    q5_state: responses['q5_state'] || '',
+                    q6_district: responses['q6_district'] || '',
+                    q7_loan: responses['q7_loan'] || '',
+                    q7a_amount: responses['q7a_amount'] || '',
+                    q8_training: responses['q8_training'] || [],
+                    q9_occupation: responses['q9_occupation'] || '',
+                    audio_q1: responses['audio_q1_name'] || '',
+                    audio_q6: responses['audio_q6_district'] || ''
+                }
             };
             
             // Submit to Google Sheets
