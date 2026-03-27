@@ -97,7 +97,7 @@
             z-index: 1;
         }
 
-        /* GPS Display */
+        /* GPS Bar */
         .gps-bar {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -565,6 +565,11 @@
             transform: none;
         }
 
+        .mic-btn.tamil-fallback {
+            background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+            font-size: 13px;
+        }
+
         .recording-status {
             color: var(--primary);
             font-weight: 600;
@@ -599,6 +604,22 @@
         }
 
         .mic-error.show {
+            display: block;
+        }
+
+        .tamil-notice {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #e65100;
+            display: none;
+            width: 100%;
+        }
+
+        .tamil-notice.show {
             display: block;
         }
 
@@ -1031,9 +1052,22 @@
         let gpsLatitude = null;
         let gpsLongitude = null;
         let micPermissionGranted = false;
+        let isTamilMobile = false; // Flag for Tamil on mobile workaround
 
         // ==========================================
-        // GPS / LOCATION CAPTURE - FROM PREVIOUS PROJECT
+        // DEVICE DETECTION
+        // ==========================================
+        
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        function isAndroid() {
+            return /Android/i.test(navigator.userAgent);
+        }
+
+        // ==========================================
+        // GPS / LOCATION CAPTURE
         // ==========================================
         
         function initGPS() {
@@ -1082,16 +1116,12 @@
         
         async function requestMicrophonePermission() {
             try {
-                // First try getUserMedia to trigger permission prompt
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                
-                // Permission granted
                 micPermissionGranted = true;
-                stream.getTracks().forEach(track => track.stop()); // Stop immediately, we just needed permission
+                stream.getTracks().forEach(track => track.stop());
                 
                 document.getElementById('permissionOverlay').classList.remove('active');
                 
-                // If we were trying to record, start now
                 if (currentRecordingField) {
                     startRecording(currentRecordingField);
                 }
@@ -1102,13 +1132,11 @@
         }
 
         function checkMicrophonePermission() {
-            // Check if we're in a secure context
             if (!window.isSecureContext) {
                 showMicError(currentRecordingField, 'Microphone requires HTTPS. Please use a secure connection.');
                 return false;
             }
             
-            // Check if browser supports getUserMedia
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
                 showMicError(currentRecordingField, 'Voice input not supported in this browser. Please use Chrome or Edge.');
                 return false;
@@ -1118,7 +1146,7 @@
         }
 
         // ==========================================
-        // SPEECH SYNTHESIS - FIXED WITH PROPER VOICE LOADING
+        // SPEECH SYNTHESIS
         // ==========================================
         
         function initSpeechSynthesis() {
@@ -1127,22 +1155,18 @@
                 return false;
             }
             
-            // Get voices immediately if available
             availableVoices = window.speechSynthesis.getVoices();
             
             if (availableVoices.length > 0) {
                 voicesLoaded = true;
-                console.log(`Loaded ${availableVoices.length} voices`);
                 return true;
             }
             
-            // Wait for voices to load
             return new Promise((resolve) => {
                 const checkVoices = () => {
                     availableVoices = window.speechSynthesis.getVoices();
                     if (availableVoices.length > 0) {
                         voicesLoaded = true;
-                        console.log(`Loaded ${availableVoices.length} voices`);
                         resolve(true);
                     } else {
                         setTimeout(checkVoices, 100);
@@ -1150,33 +1174,24 @@
                 };
                 
                 window.speechSynthesis.onvoiceschanged = checkVoices;
-                
-                // Timeout fallback after 3 seconds
                 setTimeout(() => {
-                    if (!voicesLoaded) {
-                        console.warn('Voice loading timeout');
-                        resolve(false);
-                    }
+                    if (!voicesLoaded) resolve(false);
                 }, 3000);
             });
         }
 
         function stopAllAudio() {
-            // Stop speech synthesis
             if (window.speechSynthesis) {
                 window.speechSynthesis.cancel();
             }
             
-            // Stop any recording
             if (isRecording) {
                 stopRecording();
             }
             
-            // Reset state
             isSpeaking = false;
             activeSpeakerId = null;
             
-            // Remove all speaking states
             document.querySelectorAll('.speaking, .loading').forEach(el => {
                 el.classList.remove('speaking', 'loading');
             });
@@ -1186,10 +1201,7 @@
             const btn = document.getElementById(buttonId);
             if (!btn) return;
             
-            // Remove all state classes first
             btn.classList.remove('loading', 'speaking');
-            
-            // Reset icon to speaker
             const icon = btn.querySelector('i');
             
             switch(state) {
@@ -1215,38 +1227,16 @@
             
             const langCode = lang ? lang.split('-')[0] : 'en';
             
-            // 1. Exact match for lang (e.g., 'ta-IN')
             let voice = availableVoices.find(v => v.lang === lang);
             
-            // 2. Language code match (e.g., 'ta')
             if (!voice) {
                 voice = availableVoices.find(v => v.lang && v.lang.startsWith(langCode + '-'));
             }
             
-            // 3. Any voice containing language code
             if (!voice) {
                 voice = availableVoices.find(v => v.lang && v.lang.startsWith(langCode));
             }
             
-            // 4. Language name matching
-            if (!voice) {
-                const langNames = {
-                    'ta': ['tamil', 'தமிழ்'],
-                    'hi': ['hindi', 'हिंदी'],
-                    'en': ['english', 'uk english', 'us english', 'indian english']
-                };
-                
-                const names = langNames[langCode] || [];
-                for (let name of names) {
-                    voice = availableVoices.find(v => 
-                        v.name.toLowerCase().includes(name.toLowerCase()) || 
-                        v.lang.toLowerCase().includes(name.toLowerCase())
-                    );
-                    if (voice) break;
-                }
-            }
-            
-            // 5. For Indian languages, prefer Indian English as fallback over default
             if (!voice && ['ta', 'hi'].includes(langCode)) {
                 voice = availableVoices.find(v => 
                     v.lang === 'en-IN' || 
@@ -1254,25 +1244,18 @@
                 );
             }
             
-            // 6. Any English voice as final fallback
             if (!voice) {
                 voice = availableVoices.find(v => v.lang && v.lang.startsWith('en'));
             }
             
-            // 7. Default to first available
             if (!voice && availableVoices.length > 0) {
                 voice = availableVoices[0];
-            }
-            
-            if (voice) {
-                console.log(`Selected voice for ${lang}: ${voice.name} (${voice.lang})`);
             }
             
             return voice;
         }
 
         function speakText(text, lang, buttonId) {
-            // Stop any current speech first
             stopAllAudio();
             
             if (!window.speechSynthesis) {
@@ -1280,7 +1263,6 @@
                 return;
             }
             
-            // Ensure voices are loaded
             if (!voicesLoaded || availableVoices.length === 0) {
                 setButtonState(buttonId, 'loading');
                 initSpeechSynthesis().then(() => {
@@ -1294,22 +1276,17 @@
 
         function doSpeak(text, lang, buttonId) {
             const utterance = new SpeechSynthesisUtterance(text);
-            
-            // Set language
             utterance.lang = lang || 'en-IN';
             
-            // Get best voice for this language
             const voice = getBestVoice(lang);
             if (voice) {
                 utterance.voice = voice;
             }
             
-            // Settings for clarity
             utterance.rate = 0.9;
             utterance.pitch = 1;
             utterance.volume = 1;
             
-            // Track active speaker
             activeSpeakerId = buttonId;
             setButtonState(buttonId, 'speaking');
             isSpeaking = true;
@@ -1331,7 +1308,6 @@
                 activeSpeakerId = null;
                 setButtonState(buttonId, 'idle');
                 
-                // Don't show notice for cancellation (user clicked to stop)
                 if (e.error !== 'canceled' && e.error !== 'interrupted') {
                     showAudioNotice();
                 }
@@ -1347,13 +1323,11 @@
         }
 
         function toggleSpeaker(text, lang, buttonId) {
-            // If this button is already speaking, stop it
             if (activeSpeakerId === buttonId && isSpeaking) {
                 stopAllAudio();
                 return;
             }
             
-            // Otherwise, stop any other audio and start this one
             speakText(text, lang, buttonId);
         }
 
@@ -1366,7 +1340,7 @@
         }
 
         // ==========================================
-        // INSTRUCTION SPEECH - FIXED WITH PROPER TOGGLE
+        // INSTRUCTION SPEECH
         // ==========================================
         
         function toggleInstructionAudio() {
@@ -1382,6 +1356,9 @@
         async function selectLanguage(lang) {
             currentLanguage = lang;
             
+            // Check if Tamil on mobile - needs special handling
+            isTamilMobile = (lang === 'ta' && isMobileDevice());
+            
             // Update UI
             document.querySelectorAll('.lang-card').forEach(card => {
                 card.classList.remove('active');
@@ -1390,10 +1367,8 @@
                 }
             });
             
-            // Update instruction text
             document.getElementById('instructionText').textContent = CONFIG.INSTRUCTION_TEXT[lang];
             
-            // Update permission text based on language
             const permTexts = {
                 'en': 'Please allow microphone access to use voice recording. This is needed for speech recognition.',
                 'ta': 'குரல் பதிவைப் பயன்படுத்த மைக்ரோஃபோன் அணுகலை அனுமதிக்கவும். இது பேச்சு அங்கீகாரத்திற்கு தேவைப்படுகிறது.',
@@ -1401,20 +1376,13 @@
             };
             document.getElementById('permissionText').textContent = permTexts[lang];
             
-            // Stop any speech
             stopAllAudio();
             
-            // Show loading
             document.getElementById('langSection').style.display = 'none';
             document.getElementById('loadingScreen').classList.add('active');
             
-            // Initialize speech
             await initSpeechSynthesis();
-            
-            // Start GPS capture
             initGPS();
-            
-            // Load questions
             loadQuestions(lang);
         }
 
@@ -1447,14 +1415,10 @@
             
             questions = data.questions;
             
-            // Hide loading, show survey
             document.getElementById('loadingScreen').classList.remove('active');
             document.getElementById('surveyContainer').classList.add('active');
-            
-            // Show GPS bar
             document.getElementById('gpsBar').style.display = 'flex';
             
-            // Render all questions
             renderAllQuestions();
             updateProgress();
         }
@@ -1478,7 +1442,6 @@
             card.className = 'question-card';
             card.id = `question-${q.id}`;
             
-            // Check conditional
             if (q.conditional) {
                 card.dataset.conditionQuestion = q.condition.question;
                 card.dataset.conditionValue = q.condition.value;
@@ -1521,6 +1484,19 @@
         function createShortAnswerHTML(q) {
             const micLabels = CONFIG.MIC_LABELS[currentLanguage];
             
+            // For Tamil on mobile, show special notice
+            const tamilNotice = isTamilMobile ? 
+                `<div class="tamil-notice show" id="tamil-notice-${q.id}">
+                    <i class="fas fa-info-circle"></i> 
+                    Tamil voice recognition may not work on all mobile devices. Please type your answer if recording fails.
+                </div>` : '';
+            
+            // Use different button class for Tamil mobile
+            const btnClass = isTamilMobile ? 'mic-btn tamil-fallback' : 'mic-btn';
+            const btnText = isTamilMobile ? 
+                (currentLanguage === 'ta' ? '🔴 பதிவு (அல்லது தட்டச்சு)' : '🔴 Record (or Type)') : 
+                micLabels.speak;
+            
             return `
                 <div class="text-input-wrapper">
                     <input type="text" 
@@ -1531,14 +1507,15 @@
                 </div>
                 ${q.micRecord ? `
                     <div class="mic-section">
-                        <button class="mic-btn" id="mic-${q.id}" onclick="toggleRecording('${q.id}')">
+                        <button class="${btnClass}" id="mic-${q.id}" onclick="toggleRecording('${q.id}')">
                             <i class="fas fa-microphone"></i>
-                            <span>${micLabels.speak}</span>
+                            <span>${btnText}</span>
                         </button>
                         <div class="recording-status hidden" id="status-${q.id}">
                             <span class="recording-dot"></span>
                             <span>${micLabels.recording}</span>
                         </div>
+                        ${tamilNotice}
                         <div class="mic-error" id="error-${q.id}"></div>
                     </div>
                 ` : ''}
@@ -1582,7 +1559,7 @@
         }
 
         // ==========================================
-        // QUESTION SPEECH - FIXED WITH GLOBAL TRACKING
+        // QUESTION SPEECH
         // ==========================================
         
         function toggleQuestionSpeech(questionId) {
@@ -1600,7 +1577,7 @@
         }
 
         // ==========================================
-        // INPUT HANDLING - FIXED TO STOP AUDIO ON SELECTION
+        // INPUT HANDLING
         // ==========================================
         
         function saveText(questionId) {
@@ -1611,12 +1588,10 @@
         }
 
         function selectOption(questionId, value, index) {
-            // BUG FIX 3: Stop all audio when selecting an option
             stopAllAudio();
             
             responses[questionId] = value;
             
-            // Update UI
             const q = questions.find(q => q.id === questionId);
             q.options.forEach((opt, i) => {
                 const el = document.getElementById(`opt-${questionId}-${i}`);
@@ -1634,7 +1609,6 @@
         }
 
         function toggleCheckbox(questionId, value, index) {
-            // BUG FIX 3: Stop all audio when toggling checkbox
             stopAllAudio();
             
             if (!responses[questionId]) {
@@ -1658,37 +1632,40 @@
         }
 
         // ==========================================
-        // MICROPHONE - FIXED FOR MOBILE/DESKTOP WITH PERMISSION HANDLING
+        // MICROPHONE - FIXED WITH TAMIL MOBILE WORKAROUND
         // ==========================================
         
         function getMicErrorMessage(errorType) {
             const messages = {
                 'en': {
                     'not-allowed': 'Microphone permission denied. Please allow access in browser settings.',
-                    'service-not-allowed': 'Speech recognition service not available. Please try again or type your answer.',
+                    'service-not-allowed': 'Speech recognition not available. Please type your answer.',
                     'no-speech': 'No speech detected. Please speak clearly and try again.',
                     'network': 'Network error. Please check your internet connection.',
                     'audio-capture': 'Could not capture audio. Please check your microphone.',
                     'permission_denied': 'Please allow microphone access to use voice recording.',
-                    'not_supported': 'Voice input not supported in this browser. Please use Chrome or Edge.'
+                    'not_supported': 'Voice input not supported in this browser. Please use Chrome or Edge.',
+                    'tamil_mobile': 'Tamil voice recognition not available on this device. Please type your answer.'
                 },
                 'ta': {
                     'not-allowed': 'மைக்ரோஃபோன் அனுமதி மறுக்கப்பட்டது. உலாவி அமைப்புகளில் அணுகலை அனுமதிக்கவும்.',
-                    'service-not-allowed': 'பேச்சு அங்கீகார சேவை கிடைக்கவில்லை. மீண்டும் முயற்சிக்கவும் அல்லது தட்டச்சு செய்யவும்.',
+                    'service-not-allowed': 'பேச்சு அங்கீகாரம் கிடைக்கவில்லை. தயவுசெய்து தட்டச்சு செய்யவும்.',
                     'no-speech': 'பேச்சு கண்டறியப்படவில்லை. தெளிவாகப் பேசி மீண்டும் முயற்சிக்கவும்.',
                     'network': 'நெட்வொர்க் பிழை. உங்கள் இணைய இணைப்பைச் சரிபார்க்கவும்.',
                     'audio-capture': 'ஆடியோவைப் பிடிக்க முடியவில்லை. உங்கள் மைக்ரோஃபோனைச் சரிபார்க்கவும்.',
                     'permission_denied': 'குரல் பதிவைப் பயன்படுத்த மைக்ரோஃபோன் அணுகலை அனுமதிக்கவும்.',
-                    'not_supported': 'இந்த உலாவியில் குரல் உள்ளீடு ஆதரிக்கப்படவில்லை. Chrome அல்லது Edge ஐப் பயன்படுத்தவும்.'
+                    'not_supported': 'இந்த உலாவியில் குரல் உள்ளீடு ஆதரிக்கப்படவில்லை. Chrome அல்லது Edge ஐப் பயன்படுத்தவும்.',
+                    'tamil_mobile': 'இந்த சாதனத்தில் தமிழ் குரல் அங்கீகாரம் கிடைக்கவில்லை. தயவுசெய்து தட்டச்சு செய்யவும்.'
                 },
                 'hi': {
                     'not-allowed': 'माइक्रोफ़ोन अनुमति अस्वीकृत। कृपया ब्राउज़र सेटिंग्स में एक्सेस की अनुमति दें।',
-                    'service-not-allowed': 'स्पीच रिकग्निशन सेवा उपलब्ध नहीं। कृपया फिर से प्रयास करें या टाइप करें।',
+                    'service-not-allowed': 'स्पीच रिकग्निशन उपलब्ध नहीं। कृपया टाइप करें।',
                     'no-speech': 'कोई भाषण का पता नहीं चला। कृपया स्पष्ट रूप से बोलें और पुनः प्रयास करें।',
                     'network': 'नेटवर्क त्रुटि। कृपया अपना इंटरनेट कनेक्शन जांचें।',
                     'audio-capture': 'ऑडियो कैप्चर नहीं हो सका। कृपया अपना माइक्रोफ़ोन जांचें।',
                     'permission_denied': 'वॉइस रिकॉर्डिंग के लिए कृपया माइक्रोफ़ोन एक्सेस की अनुमति दें।',
-                    'not_supported': 'इस ब्राउज़र में वॉइस इनपुट समर्थित नहीं। कृपया Chrome या Edge का उपयोग करें।'
+                    'not_supported': 'इस ब्राउज़र में वॉइस इनपुट समर्थित नहीं। कृपया Chrome या Edge का उपयोग करें।',
+                    'tamil_mobile': 'इस डिवाइस पर तमिल वॉइस रिकग्निशन उपलब्ध नहीं। कृपया टाइप करें।'
                 }
             };
             
@@ -1711,7 +1688,6 @@
                 return;
             }
             
-            // Check secure context
             if (!window.isSecureContext) {
                 showMicError(questionId, 'HTTPS required for microphone access.');
                 return;
@@ -1721,23 +1697,31 @@
             if (!micPermissionGranted) {
                 currentRecordingField = questionId;
                 
-                // Try to get permission silently first
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     stream.getTracks().forEach(track => track.stop());
                     micPermissionGranted = true;
                 } catch (err) {
-                    // Show permission overlay
                     document.getElementById('permissionOverlay').classList.add('active');
                     return;
                 }
             }
             
-            // Setup recognition
+            // SPECIAL HANDLING FOR TAMIL ON MOBILE
+            // Try with 'en-IN' first as fallback, then 'ta-IN'
+            let recognitionLang = CONFIG.SPEECH_LANG[currentLanguage];
+            
+            // For Tamil on mobile, we need special handling
+            if (isTamilMobile) {
+                // First try with English-India as it has better support
+                // The user can speak Tamil and it might still work, or they can type
+                recognitionLang = 'en-IN'; // Fallback to English-India for better mobile support
+            }
+            
             recognition = new SpeechRecognition();
-            recognition.lang = CONFIG.SPEECH_LANG[currentLanguage];
+            recognition.lang = recognitionLang;
             recognition.continuous = false;
-            recognition.interimResults = false;
+            recognition.interimResults = true; // Enable interim for better feedback
             recognition.maxAlternatives = 1;
             
             currentRecordingField = questionId;
@@ -1746,8 +1730,11 @@
             const status = document.getElementById(`status-${questionId}`);
             const micLabels = CONFIG.MIC_LABELS[currentLanguage];
             
+            let finalTranscript = '';
+            
             recognition.onstart = function() {
                 isRecording = true;
+                finalTranscript = '';
                 hideMicError(questionId);
                 
                 if (micBtn) {
@@ -1760,30 +1747,53 @@
             };
             
             recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
+                let interimTranscript = '';
+                
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+                
+                // Update input with interim results for feedback
                 const input = document.getElementById(`input-${questionId}`);
                 if (input) {
-                    input.value = transcript;
-                    saveText(questionId);
-                    responses[`audio_${questionId}`] = transcript;
-                    updateProgress();
+                    input.value = finalTranscript || interimTranscript;
                 }
             };
             
             recognition.onerror = function(event) {
                 console.error('Speech recognition error:', event.error);
                 
-                let errorType = event.error;
-                // Map error types to our messages
-                if (event.error === 'service-not-allowed' || event.error === 'not-allowed') {
-                    micPermissionGranted = false; // Reset permission state
+                // For Tamil mobile, if we get service-not-allowed, show friendly message
+                if (isTamilMobile && (event.error === 'service-not-allowed' || event.error === 'not-allowed')) {
+                    showMicError(questionId, getMicErrorMessage('tamil_mobile'));
+                    
+                    // Hide the notice since we're showing error
+                    const notice = document.getElementById(`tamil-notice-${questionId}`);
+                    if (notice) notice.classList.remove('show');
+                } else {
+                    showMicError(questionId, getMicErrorMessage(event.error));
                 }
                 
-                showMicError(questionId, getMicErrorMessage(errorType));
                 stopRecording();
             };
             
             recognition.onend = function() {
+                // Save final transcript
+                if (finalTranscript) {
+                    const input = document.getElementById(`input-${questionId}`);
+                    if (input) {
+                        input.value = finalTranscript;
+                        saveText(questionId);
+                        responses[`audio_${questionId}`] = finalTranscript;
+                        updateProgress();
+                    }
+                }
+                
                 stopRecording();
             };
             
@@ -1791,7 +1801,11 @@
                 recognition.start();
             } catch (err) {
                 console.error('Start error:', err);
-                showMicError(questionId, getMicErrorMessage('service-not-allowed'));
+                if (isTamilMobile) {
+                    showMicError(questionId, getMicErrorMessage('tamil_mobile'));
+                } else {
+                    showMicError(questionId, getMicErrorMessage('service-not-allowed'));
+                }
             }
         }
 
@@ -1810,9 +1824,14 @@
                 const btn = document.getElementById(`mic-${currentRecordingField}`);
                 const status = document.getElementById(`status-${currentRecordingField}`);
                 
+                // Restore appropriate button text
+                const btnText = isTamilMobile ? 
+                    (currentLanguage === 'ta' ? '🔴 பதிவு (அல்லது தட்டச்சு)' : '🔴 Record (or Type)') : 
+                    micLabels.speak;
+                
                 if (btn) {
                     btn.classList.remove('recording');
-                    btn.innerHTML = `<i class="fas fa-microphone"></i><span>${micLabels.speak}</span>`;
+                    btn.innerHTML = `<i class="fas fa-microphone"></i><span>${btnText}</span>`;
                 }
                 if (status) {
                     status.classList.add('hidden');
@@ -1921,7 +1940,6 @@
         // ==========================================
         
         function submitSurvey() {
-            // Stop any speech
             stopAllAudio();
             
             const { missing, firstMissingCard } = validateAll();
@@ -1934,7 +1952,6 @@
                 return;
             }
             
-            // Show loading
             document.getElementById('surveyContainer').style.display = 'none';
             document.getElementById('loadingScreen').classList.add('active');
             document.getElementById('loadingScreen').innerHTML = `
@@ -1943,7 +1960,6 @@
                 <p>Please do not close this window</p>
             `;
             
-            // Prepare data
             const formData = {
                 action: 'submitResponse',
                 formData: {
@@ -1951,7 +1967,8 @@
                     language: currentLanguage,
                     gps_lat: gpsLatitude,
                     gps_lng: gpsLongitude,
-                    submitted_at: new Date().toISOString()
+                    submitted_at: new Date().toISOString(),
+                    is_tamil_mobile: isTamilMobile
                 }
             };
             
@@ -2009,10 +2026,8 @@
         // ==========================================
         
         window.addEventListener('load', async () => {
-            // Pre-initialize speech synthesis
             await initSpeechSynthesis();
             
-            // Some browsers need user interaction before audio works
             document.addEventListener('click', () => {
                 if (window.speechSynthesis && !voicesLoaded) {
                     initSpeechSynthesis();
@@ -2020,7 +2035,6 @@
             }, { once: true });
         });
 
-        // Handle page visibility changes (mobile browsers pause audio)
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
                 stopAllAudio();
