@@ -2322,7 +2322,7 @@
                     q6_district: responses['q6_district'] || '',
                     q7_loan: responses['q7_loan'] || '',
                     q7a_amount: responses['q7a_amount'] || '',
-                    q8_training: responses['q8_training'] || [],
+                    q8_training: sortTrainingByOrder(responses['q8_training'] || []),
                     q9_occupation: responses['q9_occupation'] || '',
                     audio_q1: responses['audio_q1_name'] || '',
                     audio_q6: responses['audio_q6_district'] || ''
@@ -2366,6 +2366,28 @@
             const timestamp = Date.now().toString(36).toUpperCase();
             const random = Math.random().toString(36).substring(2, 5).toUpperCase();
             return `${prefix}${timestamp}${random}`;
+        }
+
+        function generateResponseId() {
+    const prefix = 'BEL';
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const random = Math.random().toString(36).substring(2, 5).toUpperCase();
+    return `${prefix}${timestamp}${random}`;
+}
+
+// ← PASTE HERE
+        function sortTrainingByOrder(selectedTrainings) {
+            const fixedOrder = [
+                'Financial Literacy Training',
+                'Digital Literacy Training',
+                'Business Motivation Training',
+                'Leadership & Relationship Building Training',
+                'Gender & Women Leadership Training',
+                'Awareness & Access to Government Schemes',
+                'Knowledge Volunteer Capacity Building Training',
+                'Women Connect Program/Meetings'
+            ];
+            return fixedOrder.filter(training => selectedTrainings.includes(training));
         }
 
         function showSuccess(responseId) {
