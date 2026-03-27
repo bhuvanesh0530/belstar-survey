@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Belstar SHG Women Training — Donor Impact Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --sg-50:  #eff5f2;
+      --sg-100: #e0ebe4;
+      --sg-200: #c1d7ca;
+      --sg-300: #a2c3af;
+      --sg-400: #83af95;
+      --sg-500: #639c7a;
+      --sg-600: #507c62;
+      --sg-700: #3c5d49;
+      --sg-800: #283e31;
+      --sg-900: #141f18;
+      --sg-950: #0e1611;
+      --accent:  #639c7a;
+      --accent2: #3c5d49;
+      --warn:    #c17d3c;
+      --bg:      #f5f9f6;
+      --card:    #ffffff;
+      --text:    #1a2e22;
+      --muted:   #6b8070;
+      --border:  #dce9e1;
+      --radius:  14px;
+      --shadow:  0 2px 16px rgba(40,62,49,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── TOP NAV ── */
+    .topbar {
+      background: var(--sg-900);
+      color: var(--sg-100);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .topbar-left { display: flex; flex-direction: column; }
+    .topbar-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      letter-spacing: 0.01em;
+      color: #fff;
+    }
+    .topbar-sub { font-size: 12px; color: var(--sg-300); margin-top: 2px; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .live-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(99,156,122,0.18);
+      border: 1px solid var(--sg-600);
+      color: var(--sg-300);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .live-dot {
+      width: 8px; height: 8px;
+      background: #63c77a;
+      border-radius: 50%;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.5; transform:scale(1.3); }
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .main { max-width: 1280px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 32px 0 14px;
+    }
+
+    /* ── KPI GRID ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 960px) { .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 560px) { .kpi-grid { grid-template-columns: 1fr; } }
+
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 22px 18px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-3px); }
+    .kpi-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+    .kpi-card.warn::before { background: var(--warn); }
+    .kpi-card.dark { background: var(--sg-800); border-color: var(--sg-700); }
+    .kpi-card.dark .kpi-value { color: #fff; }
+    .kpi-card.dark .kpi-label { color: var(--sg-300); }
+    .kpi-card.dark .kpi-sub { color: var(--sg-400); }
+    .kpi-card.dark::before { background: var(--sg-400); }
+
+    .kpi-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: 38px;
+      line-height: 1;
+      color: var(--accent2);
+      margin-bottom: 4px;
+    }
+    .kpi-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ── INSIGHT ROW ── */
+    .insight-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+    @media (max-width: 760px) { .insight-row { grid-template-columns: 1fr; } }
+
+    .insight-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      display: flex; flex-direction: column; gap: 4px;
+      box-shadow: var(--shadow);
+    }
+    .insight-key { font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; }
+    .insight-val { font-size: 16px; font-weight: 600; color: var(--text); }
+
+    /* ── CHARTS GRID ── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 960px) { .charts-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .charts-grid { grid-template-columns: 1fr; } }
+
+    .charts-grid-2col {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 800px) { .charts-grid-2col { grid-template-columns: 1fr; } }
+
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .chart-card.span2 { grid-column: span 2; }
+    @media (max-width: 960px) { .chart-card.span2 { grid-column: span 1; } }
+
+    .chart-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .chart-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+    .chart-badge {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--sg-50);
+      color: var(--sg-700);
+      font-weight: 500;
+    }
+    canvas { max-height: 260px; }
+
+    /* ── MAP SECTION ── */
+    .map-container {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .map-inner {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 800px) { .map-inner { grid-template-columns: 1fr; } }
+    #india-map { width: 100%; height: 400px; }
+    .state-list { display: flex; flex-direction: column; gap: 10px; }
+    .state-row {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .state-name { font-size: 13px; flex: 1; color: var(--text); font-weight: 500; }
+    .state-bar-wrap {
+      flex: 2;
+      background: var(--sg-50);
+      border-radius: 4px;
+      height: 8px;
+      overflow: hidden;
+    }
+    .state-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      transition: width 0.8s ease;
+    }
+    .state-count {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent2);
+      min-width: 20px;
+      text-align: right;
+    }
+
+    /* ── TABLE ── */
+    .table-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    thead th {
+      background: var(--sg-50);
+      color: var(--sg-700);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    tbody td { padding: 10px 14px; border-bottom: 1px solid var(--sg-50); color: var(--text); }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--sg-50); }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .tag-en { background: #dff0ea; color: #2e7d56; }
+    .tag-ta { background: #fef3e2; color: #a16207; }
+    .tag-hi { background: #e8f0fe; color: #3949ab; }
+    .tag-yes { background: #dff0ea; color: #2e7d56; }
+    .tag-no  { background: #fce8e8; color: #b91c1c; }
+
+    /* ── LOADING ── */
+    #loading-screen {
+      position: fixed; inset: 0;
+      background: var(--sg-950);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 999;
+      transition: opacity 0.5s;
+    }
+    .loader-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      color: var(--sg-300);
+      margin-bottom: 20px;
+    }
+    .loader-bar {
+      width: 200px; height: 3px;
+      background: var(--sg-700);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .loader-fill {
+      height: 100%;
+      background: var(--sg-400);
+      border-radius: 2px;
+      animation: fill 1.5s ease forwards;
+    }
+    @keyframes fill { from { width:0; } to { width:100%; } }
+    .loader-text { color: var(--sg-500); font-size: 13px; margin-top: 12px; }
+
+    /* ── REFRESH ── */
+    .fab {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--sg-700);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 13px 24px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(40,62,49,0.3);
+      transition: background 0.2s, transform 0.2s;
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .fab:hover { background: var(--sg-800); transform: scale(1.04); }
+
+    /* ── TOOLTIP ── */
+    .tooltip-wrapper { position: relative; display: inline-block; }
+    .tooltip-wrapper:hover .tooltip { visibility: visible; opacity: 1; }
+    .tooltip {
+      visibility: hidden; opacity: 0;
+      background: var(--sg-800); color: var(--sg-100);
+      font-size: 12px; padding: 6px 10px; border-radius: 6px;
+      position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%);
+      white-space: nowrap;
+      transition: opacity 0.2s;
+      z-index: 10;
+    }
+
+    .no-data-msg {
+      text-align: center;
+      padding: 60px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── LOADING SCREEN ── -->
+<div id="loading-screen">
+  <div class="loader-logo">Belstar</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-text">Fetching live data…</div>
+</div>
+
+<!-- ── TOP BAR ── -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title">Belstar SHG Women Training — Donor Impact Dashboard</div>
+    <div class="topbar-sub">Clean Data Sheet · Auto-updates every 30 seconds</div>
+  </div>
+  <div class="topbar-right">
+    <div class="live-badge">
+      <span class="live-dot"></span>
+      Live · Updated <span id="last-updated-time">—</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAIN ── -->
+<div class="main" id="dashboard-content" style="display:none;">
+
+  <!-- KPIs -->
+  <div class="section-label">Key Performance Indicators</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Beneficiaries</div>
+      <div class="kpi-value" id="kpi-total">—</div>
+      <div class="kpi-sub">Responses collected</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">States Covered</div>
+      <div class="kpi-value" id="kpi-states">—</div>
+      <div class="kpi-sub">Geographic reach</div>
+    </div>
+    <div class="kpi-card warn">
+      <div class="kpi-label">Loans Taken</div>
+      <div class="kpi-value" id="kpi-loans">—</div>
+      <div class="kpi-sub" id="kpi-loan-rate">—% uptake</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-label">Self-Employed</div>
+      <div class="kpi-value" id="kpi-self">—</div>
+      <div class="kpi-sub">Livelihood created</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Economically Active</div>
+      <div class="kpi-value" id="kpi-active">—</div>
+      <div class="kpi-sub">After training</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Training Completions</div>
+      <div class="kpi-value" id="kpi-trainings">—</div>
+      <div class="kpi-sub">Total program enrollments</div>
+    </div>
+    <div class="kpi-card warn">
+      <div class="kpi-label">Loan Uptake Rate</div>
+      <div class="kpi-value" id="kpi-loan-rate2">—</div>
+      <div class="kpi-sub">Financial inclusion</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-label">Livelihood Impact</div>
+      <div class="kpi-value" id="kpi-livelihood">—</div>
+      <div class="kpi-sub">Employed after training</div>
+    </div>
+  </div>
+
+  <!-- Insight Row -->
+  <div class="insight-row">
+    <div class="insight-card">
+      <div class="insight-key">Top state by responses</div>
+      <div class="insight-val" id="ins-top-state">—</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-key">Most common occupation</div>
+      <div class="insight-val" id="ins-top-occ">—</div>
+    </div>
+    <div class="insight-card">
+      <div class="insight-key">Most active age group</div>
+      <div class="insight-val" id="ins-top-age">—</div>
+    </div>
+  </div>
+
+  <!-- Row 1: Charts -->
+  <div class="section-label">Demographic & Financial Breakdown</div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Age group</div>
+        <div class="chart-badge" id="badge-age">—</div>
+      </div>
+      <canvas id="chartAge"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Loan status</div>
+      </div>
+      <canvas id="chartLoan"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Loan amount distribution</div>
+      </div>
+      <canvas id="chartLoanAmt"></canvas>
+    </div>
+  </div>
+
+  <!-- Row 2: State + Occupation -->
+  <div class="section-label">Geographic & Livelihood Outcomes</div>
+  <div class="charts-grid-2col">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">State-wise beneficiaries</div>
+      </div>
+      <canvas id="chartState" style="max-height:220px;"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Occupation after training</div>
+      </div>
+      <canvas id="chartOcc"></canvas>
+    </div>
+  </div>
+
+  <!-- Training Chart -->
+  <div class="section-label">Training Programs Completed</div>
+  <div class="chart-card">
+    <div class="chart-header">
+      <div class="chart-title">Training programs completed (participants)</div>
+    </div>
+    <canvas id="chartTraining" style="max-height:300px;"></canvas>
+  </div>
+
+  <!-- Education Chart -->
+  <div class="section-label">Education Profile</div>
+  <div class="charts-grid-2col">
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Education level</div>
+      </div>
+      <canvas id="chartEdu"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-header">
+        <div class="chart-title">Marital status</div>
+      </div>
+      <canvas id="chartMarital"></canvas>
+    </div>
+  </div>
+
+  <!-- India Map -->
+  <div class="section-label">Geographic Distribution — State Coverage</div>
+  <div class="map-container">
+    <div class="chart-header">
+      <div class="chart-title">State-wise beneficiary map</div>
+    </div>
+    <div class="map-inner">
+      <div>
+        <svg id="india-map" viewBox="0 0 700 800" xmlns="http://www.w3.org/2000/svg">
+          <!-- Simplified India SVG paths by state -->
+          <!-- Tamil Nadu -->
+          <path id="map-Tamil Nadu"
+            d="M340 620 L360 600 L390 580 L410 590 L420 620 L410 650 L390 670 L370 680 L350 660 Z"
+            fill="var(--sg-200)" stroke="#fff" stroke-width="1.5" data-state="Tamil Nadu"/>
+          <!-- Karnataka -->
+          <path id="map-Karnataka"
+            d="M280 510 L310 490 L350 480 L390 490 L410 520 L400 560 L380 580 L340 590 L300 575 L275 545 Z"
+            fill="var(--sg-200)" stroke="#fff" stroke-width="1.5" data-state="Karnataka"/>
+          <!-- Telangana -->
+          <path id="map-Telangana"
+            d="M340 440 L380 430 L420 440 L440 470 L430 510 L400 520 L370 515 L345 495 L330 465 Z"
+            fill="var(--sg-200)" stroke="#fff" stroke-width="1.5" data-state="Telangana"/>
+          <!-- West Bengal -->
+          <path id="map-West Bengal"
+            d="M470 310 L510 300 L530 325 L525 360 L510 390 L490 400 L470 380 L455 350 L460 320 Z"
+            fill="var(--sg-200)" stroke="#fff" stroke-width="1.5" data-state="West Bengal"/>
+          <!-- Jharkhand -->
+          <path id="map-Jharkhand"
+            d="M400 295 L440 285 L470 295 L475 330 L460 355 L430 360 L400 345 L385 315 Z"
+            fill="var(--sg-200)" stroke="#fff" stroke-width="1.5" data-state="Jharkhand"/>
+          <!-- Bihar -->
+          <path id="map-Bihar"
+            d="M355 245 L400 235 L435 245 L445 275 L435 300 L400 310 L360 300 L345 270 Z"
+            fill="var(--sg-200)" stroke="#fff" stroke-width="1.5" data-state="Bihar"/>
+          <!-- Other decorative states (grey, no data) -->
+          <path d="M200 200 L260 180 L310 200 L320 240 L295 270 L250 275 L210 255 Z"
+            fill="#e8ede9" stroke="#fff" stroke-width="1" opacity="0.6"/>
+          <path d="M240 310 L290 295 L340 310 L345 345 L315 370 L265 365 L235 340 Z"
+            fill="#e8ede9" stroke="#fff" stroke-width="1" opacity="0.6"/>
+          <path d="M170 340 L225 330 L245 360 L235 400 L200 415 L165 395 L155 365 Z"
+            fill="#e8ede9" stroke="#fff" stroke-width="1" opacity="0.6"/>
+          <path d="M220 430 L265 415 L300 430 L305 470 L280 490 L245 485 L215 460 Z"
+            fill="#e8ede9" stroke="#fff" stroke-width="1" opacity="0.6"/>
+          <path d="M420 150 L470 140 L500 165 L495 200 L465 215 L430 205 L415 175 Z"
+            fill="#e8ede9" stroke="#fff" stroke-width="1" opacity="0.6"/>
+          <path d="M290 140 L345 125 L390 140 L400 175 L380 200 L340 205 L300 190 L280 165 Z"
+            fill="#e8ede9" stroke="#fff" stroke-width="1" opacity="0.6"/>
+          <path d="M160 460 L205 450 L225 480 L215 520 L185 535 L155 515 L145 485 Z"
+            fill="#e8ede9" stroke="#fff" stroke-width="1" opacity="0.6"/>
+          <path d="M390 555 L430 545 L450 570 L445 610 L420 625 L400 615 L385 590 Z"
+            fill="#e8ede9" stroke="#fff" stroke-width="1" opacity="0.6"/>
+          <!-- State labels -->
+          <text x="375" y="645" font-size="9" fill="var(--sg-800)" text-anchor="middle" font-family="DM Sans">Tamil Nadu</text>
+          <text x="340" y="540" font-size="9" fill="var(--sg-800)" text-anchor="middle" font-family="DM Sans">Karnataka</text>
+          <text x="385" y="480" font-size="9" fill="var(--sg-800)" text-anchor="middle" font-family="DM Sans">Telangana</text>
+          <text x="492" y="350" font-size="9" fill="var(--sg-800)" text-anchor="middle" font-family="DM Sans">W.Bengal</text>
+          <text x="428" y="325" font-size="9" fill="var(--sg-800)" text-anchor="middle" font-family="DM Sans">Jharkhand</text>
+          <text x="393" y="275" font-size="9" fill="var(--sg-800)" text-anchor="middle" font-family="DM Sans">Bihar</text>
+          <!-- Tooltip circle -->
+          <circle id="map-tooltip-circle" cx="0" cy="0" r="0" fill="rgba(99,156,122,0.3)" stroke="var(--sg-600)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="section-label" style="margin-top:0;">State breakdown</div>
+        <div class="state-list" id="state-list-visual"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Responses Table -->
+  <div class="section-label">Recent Beneficiary Responses</div>
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Response ID</th>
+          <th>Date</th>
+          <th>Lang</th>
+          <th>Name</th>
+          <th>State</th>
+          <th>District</th>
+          <th>Loan</th>
+          <th>Occupation</th>
+          <th>Audio</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+        <tr><td colspan="9" class="no-data-msg">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div><!-- /main -->
+
+<button class="fab" onclick="loadDashboard()">↺ Refresh</button>
+
+<script>
+// =========================================================
+// CONFIG – paste your Google Apps Script Web App URL here
+// =========================================================
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgoMeqhyB7sO6nEx4Q-AyoDAc96dojoWF6Motf3Y-rcbpYI93ctRS26kD3invSSIRCzQ/exec';
+
+// =========================================================
+// COLOUR PALETTE
+// =========================================================
+const C = {
+  green:  ['#639c7a','#3c5d49','#a2c3af','#283e31','#83af95','#507c62','#c1d7ca','#141f18'],
+  warm:   ['#c17d3c','#e8a96a','#f5d0a9','#8b5a2b'],
+  mixed:  ['#639c7a','#c17d3c','#3c5d49','#a16207','#83af95','#6b8070','#283e31','#e8a96a'],
+};
+
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+Chart.defaults.color = '#6b8070';
+
+let charts = {};
+
+// =========================================================
+// DATA FETCHING — reads from Apps Script
+// =========================================================
+async function fetchData() {
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=getDashboardData&_=${Date.now()}`);
+    const json = await res.json();
+    if (json.success) return json.stats;
+  } catch(e) {
+    console.warn('Remote fetch failed, trying JSONP…', e);
+  }
+  return null;
+}
+
+// =========================================================
+// PARSE & COMPUTE from Clean Data sheet columns:
+// [0]Timestamp [1]ResponseID [2]Language [3]Name
+// [4]AgeGroup [5]Marital [6]Education [7]State [8]District
+// [9]LoanTaken [10]LoanAmount [11]Training [12]Occupation
+// [13]HasAudio [14]ProcessedBy [15]ProcessingTimestamp
+// =========================================================
+function processRows(rows) {
+  const s = {
+    total: rows.length,
+    states: new Set(),
+    loans: 0,
+    selfEmployed: 0,
+    economicallyActive: 0,
+    totalTrainings: 0,
+    lang:     {},
+    age:      {},
+    marital:  {},
+    edu:      {},
+    state:    {},
+    occ:      {},
+    training: {},
+    loanAmt:  {},
+    rows:     rows
+  };
+
+  const NOT_ACTIVE = ['homemaker','unemployed'];
+
+  rows.forEach(r => {
+    const lang  = (r[2]  || 'en').toLowerCase();
+    const age   = r[4]  || 'Unknown';
+    const mar   = r[5]  || 'Unknown';
+    const edu   = r[6]  || 'Unknown';
+    const state = r[7]  || 'Unknown';
+    const loan  = (r[9]  || '').toString().trim();
+    const lAmt  = r[10] || '';
+    const train = r[11] || '';
+    const occ   = r[12] || 'Unknown';
+
+    s.lang[lang]   = (s.lang[lang]   || 0) + 1;
+    s.age[age]     = (s.age[age]     || 0) + 1;
+    s.marital[mar] = (s.marital[mar] || 0) + 1;
+    s.edu[edu]     = (s.edu[edu]     || 0) + 1;
+    s.state[state] = (s.state[state] || 0) + 1;
+    s.states.add(state);
+
+    const occShort = occ.split('–')[0].split('(')[0].trim();
+    s.occ[occShort] = (s.occ[occShort] || 0) + 1;
+
+    if (loan === 'Yes') s.loans++;
+    if (lAmt) s.loanAmt[lAmt] = (s.loanAmt[lAmt] || 0) + 1;
+
+    // Trainings (comma-separated list in one cell)
+    if (train) {
+      train.split(',').map(t => t.trim()).filter(Boolean).forEach(t => {
+        const short = t.replace('Training','').replace('Program/Meetings','').trim();
+        s.training[short] = (s.training[short] || 0) + 1;
+        s.totalTrainings++;
+      });
+    }
+
+    // Self-employed
+    if (occ.toLowerCase().includes('self-employed')) s.selfEmployed++;
+
+    // Economically active (not homemaker / unemployed)
+    if (!NOT_ACTIVE.some(x => occ.toLowerCase().includes(x))) s.economicallyActive++;
+  });
+
+  return s;
+}
+
+// =========================================================
+// KPI HELPERS
+// =========================================================
+function topKey(obj) {
+  return Object.entries(obj).sort((a,b)=>b[1]-a[1])[0]?.[0] || '—';
+}
+function pct(n, total) {
+  if (!total) return '0%';
+  return Math.round(n/total*100) + '%';
+}
+
+// =========================================================
+// RENDER KPIs
+// =========================================================
+function renderKPIs(s) {
+  document.getElementById('kpi-total').textContent   = s.total;
+  document.getElementById('kpi-states').textContent  = s.states.size;
+  document.getElementById('kpi-loans').textContent   = `${s.loans} / ${s.total}`;
+  document.getElementById('kpi-loan-rate').textContent = pct(s.loans, s.total) + ' uptake';
+  document.getElementById('kpi-self').textContent    = s.selfEmployed;
+  document.getElementById('kpi-active').textContent  = s.economicallyActive;
+  document.getElementById('kpi-trainings').textContent = s.totalTrainings;
+  document.getElementById('kpi-loan-rate2').textContent = pct(s.loans, s.total);
+  document.getElementById('kpi-livelihood').textContent = pct(s.economicallyActive, s.total);
+
+  // Insights
+  const topState = topKey(s.state);
+  const topOcc   = topKey(s.occ);
+  const topAge   = topKey(s.age);
+  document.getElementById('ins-top-state').textContent = `${topState} (${s.state[topState]})`;
+  document.getElementById('ins-top-occ').textContent   = topOcc;
+  document.getElementById('ins-top-age').textContent   = `${topAge} (${s.age[topAge]} beneficiaries)`;
+
+  document.getElementById('badge-age').textContent = `${Object.keys(s.age).length} groups`;
+}
+
+// =========================================================
+// RENDER CHARTS
+// =========================================================
+function mkChart(id, type, labels, data, colors, opts = {}) {
+  if (charts[id]) charts[id].destroy();
+  const ctx = document.getElementById(id)?.getContext('2d');
+  if (!ctx) return;
+  charts[id] = new Chart(ctx, {
+    type,
+    data: {
+      labels,
+      datasets: [{
+        label: opts.label || 'Count',
+        data,
+        backgroundColor: colors,
+        borderColor: type === 'line' ? colors[0] : undefined,
+        borderWidth: ['pie','doughnut'].includes(type) ? 0 : 1,
+        borderRadius: ['bar'].includes(type) ? 6 : 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: ['pie','doughnut'].includes(type),
+          position: 'bottom',
+          labels: { boxWidth: 12, padding: 14, font: { size: 11 } }
+        },
+        tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y ?? ctx.parsed} ` } }
+      },
+      scales: ['pie','doughnut'].includes(type) ? {} : {
+        x: {
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          ticks: { font: { size: 11 } },
+          ...(opts.indexAxis === 'y' ? {} : {})
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          ticks: { stepSize: 1, font: { size: 11 } }
+        }
+      },
+      indexAxis: opts.indexAxis || 'x',
+      ...opts.extra
+    }
+  });
+}
+
+function renderCharts(s) {
+  // Age
+  mkChart('chartAge','bar',Object.keys(s.age),Object.values(s.age),C.green[0]);
+
+  // Loan status
+  mkChart('chartLoan','doughnut',
+    ['Yes – Loan taken', 'No – Not taken'],
+    [s.loans, s.total - s.loans],
+    ['#639c7a','#e8ede9']);
+
+  // Loan amount
+  const loanOrder = ['Below ₹20,000','₹20,000 - ₹40,000','₹40,000 - ₹60,000','Above ₹60,000'];
+  mkChart('chartLoanAmt','bar',
+    loanOrder,
+    loanOrder.map(k => s.loanAmt[k] || 0),
+    C.warm[0]);
+
+  // State
+  const stateEntries = Object.entries(s.state).sort((a,b)=>b[1]-a[1]);
+  mkChart('chartState','bar',
+    stateEntries.map(e=>e[0]),
+    stateEntries.map(e=>e[1]),
+    C.green.slice(0,stateEntries.length),
+    { indexAxis: 'y' });
+
+  // Occupation
+  const occKeys = Object.keys(s.occ);
+  mkChart('chartOcc','doughnut', occKeys, Object.values(s.occ), C.mixed.slice(0, occKeys.length));
+
+  // Training
+  const trainEntries = Object.entries(s.training).sort((a,b)=>b[1]-a[1]);
+  mkChart('chartTraining','bar',
+    trainEntries.map(e=>e[0]),
+    trainEntries.map(e=>e[1]),
+    '#a2c3af',
+    { indexAxis: 'y' });
+
+  // Education
+  const eduOrder = ['No formal education','Primary education','High school','Higher secondary','Diploma','Degree'];
+  mkChart('chartEdu','bar',
+    eduOrder,
+    eduOrder.map(k => s.edu[k] || 0),
+    C.green[0]);
+
+  // Marital
+  mkChart('chartMarital','pie',
+    Object.keys(s.marital),
+    Object.values(s.marital),
+    C.mixed.slice(0,4));
+}
+
+// =========================================================
+// RENDER MAP
+// =========================================================
+function renderMap(s) {
+  const stateEntries = Object.entries(s.state).sort((a,b)=>b[1]-a[1]);
+  const maxVal = stateEntries[0]?.[1] || 1;
+
+  // Colour SVG paths
+  const STATES = ['Tamil Nadu','Karnataka','Telangana','West Bengal','Jharkhand','Bihar'];
+  STATES.forEach(st => {
+    const el = document.getElementById('map-' + st);
+    if (!el) return;
+    const val = s.state[st] || 0;
+    const intensity = val ? 0.3 + 0.7 * (val / maxVal) : 0.1;
+    el.style.fill = val
+      ? `rgba(60, 93, 73, ${intensity})`
+      : 'var(--sg-100)';
+    el.setAttribute('title', `${st}: ${val}`);
+    // Tooltip on hover
+    el.onmouseenter = (e) => {
+      el.style.filter = 'brightness(1.2)';
+    };
+    el.onmouseleave = () => {
+      el.style.filter = '';
+    };
+  });
+
+  // State list visual
+  const list = document.getElementById('state-list-visual');
+  list.innerHTML = stateEntries.map(([st, val]) => `
+    <div class="state-row">
+      <div class="state-name">${st}</div>
+      <div class="state-bar-wrap">
+        <div class="state-bar" style="width:${Math.round(val/maxVal*100)}%"></div>
+      </div>
+      <div class="state-count">${val}</div>
+    </div>
+  `).join('');
+}
+
+// =========================================================
+// RENDER TABLE
+// =========================================================
+function renderTable(rows) {
+  const recent = rows.slice().reverse().slice(0, 15);
+  const tbody = document.getElementById('table-body');
+  if (!recent.length) {
+    tbody.innerHTML = '<tr><td colspan="9" class="no-data-msg">No responses yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = recent.map(r => {
+    const lang = (r[2] || 'en').toLowerCase();
+    const loan = (r[9] || '').toString().trim();
+    const audio = (r[13] || '').toString().trim();
+    const occ = (r[12] || '').split('–')[0].split('(')[0].trim();
+    const date = r[0] ? new Date(r[0]).toLocaleDateString('en-IN') : '—';
+    return `<tr>
+      <td style="font-size:11px;color:var(--muted);">${r[1] || '—'}</td>
+      <td>${date}</td>
+      <td><span class="tag tag-${lang}">${lang.toUpperCase()}</span></td>
+      <td>${r[3] || '—'}</td>
+      <td>${r[7] || '—'}</td>
+      <td>${r[8] || '—'}</td>
+      <td><span class="tag tag-${loan === 'Yes' ? 'yes' : 'no'}">${loan || '—'}</span></td>
+      <td title="${r[12] || ''}">${occ.length > 28 ? occ.slice(0,28)+'…' : occ}</td>
+      <td><span class="tag tag-${audio === 'Yes' ? 'yes' : 'no'}">${audio || 'No'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+// =========================================================
+// MAIN LOAD
+// =========================================================
+async function loadDashboard() {
+  const stats = await fetchData();
+
+  let rows = [];
+
+  if (stats) {
+    // Using Apps Script stats object — convert to pseudo-rows for shared processing
+    // Build KPIs directly from stats if available
+    document.getElementById('kpi-total').textContent   = stats.totalResponses;
+    document.getElementById('kpi-states').textContent  = Object.keys(stats.stateBreakdown || {}).filter(k=>k!=='No Data').length;
+    document.getElementById('kpi-loans').textContent   = `${stats.loanTaken} / ${stats.totalResponses}`;
+    document.getElementById('kpi-loan-rate').textContent = (stats.totalResponses ? Math.round(stats.loanTaken/stats.totalResponses*100) : 0) + '% uptake';
+    document.getElementById('kpi-self').textContent    = stats.selfEmployed;
+    document.getElementById('kpi-active').textContent  = '—';
+    document.getElementById('kpi-trainings').textContent = Object.values(stats.trainingBreakdown || {}).reduce((a,b)=>a+b,0);
+    document.getElementById('kpi-loan-rate2').textContent = (stats.totalResponses ? Math.round(stats.loanTaken/stats.totalResponses*100) : 0) + '%';
+    document.getElementById('kpi-livelihood').textContent = '—';
+
+    const topState = Object.entries(stats.stateBreakdown||{}).sort((a,b)=>b[1]-a[1])[0];
+    const topOcc   = Object.entries(stats.occupationBreakdown||{}).sort((a,b)=>b[1]-a[1])[0];
+    const topAge   = Object.entries(stats.ageBreakdown||{}).sort((a,b)=>b[1]-a[1])[0];
+    document.getElementById('ins-top-state').textContent = topState ? `${topState[0]} (${topState[1]})` : '—';
+    document.getElementById('ins-top-occ').textContent   = topOcc?.[0] || '—';
+    document.getElementById('ins-top-age').textContent   = topAge ? `${topAge[0]} (${topAge[1]} beneficiaries)` : '—';
+    document.getElementById('badge-age').textContent = Object.keys(stats.ageBreakdown||{}).length + ' groups';
+
+    // Charts from stats
+    if (stats.ageBreakdown) {
+      const ak = Object.keys(stats.ageBreakdown), av = Object.values(stats.ageBreakdown);
+      mkChart('chartAge','bar',ak,av,C.green[0]);
+    }
+    mkChart('chartLoan','doughnut',
+      ['Yes – Loan taken', 'No – Not taken'],
+      [stats.loanTaken, stats.totalResponses - stats.loanTaken],
+      ['#639c7a','#e8ede9']);
+    if (stats.stateBreakdown) {
+      const se = Object.entries(stats.stateBreakdown).sort((a,b)=>b[1]-a[1]);
+      mkChart('chartState','bar', se.map(e=>e[0]), se.map(e=>e[1]), C.green, {indexAxis:'y'});
+      renderMapFromObj(stats.stateBreakdown);
+    }
+    if (stats.occupationBreakdown) {
+      const ok = Object.keys(stats.occupationBreakdown);
+      mkChart('chartOcc','doughnut',ok,Object.values(stats.occupationBreakdown),C.mixed.slice(0,ok.length));
+    }
+    if (stats.trainingBreakdown) {
+      const te = Object.entries(stats.trainingBreakdown).sort((a,b)=>b[1]-a[1]);
+      const tLabels = te.map(e=>e[0].replace('Training','').replace('Program/Meetings','').trim());
+      mkChart('chartTraining','bar', tLabels, te.map(e=>e[1]), '#a2c3af', {indexAxis:'y'});
+    }
+    // Recent responses table from stats
+    if (stats.recentResponses) {
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = stats.recentResponses.map(r => `<tr>
+        <td style="font-size:11px;color:var(--muted);">${r.id || '—'}</td>
+        <td>${r.date || '—'}</td>
+        <td><span class="tag tag-${r.language||'en'}">${(r.language||'en').toUpperCase()}</span></td>
+        <td>${r.name || '—'}</td>
+        <td>${r.state || '—'}</td>
+        <td>—</td>
+        <td><span class="tag tag-${r.loan==='Yes'?'yes':'no'}">${r.loan||'—'}</span></td>
+        <td title="${r.occupation||''}">${(r.occupation||'').length>28?(r.occupation||'').slice(0,28)+'…':r.occupation||'—'}</td>
+        <td>—</td>
+      </tr>`).join('');
+    }
+  } else {
+    // Demo mode with sample data matching your sheet columns
+    rows = getDemoData();
+    const s = processRows(rows);
+    renderKPIs(s);
+    renderCharts(s);
+    renderMap(s);
+    renderTable(rows);
+  }
+
+  document.getElementById('last-updated-time').textContent = new Date().toLocaleTimeString('en-IN');
+}
+
+// =========================================================
+// MAP RENDER FROM OBJECT
+// =========================================================
+function renderMapFromObj(stateObj) {
+  const entries = Object.entries(stateObj).sort((a,b)=>b[1]-a[1]);
+  const maxVal = entries[0]?.[1] || 1;
+  const STATES = ['Tamil Nadu','Karnataka','Telangana','West Bengal','Jharkhand','Bihar'];
+  STATES.forEach(st => {
+    const el = document.getElementById('map-' + st);
+    if (!el) return;
+    const val = stateObj[st] || 0;
+    const intensity = val ? 0.3 + 0.7*(val/maxVal) : 0.1;
+    el.style.fill = val ? `rgba(60, 93, 73, ${intensity})` : 'var(--sg-100)';
+    el.onmouseenter = () => { el.style.filter = 'brightness(1.2)'; };
+    el.onmouseleave = () => { el.style.filter = ''; };
+  });
+  const list = document.getElementById('state-list-visual');
+  list.innerHTML = entries.map(([st,val]) => `
+    <div class="state-row">
+      <div class="state-name">${st}</div>
+      <div class="state-bar-wrap"><div class="state-bar" style="width:${Math.round(val/maxVal*100)}%"></div></div>
+      <div class="state-count">${val}</div>
+    </div>
+  `).join('');
+}
+
+// =========================================================
+// DEMO DATA (matches your Clean Data sheet columns exactly)
+// Col: [0]Timestamp [1]RespID [2]Lang [3]Name [4]Age [5]Marital
+//      [6]Education [7]State [8]District [9]LoanTaken [10]LoanAmt
+//      [11]Training [12]Occupation [13]HasAudio [14]ProcessedBy [15]ProcTS
+// =========================================================
+function getDemoData() {
+  return [
+    ['3/27/2026 13:24','BEL001','ta','Nirmala','18-25','Single','No formal education','Tamil Nadu','Vellore','Yes','Below ₹20,000','Financial Literacy Training, Digital Literacy Training','Homemaker (Not using training)','No','Auto-Processed',''],
+    ['3/27/2026 14:22','BEL002','ta','Nirmala','18-25','Single','No formal education','Karnataka','Vellore','Yes','Below ₹20,000','Financial Literacy Training, Awareness & Access to Government Schemes, Women Connect Program/Meetings','Daily wage worker','No','Auto-Processed',''],
+    ['3/27/2026 14:23','BEL003','ta','Nirmala','18-25','Single','No formal education','Tamil Nadu','Vellore','Yes','Above ₹60,000','Financial Literacy Training, Awareness & Access to Government Schemes, Women Connect Program/Meetings','Homemaker (Not using training)','No','Auto-Processed',''],
+    ['3/27/2026 14:30','BEL004','en','Priya','26-35','Married','High school','Karnataka','Bangalore','Yes','₹20,000 - ₹40,000','Business Motivation Training, Financial Literacy Training','Self-employed – Small business or livelihood activity','Yes','Auto-Processed',''],
+    ['3/27/2026 14:35','BEL005','hi','Sunita','36-45','Married','Primary education','Bihar','Patna','No','','Financial Literacy Training, Gender & Women Leadership Training','Agriculture/Fishing work','No','Auto-Processed',''],
+    ['3/27/2026 14:40','BEL006','en','Meena','26-35','Single','Higher secondary','Tamil Nadu','Chennai','Yes','₹40,000 - ₹60,000','Digital Literacy Training, Business Motivation Training, Leadership & Relationship Building Training','Self-employed – Small business or livelihood activity','Yes','Auto-Processed',''],
+    ['3/27/2026 14:45','BEL007','hi','Kavitha','36-45','Widow','Primary education','Jharkhand','Ranchi','Yes','₹20,000 - ₹40,000','Financial Literacy Training, Knowledge Volunteer Capacity Building Training','Daily wage worker','No','Auto-Processed',''],
+    ['3/27/2026 14:50','BEL008','en','Rani','26-35','Married','Degree','West Bengal','Kolkata','Yes','Above ₹60,000','Financial Literacy Training, Digital Literacy Training, Business Motivation Training','Private job','Yes','Auto-Processed',''],
+    ['3/27/2026 14:55','BEL009','ta','Lakshmi','46+','Married','High school','Tamil Nadu','Coimbatore','Yes','₹20,000 - ₹40,000','Women Connect Program/Meetings, Awareness & Access to Government Schemes','SHG-based income activity','Yes','Auto-Processed',''],
+  ];
+}
+
+// =========================================================
+// BOOT
+// =========================================================
+window.addEventListener('load', async () => {
+  await loadDashboard();
+  // Hide loading screen
+  const ls = document.getElementById('loading-screen');
+  ls.style.opacity = '0';
+  setTimeout(() => { ls.style.display = 'none'; }, 500);
+  document.getElementById('dashboard-content').style.display = 'block';
+  // Auto-refresh every 30 seconds
+  setInterval(loadDashboard, 30000);
+});
+</script>
+</body>
+</html>
