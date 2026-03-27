@@ -3,16 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Belstar SHG Women Training Completion Survey</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --primary: #e91e63;
@@ -34,17 +29,10 @@
             min-height: 100vh;
             color: var(--text-dark);
             line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
 
-        /* Header */
         .main-header {
             text-align: center;
             padding: 40px 20px;
@@ -59,10 +47,8 @@
         .main-header::before {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
+            top: -50%; right: -50%;
+            width: 100%; height: 100%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
             animation: pulse 4s ease-in-out infinite;
         }
@@ -72,245 +58,118 @@
             50% { transform: scale(1.1); opacity: 0.8; }
         }
 
-        .header-icon {
-            font-size: 60px;
-            color: white;
-            margin-bottom: 15px;
-            display: block;
-        }
+        .header-icon { font-size: 60px; color: white; margin-bottom: 15px; display: block; }
 
         .main-header h1 {
-            color: white;
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
-            line-height: 1.3;
+            color: white; font-size: 24px; font-weight: 700;
+            margin-bottom: 10px; position: relative; z-index: 1; line-height: 1.3;
         }
 
         .main-header p {
-            color: rgba(255,255,255,0.9);
-            font-size: 14px;
-            font-weight: 300;
-            position: relative;
-            z-index: 1;
+            color: rgba(255,255,255,0.9); font-size: 14px;
+            font-weight: 300; position: relative; z-index: 1;
         }
 
-        /* Language Selection */
         .lang-section {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 40px 30px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            margin-bottom: 30px;
+            background: var(--white); border-radius: 25px;
+            padding: 40px 30px; box-shadow: var(--shadow);
+            text-align: center; margin-bottom: 30px;
         }
 
-        .lang-title {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-        }
-
-        .lang-subtitle {
-            color: var(--text-light);
-            margin-bottom: 30px;
-            font-size: 15px;
-        }
+        .lang-title { font-size: 22px; font-weight: 600; color: var(--text-dark); margin-bottom: 10px; }
+        .lang-subtitle { color: var(--text-light); margin-bottom: 30px; font-size: 15px; }
 
         .instruction-box {
             background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border-left: 5px solid var(--secondary);
-            position: relative;
+            border-radius: 20px; padding: 25px; margin-bottom: 30px;
+            border-left: 5px solid var(--secondary); position: relative;
         }
 
         .instruction-speaker {
-            background: var(--secondary);
-            color: white;
-            border: none;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            font-size: 28px;
-            cursor: pointer;
-            margin-bottom: 15px;
-            transition: all 0.3s;
+            background: var(--secondary); color: white; border: none;
+            width: 70px; height: 70px; border-radius: 50%; font-size: 28px;
+            cursor: pointer; margin-bottom: 15px; transition: all 0.3s;
             box-shadow: 0 5px 20px rgba(255, 152, 0, 0.3);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            display: inline-flex; align-items: center; justify-content: center;
             -webkit-tap-highlight-color: transparent;
         }
 
         .instruction-speaker:hover, .instruction-speaker:active {
-            transform: scale(1.1);
-            box-shadow: 0 8px 30px rgba(255, 152, 0, 0.5);
+            transform: scale(1.1); box-shadow: 0 8px 30px rgba(255, 152, 0, 0.5);
         }
 
         .instruction-speaker.speaking {
-            animation: soundWave 1.2s ease-in-out infinite;
-            background: var(--primary);
+            animation: soundWave 1.2s ease-in-out infinite; background: var(--primary);
         }
 
         @keyframes soundWave {
-            0%, 100% { transform: scale(1); box-shadow: 0 5px 20px rgba(233, 30, 99, 0.3); }
-            50% { transform: scale(1.15); box-shadow: 0 15px 40px rgba(233, 30, 99, 0.5); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
 
-        .instruction-text {
-            font-size: 18px;
-            color: var(--text-dark);
-            font-weight: 500;
-            line-height: 1.5;
-        }
+        .instruction-text { font-size: 18px; color: var(--text-dark); font-weight: 500; line-height: 1.5; }
 
         .lang-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px; margin-top: 30px;
         }
 
         .lang-card {
             background: linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%);
-            border: 3px solid transparent;
-            border-radius: 20px;
-            padding: 30px 20px;
-            cursor: pointer;
-            transition: all 0.4s;
-            position: relative;
-            overflow: hidden;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .lang-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--primary);
-            transform: scaleX(0);
-            transition: transform 0.3s;
+            border: 3px solid transparent; border-radius: 20px;
+            padding: 30px 20px; cursor: pointer; transition: all 0.4s;
+            position: relative; overflow: hidden; -webkit-tap-highlight-color: transparent;
         }
 
         .lang-card:hover, .lang-card:active {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .lang-card:hover::before, .lang-card:active::before {
-            transform: scaleX(1);
+            transform: translateY(-5px); border-color: var(--primary); box-shadow: var(--shadow-hover);
         }
 
         .lang-card.active {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            color: white;
-            border-color: var(--primary);
+            color: white; border-color: var(--primary);
         }
 
         .lang-card.active .lang-name,
-        .lang-card.active .lang-native {
-            color: white;
-        }
+        .lang-card.active .lang-native { color: white; }
 
-        .lang-flag {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
+        .lang-flag { font-size: 48px; margin-bottom: 15px; }
+        .lang-name { font-size: 20px; font-weight: 600; color: var(--text-dark); margin-bottom: 5px; }
+        .lang-native { font-size: 24px; color: var(--primary); font-weight: 500; }
 
-        .lang-name {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 5px;
-        }
-
-        .lang-native {
-            font-size: 24px;
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        /* Survey Container */
-        .survey-container {
-            display: none;
-        }
-
-        .survey-container.active {
-            display: block;
-        }
+        .survey-container { display: none; }
+        .survey-container.active { display: block; }
 
         .progress-section {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 10px;
-            z-index: 100;
+            background: var(--white); border-radius: 20px; padding: 25px;
+            margin-bottom: 25px; box-shadow: var(--shadow);
+            position: sticky; top: 10px; z-index: 100;
         }
 
         .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 15px;
         }
 
-        .progress-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-dark);
-        }
+        .progress-title { font-size: 16px; font-weight: 600; color: var(--text-dark); }
+        .progress-percent { font-size: 20px; font-weight: 700; color: var(--primary); }
 
-        .progress-percent {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: #e2e8f0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
+        .progress-bar { height: 10px; background: #e2e8f0; border-radius: 10px; overflow: hidden; }
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 10px;
-            transition: width 0.5s ease;
+            border-radius: 10px; transition: width 0.5s ease;
         }
 
-        /* Question Cards */
-        .questions-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
+        .questions-wrapper { display: flex; flex-direction: column; gap: 25px; }
 
         .question-card {
-            background: var(--white);
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s;
+            background: var(--white); border-radius: 25px; padding: 30px;
+            box-shadow: var(--shadow); transition: all 0.3s;
             border-left: 5px solid var(--primary);
         }
 
-        .question-card:hover {
-            box-shadow: var(--shadow-hover);
-        }
+        .question-card:hover { box-shadow: var(--shadow-hover); }
 
         .question-card.error {
             border-left-color: #f44336;
@@ -324,62 +183,45 @@
         }
 
         .question-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            margin-bottom: 25px;
+            display: flex; align-items: flex-start; gap: 15px; margin-bottom: 25px;
         }
 
         .question-number {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 700;
-            flex-shrink: 0;
+            color: white; width: 45px; height: 45px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; font-weight: 700; flex-shrink: 0;
             box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
         }
 
-        .question-content {
-            flex: 1;
-        }
+        .question-content { flex: 1; }
 
         .question-text {
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 15px;
-            line-height: 1.5;
+            font-size: 17px; font-weight: 600; color: var(--text-dark);
+            margin-bottom: 15px; line-height: 1.5;
         }
 
+        /* ===== SPEAKER BUTTON ===== */
         .speaker-btn {
             background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
-            color: white;
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            -webkit-tap-highlight-color: transparent;
-            flex-shrink: 0;
+            color: white; border: none; width: 45px; height: 45px;
+            border-radius: 12px; cursor: pointer; font-size: 18px;
+            transition: all 0.3s; box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+            display: inline-flex; align-items: center; justify-content: center;
+            flex-shrink: 0; -webkit-tap-highlight-color: transparent; position: relative;
         }
 
         .speaker-btn:hover, .speaker-btn:active {
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.5);
+            transform: scale(1.1); box-shadow: 0 8px 25px rgba(255, 152, 0, 0.5);
         }
 
+        /* LOADING state — amber pulse */
+        .speaker-btn.loading {
+            background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+            animation: speakerPulse 0.6s ease-in-out infinite;
+        }
+
+        /* SPEAKING state — red */
         .speaker-btn.speaking {
             background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
             animation: speakerPulse 1s ease-in-out infinite;
@@ -387,117 +229,67 @@
 
         @keyframes speakerPulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.12); }
         }
 
-        /* Options */
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        /* Loading spinner inside button */
+        .speaker-btn.loading .fa-volume-up::before { content: "\f110"; animation: spin 0.8s linear infinite; display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .options-container { display: flex; flex-direction: column; gap: 12px; }
 
         .option-item {
-            display: flex;
-            align-items: center;
-            padding: 18px 20px;
+            display: flex; align-items: center; padding: 18px 20px;
             background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
-            border: 2px solid #e2e8f0;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            -webkit-tap-highlight-color: transparent;
+            border: 2px solid #e2e8f0; border-radius: 15px;
+            cursor: pointer; transition: all 0.3s; -webkit-tap-highlight-color: transparent;
         }
 
         .option-item:hover, .option-item:active {
-            border-color: var(--primary);
-            background: white;
-            transform: translateX(5px);
+            border-color: var(--primary); background: white; transform: translateX(5px);
         }
 
         .option-item.selected {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            color: white;
-            border-color: var(--primary);
+            color: white; border-color: var(--primary);
             box-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
         }
 
         .option-icon {
-            width: 26px;
-            height: 26px;
-            border: 3px solid currentColor;
-            border-radius: 50%;
-            margin-right: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
+            width: 26px; height: 26px; border: 3px solid currentColor;
+            border-radius: 50%; margin-right: 15px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; flex-shrink: 0;
         }
 
-        .option-item.selected .option-icon {
-            background: white;
-            color: var(--primary);
-        }
+        .option-item.selected .option-icon { background: white; color: var(--primary); }
+        .option-text { font-size: 15px; font-weight: 500; }
 
-        .option-text {
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        /* Text Input */
-        .text-input-wrapper {
-            position: relative;
-            margin-top: 20px;
-        }
+        .text-input-wrapper { position: relative; margin-top: 20px; }
 
         .text-input {
-            width: 100%;
-            padding: 18px 22px;
-            border: 3px solid #e2e8f0;
-            border-radius: 15px;
-            font-size: 16px;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
-            background: #f8f9fa;
+            width: 100%; padding: 18px 22px; border: 3px solid #e2e8f0;
+            border-radius: 15px; font-size: 16px; font-family: 'Poppins', sans-serif;
+            transition: all 0.3s; background: #f8f9fa;
         }
 
         .text-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: white;
+            outline: none; border-color: var(--primary); background: white;
             box-shadow: 0 0 0 4px rgba(233, 30, 99, 0.1);
         }
 
-        /* Mic Button */
-        .mic-section {
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
+        .mic-section { margin-top: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
 
         .mic-btn {
             background: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
-            color: white;
-            border: none;
-            padding: 15px 28px;
-            border-radius: 50px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 5px 20px rgba(233, 30, 99, 0.3);
-            -webkit-tap-highlight-color: transparent;
+            color: white; border: none; padding: 15px 28px; border-radius: 50px;
+            font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s;
+            display: inline-flex; align-items: center; gap: 10px;
+            box-shadow: 0 5px 20px rgba(233, 30, 99, 0.3); -webkit-tap-highlight-color: transparent;
         }
 
         .mic-btn:hover, .mic-btn:active {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.4);
+            transform: translateY(-3px); box-shadow: 0 10px 30px rgba(233, 30, 99, 0.4);
         }
 
         .mic-btn.recording {
@@ -511,107 +303,54 @@
         }
 
         .recording-status {
-            color: var(--primary);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            color: var(--primary); font-weight: 600;
+            display: flex; align-items: center; gap: 8px; font-size: 14px;
         }
 
         .recording-dot {
-            width: 10px;
-            height: 10px;
-            background: #f44336;
-            border-radius: 50%;
-            animation: blink 1s infinite;
+            width: 10px; height: 10px; background: #f44336;
+            border-radius: 50%; animation: blink 1s infinite;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
         .mic-error {
-            color: #f44336;
-            font-size: 13px;
-            margin-top: 10px;
-            padding: 10px;
-            background: #ffebee;
-            border-radius: 10px;
-            display: none;
+            color: #f44336; font-size: 13px; margin-top: 10px;
+            padding: 10px; background: #ffebee; border-radius: 10px; display: none;
         }
 
-        .mic-error.show {
-            display: block;
-        }
+        .mic-error.show { display: block; }
 
-        /* Submit Button */
-        .submit-section {
-            margin-top: 40px;
-            text-align: center;
-            padding-bottom: 40px;
-        }
+        .submit-section { margin-top: 40px; text-align: center; padding-bottom: 40px; }
 
         .submit-btn {
             background: linear-gradient(135deg, var(--success) 0%, #38a169 100%);
-            color: white;
-            border: none;
-            padding: 18px 50px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: white; border: none; padding: 18px 50px; border-radius: 50px;
+            font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s;
             box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
+            display: inline-flex; align-items: center; gap: 12px;
             -webkit-tap-highlight-color: transparent;
         }
 
         .submit-btn:hover, .submit-btn:active {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(72, 187, 120, 0.4);
+            transform: translateY(-5px); box-shadow: 0 15px 40px rgba(72, 187, 120, 0.4);
         }
 
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-        /* Loading & Success */
-        .loading-screen, .success-screen {
-            display: none;
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .loading-screen.active, .success-screen.active {
-            display: block;
-        }
+        .loading-screen, .success-screen { display: none; text-align: center; padding: 60px 20px; }
+        .loading-screen.active, .success-screen.active { display: block; }
 
         .spinner {
-            width: 70px;
-            height: 70px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 30px;
+            width: 70px; height: 70px; border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary); border-radius: 50%;
+            animation: spinLoader 1s linear infinite; margin: 0 auto 30px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spinLoader { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .success-icon {
-            font-size: 90px;
-            color: var(--success);
-            margin-bottom: 30px;
-            animation: scaleIn 0.5s ease;
+            font-size: 90px; color: var(--success); margin-bottom: 30px; animation: scaleIn 0.5s ease;
         }
 
         @keyframes scaleIn {
@@ -620,1063 +359,879 @@
             100% { transform: scale(1); }
         }
 
-        .success-title {
-            font-size: 28px;
-            color: var(--text-dark);
-            margin-bottom: 15px;
-        }
+        .success-title { font-size: 28px; color: var(--text-dark); margin-bottom: 15px; }
 
         .response-id {
             background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            padding: 20px 40px;
-            border-radius: 15px;
-            display: inline-block;
-            margin: 20px 0;
+            padding: 20px 40px; border-radius: 15px; display: inline-block; margin: 20px 0;
         }
 
-        .response-id-label {
-            color: var(--text-light);
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
+        .response-id-label { color: var(--text-light); font-size: 14px; margin-bottom: 5px; }
+        .response-id-value { font-size: 22px; font-weight: 700; color: var(--primary); font-family: monospace; }
 
-        .response-id-value {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--primary);
-            font-family: monospace;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-
-            .main-header {
-                padding: 25px 15px;
-                border-radius: 20px;
-            }
-
-            .main-header h1 {
-                font-size: 20px;
-            }
-
-            .lang-section {
-                padding: 25px 20px;
-            }
-
-            .question-card {
-                padding: 20px;
-            }
-
-            .question-header {
-                gap: 12px;
-            }
-
-            .question-number {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-
-            .question-text {
-                font-size: 15px;
-            }
-
-            .submit-btn {
-                width: 100%;
-                justify-content: center;
-                padding: 16px 30px;
-            }
+            .container { padding: 15px; }
+            .main-header { padding: 25px 15px; border-radius: 20px; }
+            .main-header h1 { font-size: 20px; }
+            .lang-section { padding: 25px 20px; }
+            .question-card { padding: 20px; }
+            .question-number { width: 40px; height: 40px; font-size: 16px; }
+            .question-text { font-size: 15px; }
+            .submit-btn { width: 100%; justify-content: center; padding: 16px 30px; }
         }
 
-        /* Hidden */
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
+        .conditional-hidden { display: none !important; }
 
-        .conditional-hidden {
-            display: none !important;
-        }
+        .checkbox-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
-        /* Checkbox specific */
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        @media (min-width: 600px) {
-            .checkbox-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
+        @media (min-width: 600px) { .checkbox-grid { grid-template-columns: 1fr 1fr; } }
 
         .checkbox-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 18px;
+            display: flex; align-items: center; padding: 15px 18px;
             background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            -webkit-tap-highlight-color: transparent;
+            border: 2px solid #e2e8f0; border-radius: 12px;
+            cursor: pointer; transition: all 0.3s; -webkit-tap-highlight-color: transparent;
         }
 
-        .checkbox-item:hover, .checkbox-item:active {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-        }
+        .checkbox-item:hover, .checkbox-item:active { border-color: var(--primary); transform: translateY(-3px); }
 
         .checkbox-item.selected {
             background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            color: white;
-            border-color: var(--primary);
+            color: white; border-color: var(--primary);
         }
 
         .checkbox-box {
-            width: 22px;
-            height: 22px;
-            border: 3px solid currentColor;
-            border-radius: 6px;
-            margin-right: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            flex-shrink: 0;
+            width: 22px; height: 22px; border: 3px solid currentColor;
+            border-radius: 6px; margin-right: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; flex-shrink: 0;
         }
 
-        .checkbox-item.selected .checkbox-box {
-            background: white;
-            color: var(--primary);
+        .checkbox-item.selected .checkbox-box { background: white; color: var(--primary); }
+        .help-text { color: var(--text-light); font-size: 13px; margin-top: 10px; font-style: italic; }
+
+        /* TTS Status bar */
+        #ttsStatusBar {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(30,30,30,0.92); color: #fff; padding: 10px 24px;
+            border-radius: 30px; font-size: 14px; font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 9999;
+            display: none; align-items: center; gap: 10px; white-space: nowrap;
+            max-width: 90vw; overflow: hidden; text-overflow: ellipsis;
         }
 
-        .help-text {
-            color: var(--text-light);
-            font-size: 13px;
-            margin-top: 10px;
-            font-style: italic;
-        }
-
-        /* Audio not supported message */
-        .audio-notice {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            font-size: 13px;
-            color: #856404;
-            display: none;
-        }
-
-        .audio-notice.show {
-            display: block;
+        #ttsStatusBar.show { display: flex; }
+        #ttsStatusBar .tts-dot {
+            width: 8px; height: 8px; background: #4caf50;
+            border-radius: 50%; flex-shrink: 0; animation: blink 0.8s infinite;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="main-header">
-            <i class="fas fa-female header-icon"></i>
-            <h1>Belstar SHG Women Training Completion Survey</h1>
-            <p>Empowering Women Through Digital Literacy</p>
-        </header>
+<div class="container">
 
-        <!-- Language Selection -->
-        <section class="lang-section" id="langSection">
-            <h2 class="lang-title">Welcome / வணக்கம் / नमस्ते</h2>
-            <p class="lang-subtitle">Please select your preferred language to continue</p>
-            
-            <div class="instruction-box">
-                <button class="instruction-speaker" onclick="toggleInstructionSpeech()" id="instructionSpeaker" title="Tap to listen">
-                    <i class="fas fa-volume-up"></i>
-                </button>
-                <p class="instruction-text" id="instructionText">
-                    Please select your preferred language – English, Tamil, or Hindi
-                </p>
-                <div class="audio-notice" id="audioNotice">
-                    <i class="fas fa-info-circle"></i> If audio doesn't play, please check your device volume and ensure not in silent mode.
-                </div>
-            </div>
+    <!-- Header -->
+    <header class="main-header">
+        <i class="fas fa-female header-icon"></i>
+        <h1>Belstar SHG Women Training Completion Survey</h1>
+        <p>Empowering Women Through Digital Literacy</p>
+    </header>
 
-            <div class="lang-grid">
-                <div class="lang-card" onclick="selectLanguage('en')" data-lang="en">
-                    <div class="lang-flag">🇬🇧</div>
-                    <div class="lang-name">English</div>
-                </div>
-                <div class="lang-card" onclick="selectLanguage('ta')" data-lang="ta">
-                    <div class="lang-flag">🇮🇳</div>
-                    <div class="lang-native">தமிழ்</div>
-                </div>
-                <div class="lang-card" onclick="selectLanguage('hi')" data-lang="hi">
-                    <div class="lang-flag">🇮🇳</div>
-                    <div class="lang-native">हिंदी</div>
-                </div>
-            </div>
-        </section>
+    <!-- Language Selection -->
+    <section class="lang-section" id="langSection">
+        <h2 class="lang-title">Welcome / வணக்கம் / नमस्ते</h2>
+        <p class="lang-subtitle">Please select your preferred language to continue</p>
 
-        <!-- Loading Screen -->
-        <div class="loading-screen" id="loadingScreen">
-            <div class="spinner"></div>
-            <h3>Loading your survey...</h3>
-            <p>Please wait while we prepare the questions</p>
+        <div class="instruction-box">
+            <button class="instruction-speaker" onclick="speakInstruction()" id="instructionSpeaker" title="Tap to listen">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <p class="instruction-text" id="instructionText">
+                Please select your preferred language – English, Tamil, or Hindi
+            </p>
         </div>
 
-        <!-- Survey Container -->
-        <div class="survey-container" id="surveyContainer">
-            <div class="progress-section">
-                <div class="progress-header">
-                    <span class="progress-title">Survey Progress</span>
-                    <span class="progress-percent" id="progressPercent">0%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                </div>
+        <div class="lang-grid">
+            <div class="lang-card" onclick="selectLanguage('en')" data-lang="en">
+                <div class="lang-flag">🇬🇧</div>
+                <div class="lang-name">English</div>
             </div>
-
-            <div class="questions-wrapper" id="questionsWrapper">
-                <!-- Questions will be inserted here -->
+            <div class="lang-card" onclick="selectLanguage('ta')" data-lang="ta">
+                <div class="lang-flag">🇮🇳</div>
+                <div class="lang-native">தமிழ்</div>
             </div>
+            <div class="lang-card" onclick="selectLanguage('hi')" data-lang="hi">
+                <div class="lang-flag">🇮🇳</div>
+                <div class="lang-native">हिंदी</div>
+            </div>
+        </div>
+    </section>
 
-            <div class="submit-section">
-                <button class="submit-btn" onclick="submitSurvey()" id="submitBtn">
-                    <i class="fas fa-paper-plane"></i>
-                    Submit Survey
-                </button>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="spinner"></div>
+        <h3>Loading your survey...</h3>
+        <p>Please wait while we prepare the questions</p>
+    </div>
+
+    <!-- Survey Container -->
+    <div class="survey-container" id="surveyContainer">
+        <div class="progress-section">
+            <div class="progress-header">
+                <span class="progress-title">Survey Progress</span>
+                <span class="progress-percent" id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
             </div>
         </div>
 
-        <!-- Success Screen -->
-        <div class="success-screen" id="successScreen">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h2 class="success-title">Thank You!</h2>
-            <p>Your response has been recorded successfully.</p>
-            <div class="response-id">
-                <div class="response-id-label">Response ID</div>
-                <div class="response-id-value" id="responseIdValue">BEL123456</div>
-            </div>
-            <button class="submit-btn" onclick="location.reload()" style="margin-top: 30px;">
-                <i class="fas fa-redo"></i>
-                Submit Another Response
+        <div class="questions-wrapper" id="questionsWrapper"></div>
+
+        <div class="submit-section">
+            <button class="submit-btn" onclick="submitSurvey()" id="submitBtn">
+                <i class="fas fa-paper-plane"></i>
+                Submit Survey
             </button>
         </div>
     </div>
 
-    <script>
-        // ==========================================
-        // CONFIGURATION
-        // ==========================================
-        const CONFIG = {
-            API_URL: 'https://script.google.com/macros/s/AKfycbzgoMeqhyB7sO6nEx4Q-AyoDAc96dojoWF6Motf3Y-rcbpYI93ctRS26kD3invSSIRCzQ/exec',
-            SPEECH_LANG: {
-                'en': 'en-IN',
-                'ta': 'ta-IN',
-                'hi': 'hi-IN'
-            },
-            INSTRUCTION_TEXT: {
-                'en': 'Please select your preferred language – English, Tamil, or Hindi',
-                'ta': 'உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும் – ஆங்கிலம், தமிழ், அல்லது இந்தி',
-                'hi': 'कृपया अपनी पसंदीदा भाषा चुनें – अंग्रेजी, तमिल, या हिंदी'
-            }
-        };
+    <!-- Success Screen -->
+    <div class="success-screen" id="successScreen">
+        <i class="fas fa-check-circle success-icon"></i>
+        <h2 class="success-title">Thank You!</h2>
+        <p>Your response has been recorded successfully.</p>
+        <div class="response-id">
+            <div class="response-id-label">Response ID</div>
+            <div class="response-id-value" id="responseIdValue">BEL123456</div>
+        </div>
+        <button class="submit-btn" onclick="location.reload()" style="margin-top: 30px;">
+            <i class="fas fa-redo"></i>
+            Submit Another Response
+        </button>
+    </div>
 
-        // ==========================================
-        // GLOBAL VARIABLES
-        // ==========================================
-        let currentLanguage = 'en';
-        let questions = [];
-        let responses = {};
-        let recognition = null;
-        let isRecording = false;
-        let currentRecordingField = null;
-        let currentSpeech = null;
-        let isSpeaking = false;
+</div>
 
-        // ==========================================
-        // SPEECH SYNTHESIS - CROSS BROWSER COMPATIBLE
-        // ==========================================
-        
-        function initSpeechSynthesis() {
-            if (!window.speechSynthesis) {
-                console.warn('Speech synthesis not supported');
-                return false;
-            }
-            
-            // Force load voices
-            let voices = window.speechSynthesis.getVoices();
-            
-            if (voices.length === 0) {
-                // Voices not loaded yet, wait for them
-                return new Promise((resolve) => {
-                    window.speechSynthesis.onvoiceschanged = () => {
-                        voices = window.speechSynthesis.getVoices();
-                        resolve(voices.length > 0);
-                    };
-                    // Timeout fallback
-                    setTimeout(() => resolve(false), 2000);
-                });
-            }
-            
-            return true;
-        }
+<!-- TTS Status Bar -->
+<div id="ttsStatusBar">
+    <span class="tts-dot"></span>
+    <span id="ttsStatusText">Playing audio...</span>
+</div>
 
-        function stopAllSpeech() {
-            if (window.speechSynthesis) {
-                window.speechSynthesis.cancel();
-            }
-            isSpeaking = false;
-            
-            // Remove all speaking states
-            document.querySelectorAll('.speaking').forEach(el => {
-                el.classList.remove('speaking');
-            });
-        }
+<script>
+// ==========================================
+// CONFIGURATION
+// ==========================================
+const CONFIG = {
+    API_URL: 'https://script.google.com/macros/s/AKfycbzgoMeqhyB7sO6nEx4Q-AyoDAc96dojoWF6Motf3Y-rcbpYI93ctRS26kD3invSSIRCzQ/exec',
+    SPEECH_LANG: { 'en': 'en-IN', 'ta': 'ta-IN', 'hi': 'hi-IN' },
+    TTS_LANG_CODE: { 'en': 'en', 'ta': 'ta', 'hi': 'hi' },
+    INSTRUCTION_TEXT: {
+        'en': 'Please select your preferred language – English, Tamil, or Hindi',
+        'ta': 'உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும் – ஆங்கிலம், தமிழ், அல்லது இந்தி',
+        'hi': 'कृपया अपनी पसंदीदा भाषा चुनें – अंग्रेजी, तमिल, या हिंदी'
+    },
+    // Max chars per TTS chunk — Google TTS limit is ~200
+    CHUNK_SIZE: 180
+};
 
-        function speakText(text, lang, buttonId) {
-            // Stop any current speech
-            stopAllSpeech();
-            
-            if (!window.speechSynthesis) {
-                showAudioNotice();
-                return;
-            }
-            
-            const utterance = new SpeechSynthesisUtterance(text);
-            
-            // Set language with fallback
-            utterance.lang = lang || 'en-IN';
-            
-            // Try to find best voice
-            const voices = window.speechSynthesis.getVoices();
-            let voice = null;
-            
-            // Priority order for voice selection
-            const langCode = lang ? lang.split('-')[0] : 'en';
-            
-            // 1. Exact match
-            voice = voices.find(v => v.lang === lang);
-            
-            // 2. Language code match
-            if (!voice) {
-                voice = voices.find(v => v.lang && v.lang.startsWith(langCode));
-            }
-            
-            // 3. Any voice containing language name
-            if (!voice) {
-                const langNames = {
-                    'ta': ['tamil', 'தமிழ்'],
-                    'hi': ['hindi', 'हिंदी'],
-                    'en': ['english']
-                };
-                
-                const names = langNames[langCode] || [];
-                for (let name of names) {
-                    voice = voices.find(v => 
-                        v.name.toLowerCase().includes(name) || 
-                        v.lang.toLowerCase().includes(name)
-                    );
-                    if (voice) break;
-                }
-            }
-            
-            // 4. Any Indian voice as fallback for Indian languages
-            if (!voice && ['ta', 'hi', 'en'].includes(langCode)) {
-                voice = voices.find(v => v.lang && v.lang.includes('IN'));
-            }
-            
-            // 5. Default voice
-            if (!voice && voices.length > 0) {
-                voice = voices[0];
-            }
-            
-            if (voice) {
-                utterance.voice = voice;
-                console.log('Using voice:', voice.name, voice.lang);
-            } else {
-                console.warn('No suitable voice found, using default');
-            }
-            
-            // Settings for clarity
-            utterance.rate = 0.95; // Slightly slower for clarity
-            utterance.pitch = 1;
-            utterance.volume = 1;
-            
-            // Visual feedback
-            const btn = document.getElementById(buttonId);
-            if (btn) {
-                btn.classList.add('speaking');
-                isSpeaking = true;
-            }
-            
-            utterance.onstart = () => {
-                isSpeaking = true;
-                if (btn) btn.classList.add('speaking');
-            };
-            
-            utterance.onend = () => {
-                isSpeaking = false;
-                if (btn) btn.classList.remove('speaking');
-            };
-            
-            utterance.onerror = (e) => {
-                console.error('Speech error:', e.error);
-                isSpeaking = false;
-                if (btn) btn.classList.remove('speaking');
-                
-                // Don't show alert for cancellation (user clicked to stop)
-                if (e.error !== 'canceled' && e.error !== 'interrupted') {
-                    showAudioNotice();
-                }
-            };
-            
-            // Speak with retry for mobile browsers
-            try {
-                window.speechSynthesis.speak(utterance);
-                currentSpeech = utterance;
-            } catch (err) {
-                console.error('Speak error:', err);
-                if (btn) btn.classList.remove('speaking');
-            }
-        }
+// ==========================================
+// GLOBAL VARIABLES
+// ==========================================
+let currentLanguage = 'en';
+let questions = [];
+let responses = {};
+let recognition = null;
+let isRecording = false;
+let currentRecordingField = null;
 
-        function toggleSpeech(text, lang, buttonId) {
-            const btn = document.getElementById(buttonId);
-            
-            if (isSpeaking && btn && btn.classList.contains('speaking')) {
-                // Stop if already speaking
-                stopAllSpeech();
-            } else {
-                // Start speaking
-                speakText(text, lang, buttonId);
-            }
-        }
+// TTS state
+let ttsQueue = [];
+let ttsPlaying = false;
+let currentAudio = null;
+let activeSpeakerBtnId = null;
 
-        function showAudioNotice() {
-            const notice = document.getElementById('audioNotice');
-            if (notice) {
-                notice.classList.add('show');
-                setTimeout(() => notice.classList.remove('show'), 5000);
-            }
-        }
+// ==========================================
+// ====  CORE TTS ENGINE  ====
+//
+// Strategy (in priority order, per-language):
+//   Tamil/Hindi  → Google Translate TTS audio  (direct fetch, no proxy)
+//   English      → native speechSynthesis  (instant, no network)
+//
+// Tamil is chunked to stay under the 200-char URL limit.
+// Audio is pre-fetched as a Blob URL so playback is instant.
+// ==========================================
 
-        // ==========================================
-        // INSTRUCTION SPEECH
-        // ==========================================
-        
-        function toggleInstructionSpeech() {
-            const text = CONFIG.INSTRUCTION_TEXT[currentLanguage] || CONFIG.INSTRUCTION_TEXT['en'];
-            toggleSpeech(text, CONFIG.SPEECH_LANG[currentLanguage], 'instructionSpeaker');
-        }
+/**
+ * Split long text into ≤ CHUNK_SIZE character pieces,
+ * breaking only at sentence/clause boundaries.
+ */
+function splitTextChunks(text, maxLen) {
+    maxLen = maxLen || CONFIG.CHUNK_SIZE;
+    // Normalise newlines
+    const cleaned = text.replace(/\n+/g, ' ').replace(/\s+/g, ' ').trim();
 
-        // ==========================================
-        // INITIALIZATION
-        // ==========================================
-        
-        async function selectLanguage(lang) {
-            currentLanguage = lang;
-            
-            // Update UI
-            document.querySelectorAll('.lang-card').forEach(card => {
-                card.classList.remove('active');
-                if (card.dataset.lang === lang) {
-                    card.classList.add('active');
-                }
-            });
-            
-            // Update instruction text
-            document.getElementById('instructionText').textContent = CONFIG.INSTRUCTION_TEXT[lang];
-            
-            // Stop any speech
-            stopAllSpeech();
-            
-            // Show loading
-            document.getElementById('langSection').style.display = 'none';
-            document.getElementById('loadingScreen').classList.add('active');
-            
-            // Initialize speech
-            await initSpeechSynthesis();
-            
-            // Load questions
-            loadQuestions(lang);
-        }
+    if (cleaned.length <= maxLen) return [cleaned];
 
-        function loadQuestions(lang) {
-            const script = document.createElement('script');
-            const callbackName = 'handleQuestions_' + Date.now();
-            
-            window[callbackName] = function(data) {
-                handleQuestionsResponse(data);
-                delete window[callbackName];
-                if (script.parentNode) {
-                    document.head.removeChild(script);
-                }
-            };
-            
-            script.src = `${CONFIG.API_URL}?action=getQuestions&lang=${lang}&callback=${callbackName}`;
-            script.onerror = function() {
-                document.getElementById('loadingScreen').innerHTML = 
-                    '<p style="color: red;">Error loading survey. Please refresh and try again.</p>';
-            };
-            
-            document.head.appendChild(script);
-        }
+    const chunks = [];
+    // Split at Tamil sentence ends (।), period, exclamation, question, comma, space
+    const sentenceRe = /[^.!?,।\s]+(?:[.!?,।]+\s*|(?:\s+(?=[A-Z\u0B80-\u0BFF\u0900-\u097F])))/g;
+    let current = '';
+    let m;
 
-        function handleQuestionsResponse(data) {
-            if (data.error) {
-                alert('Error: ' + data.error);
-                return;
-            }
-            
-            questions = data.questions;
-            
-            // Hide loading, show survey
-            document.getElementById('loadingScreen').classList.remove('active');
-            document.getElementById('surveyContainer').classList.add('active');
-            
-            // Render all questions
-            renderAllQuestions();
-            updateProgress();
-        }
-
-        // ==========================================
-        // RENDER QUESTIONS
-        // ==========================================
-        
-        function renderAllQuestions() {
-            const wrapper = document.getElementById('questionsWrapper');
-            wrapper.innerHTML = '';
-            
-            questions.forEach((q, index) => {
-                const card = createQuestionCard(q, index);
-                wrapper.appendChild(card);
-            });
-        }
-
-        function createQuestionCard(q, index) {
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            card.id = `question-${q.id}`;
-            
-            // Check conditional
-            if (q.conditional) {
-                card.dataset.conditionQuestion = q.condition.question;
-                card.dataset.conditionValue = q.condition.value;
-                card.classList.add('conditional-hidden');
-            }
-            
-            let inputHTML = '';
-            
-            switch(q.type) {
-                case 'short_answer':
-                    inputHTML = createShortAnswerHTML(q);
-                    break;
-                case 'multiple_choice':
-                case 'dropdown':
-                    inputHTML = createMultipleChoiceHTML(q);
-                    break;
-                case 'checkbox':
-                    inputHTML = createCheckboxHTML(q);
-                    break;
-            }
-            
-            card.innerHTML = `
-                <div class="question-header">
-                    <div class="question-number">${index + 1}</div>
-                    <div class="question-content">
-                        <div class="question-text">${q.text}</div>
-                    </div>
-                    ${q.speaker ? `
-                        <button class="speaker-btn" onclick="toggleQuestionSpeech('${q.id}')" id="speaker-${q.id}" title="Tap to listen">
-                            <i class="fas fa-volume-up"></i>
-                        </button>
-                    ` : ''}
-                </div>
-                ${inputHTML}
-            `;
-            
-            return card;
-        }
-
-        function createShortAnswerHTML(q) {
-            return `
-                <div class="text-input-wrapper">
-                    <input type="text" 
-                           class="text-input" 
-                           id="input-${q.id}" 
-                           placeholder="${q.placeholder || 'Type your answer here...'}"
-                           oninput="saveText('${q.id}'); checkConditionalQuestions(); updateProgress();">
-                </div>
-                ${q.micRecord ? `
-                    <div class="mic-section">
-                        <button class="mic-btn" id="mic-${q.id}" onclick="toggleRecording('${q.id}')">
-                            <i class="fas fa-microphone"></i>
-                            <span>Speak Answer</span>
-                        </button>
-                        <div class="recording-status hidden" id="status-${q.id}">
-                            <span class="recording-dot"></span>
-                            <span>Recording... Tap to stop</span>
-                        </div>
-                        <div class="mic-error" id="error-${q.id}"></div>
-                    </div>
-                ` : ''}
-            `;
-        }
-
-        function createMultipleChoiceHTML(q) {
-            return `
-                <div class="options-container">
-                    ${q.options.map((opt, i) => `
-                        <div class="option-item" onclick="selectOption('${q.id}', '${opt.value}', ${i})" id="opt-${q.id}-${i}">
-                            <div class="option-icon"></div>
-                            <div class="option-text">${opt.text}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        function createCheckboxHTML(q) {
-            return `
-                <div class="checkbox-grid">
-                    ${q.options.map((opt, i) => `
-                        <div class="checkbox-item" onclick="toggleCheckbox('${q.id}', '${opt.value}', ${i})" id="chk-${q.id}-${i}">
-                            <div class="checkbox-box"></div>
-                            <div class="option-text">${opt.text}</div>
-                        </div>
-                    `).join('')}
-                </div>
-                ${q.helpText ? `<p class="help-text"><i class="fas fa-info-circle"></i> ${q.helpText}</p>` : ''}
-            `;
-        }
-
-        // ==========================================
-        // QUESTION SPEECH
-        // ==========================================
-        
-        function toggleQuestionSpeech(questionId) {
-            // Stop any other speech first
-            stopAllSpeech();
-            
-            const q = questions.find(q => q.id === questionId);
-            if (!q) return;
-            
-            let text = q.text + '. ';
-            
-            if (q.options && q.type !== 'short_answer') {
-                text += 'Options: ' + q.options.map((opt, i) => `${i + 1}. ${opt.text}`).join('. ');
-            }
-            
-            toggleSpeech(text, q.speechLang || CONFIG.SPEECH_LANG[currentLanguage], `speaker-${q.id}`);
-        }
-
-        // ==========================================
-        // INPUT HANDLING
-        // ==========================================
-        
-        function saveText(questionId) {
-            const input = document.getElementById(`input-${questionId}`);
-            if (input) {
-                responses[questionId] = input.value;
-            }
-        }
-
-        function selectOption(questionId, value, index) {
-            // Stop speech when selecting
-            stopAllSpeech();
-            
-            responses[questionId] = value;
-            
-            // Update UI
-            const q = questions.find(q => q.id === questionId);
-            q.options.forEach((opt, i) => {
-                const el = document.getElementById(`opt-${questionId}-${i}`);
-                if (i === index) {
-                    el.classList.add('selected');
-                    el.querySelector('.option-icon').innerHTML = '<i class="fas fa-check"></i>';
-                } else {
-                    el.classList.remove('selected');
-                    el.querySelector('.option-icon').innerHTML = '';
-                }
-            });
-            
-            checkConditionalQuestions();
-            updateProgress();
-        }
-
-        function toggleCheckbox(questionId, value, index) {
-            // Stop speech when selecting
-            stopAllSpeech();
-            
-            if (!responses[questionId]) {
-                responses[questionId] = [];
-            }
-            
-            const arr = responses[questionId];
-            const idx = arr.indexOf(value);
-            
-            if (idx > -1) {
-                arr.splice(idx, 1);
-                document.getElementById(`chk-${questionId}-${index}`).classList.remove('selected');
-                document.getElementById(`chk-${questionId}-${index}`).querySelector('.checkbox-box').innerHTML = '';
-            } else {
-                arr.push(value);
-                document.getElementById(`chk-${questionId}-${index}`).classList.add('selected');
-                document.getElementById(`chk-${questionId}-${index}`).querySelector('.checkbox-box').innerHTML = '<i class="fas fa-check"></i>';
-            }
-            
-            updateProgress();
-        }
-
-        // ==========================================
-        // MICROPHONE - IMPROVED CROSS-BROWSER
-        // ==========================================
-        
-        async function toggleRecording(questionId) {
-            if (isRecording) {
-                stopRecording();
-            } else {
-                await startRecording(questionId);
-            }
-        }
-
-        async function startRecording(questionId) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            
-            if (!SpeechRecognition) {
-                showMicError(questionId, 'Speech recognition not supported in this browser. Please use Chrome or Edge.');
-                return;
-            }
-            
-            // Check if secure context
-            if (!window.isSecureContext) {
-                showMicError(questionId, 'Microphone requires HTTPS. Please use a secure connection.');
-                return;
-            }
-            
-            // Request permission explicitly
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                stream.getTracks().forEach(track => track.stop()); // Stop immediately, just checking permission
-            } catch (err) {
-                console.error('Mic permission error:', err);
-                let msg = 'Microphone access denied.';
-                
-                if (err.name === 'NotAllowedError') {
-                    msg = 'Please allow microphone access in your browser settings. Tap the lock icon in the address bar.';
-                } else if (err.name === 'NotFoundError') {
-                    msg = 'No microphone found. Please connect a microphone.';
-                }
-                
-                showMicError(questionId, msg);
-                return;
-            }
-            
-            // Setup recognition
-            recognition = new SpeechRecognition();
-            recognition.lang = CONFIG.SPEECH_LANG[currentLanguage];
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-            
-            currentRecordingField = questionId;
-            
-            recognition.onstart = function() {
-                isRecording = true;
-                hideMicError(questionId);
-                
-                const btn = document.getElementById(`mic-${questionId}`);
-                const status = document.getElementById(`status-${questionId}`);
-                
-                btn.classList.add('recording');
-                btn.innerHTML = '<i class="fas fa-stop"></i><span>Stop</span>';
-                status.classList.remove('hidden');
-            };
-            
-            recognition.onresult = function(event) {
-                const transcript = event.results[0][0].transcript;
-                const input = document.getElementById(`input-${questionId}`);
-                if (input) {
-                    input.value = transcript;
-                    saveText(questionId);
-                    responses[`audio_${questionId}`] = transcript;
-                    updateProgress();
-                }
-            };
-            
-            recognition.onerror = function(event) {
-                console.error('Speech recognition error:', event.error);
-                
-                let msg = 'Recording error: ';
-                switch(event.error) {
-                    case 'no-speech':
-                        msg = 'No speech detected. Please speak clearly and try again.';
-                        break;
-                    case 'audio-capture':
-                        msg = 'Could not capture audio. Please check your microphone.';
-                        break;
-                    case 'not-allowed':
-                        msg = 'Microphone access denied. Please check browser permissions.';
-                        break;
-                    case 'network':
-                        msg = 'Network error. Please check your internet connection.';
-                        break;
-                    case 'aborted':
-                        // User cancelled, no need to show error
-                        stopRecording();
-                        return;
-                    default:
-                        msg += event.error;
-                }
-                
-                showMicError(questionId, msg);
-                stopRecording();
-            };
-            
-            recognition.onend = function() {
-                stopRecording();
-            };
-            
-            try {
-                recognition.start();
-            } catch (err) {
-                console.error('Start error:', err);
-                showMicError(questionId, 'Could not start recording. Please try again.');
-            }
-        }
-
-        function stopRecording() {
-            if (recognition) {
-                try {
-                    recognition.stop();
-                } catch (e) {}
-                recognition = null;
-            }
-            
-            isRecording = false;
-            
-            if (currentRecordingField) {
-                const btn = document.getElementById(`mic-${currentRecordingField}`);
-                const status = document.getElementById(`status-${currentRecordingField}`);
-                
-                if (btn) {
-                    btn.classList.remove('recording');
-                    btn.innerHTML = '<i class="fas fa-microphone"></i><span>Speak Answer</span>';
-                }
-                if (status) {
-                    status.classList.add('hidden');
-                }
-            }
-            
-            currentRecordingField = null;
-        }
-
-        function showMicError(questionId, message) {
-            const errorDiv = document.getElementById(`error-${questionId}`);
-            if (errorDiv) {
-                errorDiv.textContent = message;
-                errorDiv.classList.add('show');
-                setTimeout(() => errorDiv.classList.remove('show'), 8000);
-            }
-        }
-
-        function hideMicError(questionId) {
-            const errorDiv = document.getElementById(`error-${questionId}`);
-            if (errorDiv) {
-                errorDiv.classList.remove('show');
-            }
-        }
-
-        // ==========================================
-        // CONDITIONAL LOGIC
-        // ==========================================
-        
-        function checkConditionalQuestions() {
-            questions.forEach(q => {
-                if (q.conditional) {
-                    const parentValue = responses[q.condition.question];
-                    const card = document.getElementById(`question-${q.id}`);
-                    
-                    if (parentValue === q.condition.value) {
-                        card.classList.remove('conditional-hidden');
+    // Try sentence-aware splitting first
+    const parts = cleaned.split(/([.!?,।]+\s*)/);
+    for (let i = 0; i < parts.length; i++) {
+        const seg = parts[i];
+        if ((current + seg).length <= maxLen) {
+            current += seg;
+        } else {
+            if (current.trim()) chunks.push(current.trim());
+            // If a single segment is too long, force-split by words
+            if (seg.length > maxLen) {
+                const words = seg.split(' ');
+                current = '';
+                for (const w of words) {
+                    if ((current + ' ' + w).trim().length <= maxLen) {
+                        current = (current + ' ' + w).trim();
                     } else {
-                        card.classList.add('conditional-hidden');
-                        delete responses[q.id];
+                        if (current) chunks.push(current);
+                        current = w;
                     }
                 }
-            });
-        }
-
-        // ==========================================
-        // PROGRESS & VALIDATION
-        // ==========================================
-        
-        function updateProgress() {
-            const visibleQuestions = questions.filter(q => {
-                if (!q.conditional) return true;
-                return responses[q.condition.question] === q.condition.value;
-            });
-            
-            const answeredCount = visibleQuestions.filter(q => {
-                if (q.type === 'checkbox') {
-                    return responses[q.id] && responses[q.id].length > 0;
-                }
-                return responses[q.id] && responses[q.id].toString().trim() !== '';
-            }).length;
-            
-            const percent = visibleQuestions.length > 0 
-                ? Math.round((answeredCount / visibleQuestions.length) * 100) 
-                : 0;
-            
-            document.getElementById('progressPercent').textContent = percent + '%';
-            document.getElementById('progressFill').style.width = percent + '%';
-        }
-
-        function validateAll() {
-            const visibleQuestions = questions.filter(q => {
-                if (!q.conditional) return true;
-                return responses[q.condition.question] === q.condition.value;
-            });
-            
-            const missing = [];
-            let firstMissingCard = null;
-            
-            visibleQuestions.forEach(q => {
-                if (!q.required) return;
-                
-                let hasAnswer = false;
-                if (q.type === 'checkbox') {
-                    hasAnswer = responses[q.id] && responses[q.id].length > 0;
-                } else {
-                    hasAnswer = responses[q.id] && responses[q.id].toString().trim() !== '';
-                }
-                
-                const card = document.getElementById(`question-${q.id}`);
-                
-                if (!hasAnswer) {
-                    missing.push(q.text);
-                    card.classList.add('error');
-                    if (!firstMissingCard) firstMissingCard = card;
-                } else {
-                    card.classList.remove('error');
-                }
-            });
-            
-            return { missing, firstMissingCard };
-        }
-
-        // ==========================================
-        // SUBMIT
-        // ==========================================
-        
-        function submitSurvey() {
-            // Stop any speech
-            stopAllSpeech();
-            
-            const { missing, firstMissingCard } = validateAll();
-            
-            if (missing.length > 0) {
-                alert('Please answer all required questions:\n\n• ' + missing.join('\n• '));
-                if (firstMissingCard) {
-                    firstMissingCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-                return;
+            } else {
+                current = seg;
             }
-            
-            // Show loading
-            document.getElementById('surveyContainer').style.display = 'none';
-            document.getElementById('loadingScreen').classList.add('active');
-            document.getElementById('loadingScreen').innerHTML = `
-                <div class="spinner"></div>
-                <h3>Submitting your response...</h3>
-                <p>Please do not close this window</p>
-            `;
-            
-            // Prepare data
-            const formData = {
-                action: 'submitResponse',
-                formData: {
-                    ...responses,
-                    language: currentLanguage
-                }
-            };
-            
-            submitUsingForm(formData);
         }
+    }
+    if (current.trim()) chunks.push(current.trim());
+    return chunks.filter(c => c.length > 0);
+}
 
-        function submitUsingForm(data) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = CONFIG.API_URL;
-            form.target = 'hidden-iframe';
-            form.style.display = 'none';
-            
-            const input = document.createElement('input');
-            input.name = 'data';
-            input.value = JSON.stringify(data);
-            form.appendChild(input);
-            
-            let iframe = document.getElementById('hidden-iframe');
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.name = 'hidden-iframe';
-                iframe.id = 'hidden-iframe';
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
-            }
-            
-            iframe.onload = function() {
-                try {
-                    const responseText = iframe.contentDocument.body.innerText;
-                    const result = JSON.parse(responseText);
-                    showSuccess(result.responseId || 'BEL' + Date.now());
-                } catch (e) {
-                    showSuccess('BEL' + Date.now());
-                }
-            };
-            
-            setTimeout(() => {
-                showSuccess('BEL' + Date.now());
-            }, 6000);
-            
-            document.body.appendChild(form);
-            form.submit();
-            document.body.removeChild(form);
-        }
+/**
+ * Build a Google Translate TTS audio URL for a text chunk.
+ * Uses the public `translate_tts` endpoint — no API key needed.
+ */
+function buildGoogleTTSUrl(text, langCode) {
+    // Using the same endpoint that Google Translate web uses
+    return 'https://translate.googleapis.com/translate_tts?ie=UTF-8&q='
+        + encodeURIComponent(text)
+        + '&tl=' + encodeURIComponent(langCode)
+        + '&client=gtx&ttsspeed=0.9';
+}
 
-        function showSuccess(responseId) {
-            document.getElementById('loadingScreen').classList.remove('active');
-            document.getElementById('successScreen').classList.add('active');
-            document.getElementById('responseIdValue').textContent = responseId;
-        }
-
-        // ==========================================
-        // INITIALIZE ON LOAD
-        // ==========================================
-        
-        window.addEventListener('load', async () => {
-            // Pre-initialize speech synthesis
-            await initSpeechSynthesis();
-            
-            // Some browsers need user interaction before audio works
-            document.addEventListener('click', () => {
-                if (window.speechSynthesis && window.speechSynthesis.getVoices().length === 0) {
-                    initSpeechSynthesis();
-                }
-            }, { once: true });
-        });
-
-        // Handle page visibility changes (mobile browsers pause audio)
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                stopAllSpeech();
-                stopRecording();
+/**
+ * Fetch one TTS chunk and return a Blob URL.
+ * Falls back gracefully on network error.
+ */
+async function fetchTTSBlob(text, langCode) {
+    const url = buildGoogleTTSUrl(text, langCode);
+    try {
+        const resp = await fetch(url, {
+            method: 'GET',
+            headers: {
+                // Mimic the User-Agent Google Translate uses
+                'Accept': 'audio/mpeg, audio/*'
             }
         });
-    </script>
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const blob = await resp.blob();
+        return URL.createObjectURL(blob);
+    } catch (err) {
+        console.warn('TTS fetch failed for chunk:', text, err);
+        return null;
+    }
+}
+
+/**
+ * Play an array of Blob URLs sequentially.
+ */
+async function playBlobQueue(blobUrls, onDone) {
+    for (let i = 0; i < blobUrls.length; i++) {
+        if (!ttsPlaying) break; // aborted
+        const blobUrl = blobUrls[i];
+        if (!blobUrl) continue;
+
+        await new Promise((resolve) => {
+            const audio = new Audio(blobUrl);
+            currentAudio = audio;
+            audio.volume = 1;
+
+            audio.onended = () => { URL.revokeObjectURL(blobUrl); resolve(); };
+            audio.onerror = () => { URL.revokeObjectURL(blobUrl); resolve(); };
+
+            audio.play().catch(() => resolve());
+        });
+    }
+    if (onDone) onDone();
+}
+
+/**
+ * Main TTS function. Handles both English (native) and Indian languages (Google TTS).
+ *
+ * @param {string}   text        Text to speak
+ * @param {string}   lang        Language code: 'en', 'ta', 'hi'
+ * @param {string}   btnId       ID of the speaker button (for visual state)
+ * @param {string}   [statusMsg] Optional short status shown in the status bar
+ */
+async function speakText(text, lang, btnId, statusMsg) {
+    if (!text || !text.trim()) return;
+
+    // If same button clicked again while playing → stop
+    if (ttsPlaying && activeSpeakerBtnId === btnId) {
+        stopTTS();
+        return;
+    }
+
+    stopTTS(); // stop any previous playback
+
+    activeSpeakerBtnId = btnId;
+    ttsPlaying = true;
+
+    setButtonState(btnId, 'loading');
+    showStatusBar(statusMsg || 'Loading audio...');
+
+    if (lang === 'en') {
+        // ── English: use native speechSynthesis (no network, instant) ──
+        if (!window.speechSynthesis) {
+            stopTTS();
+            return;
+        }
+
+        window.speechSynthesis.cancel();
+        const utt = new SpeechSynthesisUtterance(text);
+        utt.lang = 'en-IN';
+        utt.rate = 0.92;
+        utt.volume = 1;
+
+        // Try to pick an Indian English voice
+        const voices = window.speechSynthesis.getVoices();
+        const voice = voices.find(v => v.lang === 'en-IN')
+                   || voices.find(v => v.lang.startsWith('en-'))
+                   || null;
+        if (voice) utt.voice = voice;
+
+        utt.onstart = () => {
+            setButtonState(btnId, 'speaking');
+            showStatusBar('Speaking...');
+        };
+        utt.onend = () => { stopTTS(); };
+        utt.onerror = (e) => {
+            if (e.error !== 'canceled' && e.error !== 'interrupted') {
+                console.warn('SpeechSynthesis error:', e.error);
+            }
+            stopTTS();
+        };
+
+        window.speechSynthesis.speak(utt);
+
+    } else {
+        // ── Tamil / Hindi: Google Translate TTS, fetched and played as audio ──
+        const langCode = CONFIG.TTS_LANG_CODE[lang] || lang;
+        const chunks = splitTextChunks(text, CONFIG.CHUNK_SIZE);
+
+        // Pre-fetch ALL chunks before playing — eliminates gaps between chunks
+        showStatusBar('Preparing audio (' + chunks.length + ' part' + (chunks.length > 1 ? 's' : '') + ')...');
+
+        const blobUrls = [];
+        for (let i = 0; i < chunks.length; i++) {
+            if (!ttsPlaying) break; // aborted before we finished fetching
+            const bUrl = await fetchTTSBlob(chunks[i], langCode);
+            blobUrls.push(bUrl);
+        }
+
+        if (!ttsPlaying) { // user stopped during fetch
+            blobUrls.forEach(u => u && URL.revokeObjectURL(u));
+            return;
+        }
+
+        setButtonState(btnId, 'speaking');
+        showStatusBar('Speaking...');
+
+        await playBlobQueue(blobUrls, () => { stopTTS(); });
+    }
+}
+
+/**
+ * Stop all TTS immediately.
+ */
+function stopTTS() {
+    ttsPlaying = false;
+
+    // Stop native speech
+    if (window.speechSynthesis) {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+    }
+
+    // Stop audio element
+    if (currentAudio) {
+        try { currentAudio.pause(); currentAudio.src = ''; } catch (e) {}
+        currentAudio = null;
+    }
+
+    setButtonState(activeSpeakerBtnId, 'idle');
+    activeSpeakerBtnId = null;
+    hideStatusBar();
+}
+
+function setButtonState(btnId, state) {
+    if (!btnId) return;
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+
+    btn.classList.remove('loading', 'speaking');
+    if (state === 'loading') btn.classList.add('loading');
+    else if (state === 'speaking') btn.classList.add('speaking');
+}
+
+function showStatusBar(msg) {
+    const bar = document.getElementById('ttsStatusBar');
+    const txt = document.getElementById('ttsStatusText');
+    if (bar && txt) { txt.textContent = msg; bar.classList.add('show'); }
+}
+
+function hideStatusBar() {
+    const bar = document.getElementById('ttsStatusBar');
+    if (bar) bar.classList.remove('show');
+}
+
+// ==========================================
+// INSTRUCTION SPEECH
+// ==========================================
+function speakInstruction() {
+    const text = CONFIG.INSTRUCTION_TEXT[currentLanguage] || CONFIG.INSTRUCTION_TEXT['en'];
+    speakText(text, currentLanguage, 'instructionSpeaker', 'Reading instruction...');
+}
+
+// ==========================================
+// QUESTION SPEECH
+// ==========================================
+function toggleQuestionSpeech(questionId) {
+    const q = questions.find(q => q.id === questionId);
+    if (!q) return;
+
+    let text = q.text;
+    if (q.options && q.options.length) {
+        // Read options too
+        text += '. ' + q.options.map((o, i) => (i + 1) + '. ' + o.text).join('. ');
+    }
+
+    speakText(text, currentLanguage, 'speaker-' + questionId, 'Reading question...');
+}
+
+// ==========================================
+// LANGUAGE SELECTION & QUESTION LOADING
+// ==========================================
+async function selectLanguage(lang) {
+    currentLanguage = lang;
+    stopTTS();
+
+    document.querySelectorAll('.lang-card').forEach(c => {
+        c.classList.toggle('active', c.dataset.lang === lang);
+    });
+
+    const INSTRUCTION = {
+        'en': 'Please select your preferred language – English, Tamil, or Hindi',
+        'ta': 'உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும் – ஆங்கிலம், தமிழ், அல்லது இந்தி',
+        'hi': 'कृपया अपनी पसंदीदा भाषा चुनें – अंग्रेजी, तमिल, या हिंदी'
+    };
+    document.getElementById('instructionText').textContent = INSTRUCTION[lang];
+
+    document.getElementById('langSection').style.display = 'none';
+    document.getElementById('loadingScreen').classList.add('active');
+
+    // Pre-warm voices for English
+    if (lang === 'en' && window.speechSynthesis) {
+        window.speechSynthesis.getVoices();
+    }
+
+    loadQuestions(lang);
+}
+
+function loadQuestions(lang) {
+    const callbackName = 'cb_' + Date.now();
+    const script = document.createElement('script');
+
+    window[callbackName] = function(data) {
+        delete window[callbackName];
+        if (script.parentNode) document.head.removeChild(script);
+        handleQuestionsResponse(data);
+    };
+
+    script.src = CONFIG.API_URL + '?action=getQuestions&lang=' + lang + '&callback=' + callbackName;
+    script.onerror = function() {
+        document.getElementById('loadingScreen').innerHTML =
+            '<p style="color:red;padding:20px">Error loading survey. Please refresh and try again.</p>';
+    };
+
+    document.head.appendChild(script);
+}
+
+function handleQuestionsResponse(data) {
+    if (data.error) { alert('Error: ' + data.error); return; }
+
+    questions = data.questions;
+    document.getElementById('loadingScreen').classList.remove('active');
+    document.getElementById('surveyContainer').classList.add('active');
+    renderAllQuestions();
+    updateProgress();
+}
+
+// ==========================================
+// RENDER QUESTIONS
+// ==========================================
+function renderAllQuestions() {
+    const wrapper = document.getElementById('questionsWrapper');
+    wrapper.innerHTML = '';
+    questions.forEach((q, idx) => wrapper.appendChild(createQuestionCard(q, idx)));
+}
+
+function createQuestionCard(q, index) {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = 'question-' + q.id;
+
+    if (q.conditional) {
+        card.dataset.conditionQuestion = q.condition.question;
+        card.dataset.conditionValue = q.condition.value;
+        card.classList.add('conditional-hidden');
+    }
+
+    let inputHTML = '';
+    if (q.type === 'short_answer')                         inputHTML = createShortAnswerHTML(q);
+    else if (q.type === 'multiple_choice' || q.type === 'dropdown') inputHTML = createMultipleChoiceHTML(q);
+    else if (q.type === 'checkbox')                        inputHTML = createCheckboxHTML(q);
+
+    card.innerHTML =
+        '<div class="question-header">' +
+            '<div class="question-number">' + (index + 1) + '</div>' +
+            '<div class="question-content">' +
+                '<div class="question-text">' + q.text + '</div>' +
+            '</div>' +
+            (q.speaker
+                ? '<button class="speaker-btn" id="speaker-' + q.id + '" onclick="toggleQuestionSpeech(\'' + q.id + '\')" title="Tap to listen"><i class="fas fa-volume-up"></i></button>'
+                : '') +
+        '</div>' + inputHTML;
+
+    return card;
+}
+
+function createShortAnswerHTML(q) {
+    return '<div class="text-input-wrapper">' +
+        '<input type="text" class="text-input" id="input-' + q.id + '" ' +
+               'placeholder="' + (q.placeholder || 'Type your answer here...') + '" ' +
+               'oninput="saveText(\'' + q.id + '\'); checkConditionalQuestions(); updateProgress();">' +
+        '</div>' +
+        (q.micRecord
+            ? '<div class="mic-section">' +
+                  '<button class="mic-btn" id="mic-' + q.id + '" onclick="toggleRecording(\'' + q.id + '\')">' +
+                      '<i class="fas fa-microphone"></i><span>Speak Answer</span>' +
+                  '</button>' +
+                  '<div class="recording-status hidden" id="status-' + q.id + '">' +
+                      '<span class="recording-dot"></span><span>Recording... Tap to stop</span>' +
+                  '</div>' +
+                  '<div class="mic-error" id="error-' + q.id + '"></div>' +
+              '</div>'
+            : '');
+}
+
+function createMultipleChoiceHTML(q) {
+    return '<div class="options-container">' +
+        q.options.map(function(opt, i) {
+            return '<div class="option-item" ' +
+                   'onclick="selectOption(\'' + q.id + '\', \'' + opt.value.replace(/'/g, "\\'") + '\', ' + i + ')" ' +
+                   'id="opt-' + q.id + '-' + i + '">' +
+                   '<div class="option-icon"></div>' +
+                   '<div class="option-text">' + opt.text + '</div>' +
+                   '</div>';
+        }).join('') + '</div>';
+}
+
+function createCheckboxHTML(q) {
+    return '<div class="checkbox-grid">' +
+        q.options.map(function(opt, i) {
+            return '<div class="checkbox-item" ' +
+                   'onclick="toggleCheckbox(\'' + q.id + '\', \'' + opt.value.replace(/'/g, "\\'") + '\', ' + i + ')" ' +
+                   'id="chk-' + q.id + '-' + i + '">' +
+                   '<div class="checkbox-box"></div>' +
+                   '<div class="option-text">' + opt.text + '</div>' +
+                   '</div>';
+        }).join('') + '</div>' +
+        (q.helpText ? '<p class="help-text"><i class="fas fa-info-circle"></i> ' + q.helpText + '</p>' : '');
+}
+
+// ==========================================
+// INPUT HANDLING
+// ==========================================
+function saveText(qId) {
+    const el = document.getElementById('input-' + qId);
+    if (el) responses[qId] = el.value;
+}
+
+function selectOption(qId, value, index) {
+    stopTTS();
+    responses[qId] = value;
+
+    const q = questions.find(q => q.id === qId);
+    q.options.forEach(function(opt, i) {
+        const el = document.getElementById('opt-' + qId + '-' + i);
+        if (el) {
+            const icon = el.querySelector('.option-icon');
+            if (i === index) {
+                el.classList.add('selected');
+                if (icon) icon.innerHTML = '<i class="fas fa-check"></i>';
+            } else {
+                el.classList.remove('selected');
+                if (icon) icon.innerHTML = '';
+            }
+        }
+    });
+
+    checkConditionalQuestions();
+    updateProgress();
+}
+
+function toggleCheckbox(qId, value, index) {
+    stopTTS();
+    if (!responses[qId]) responses[qId] = [];
+
+    const arr = responses[qId];
+    const idx = arr.indexOf(value);
+    const el = document.getElementById('chk-' + qId + '-' + index);
+    const box = el ? el.querySelector('.checkbox-box') : null;
+
+    if (idx > -1) {
+        arr.splice(idx, 1);
+        if (el) el.classList.remove('selected');
+        if (box) box.innerHTML = '';
+    } else {
+        arr.push(value);
+        if (el) el.classList.add('selected');
+        if (box) box.innerHTML = '<i class="fas fa-check"></i>';
+    }
+
+    updateProgress();
+}
+
+// ==========================================
+// MICROPHONE
+// ==========================================
+async function toggleRecording(qId) {
+    if (isRecording) stopRecording();
+    else await startRecording(qId);
+}
+
+async function startRecording(qId) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { showMicError(qId, 'Speech recognition not supported. Please use Chrome or Edge.'); return; }
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(t => t.stop());
+    } catch (err) {
+        let msg = err.name === 'NotAllowedError'
+            ? 'Please allow microphone access in your browser settings.'
+            : 'Microphone error: ' + err.message;
+        showMicError(qId, msg);
+        return;
+    }
+
+    recognition = new SR();
+    recognition.lang = CONFIG.SPEECH_LANG[currentLanguage];
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+    currentRecordingField = qId;
+
+    recognition.onstart = function() {
+        isRecording = true;
+        hideMicError(qId);
+        const btn = document.getElementById('mic-' + qId);
+        const status = document.getElementById('status-' + qId);
+        if (btn) { btn.classList.add('recording'); btn.innerHTML = '<i class="fas fa-stop"></i><span>Stop</span>'; }
+        if (status) status.classList.remove('hidden');
+    };
+
+    recognition.onresult = function(e) {
+        const transcript = e.results[0][0].transcript;
+        const input = document.getElementById('input-' + qId);
+        if (input) { input.value = transcript; saveText(qId); responses['audio_' + qId] = transcript; updateProgress(); }
+    };
+
+    recognition.onerror = function(e) {
+        let msg = {
+            'no-speech': 'No speech detected. Please try again.',
+            'audio-capture': 'Could not capture audio.',
+            'not-allowed': 'Microphone access denied.',
+            'network': 'Network error during recording.'
+        }[e.error] || ('Error: ' + e.error);
+        if (e.error !== 'aborted') showMicError(qId, msg);
+        stopRecording();
+    };
+
+    recognition.onend = function() { stopRecording(); };
+
+    try { recognition.start(); } catch (e) { showMicError(qId, 'Could not start recording.'); }
+}
+
+function stopRecording() {
+    if (recognition) { try { recognition.stop(); } catch (e) {} recognition = null; }
+    isRecording = false;
+    if (currentRecordingField) {
+        const btn = document.getElementById('mic-' + currentRecordingField);
+        const status = document.getElementById('status-' + currentRecordingField);
+        if (btn) { btn.classList.remove('recording'); btn.innerHTML = '<i class="fas fa-microphone"></i><span>Speak Answer</span>'; }
+        if (status) status.classList.add('hidden');
+    }
+    currentRecordingField = null;
+}
+
+function showMicError(qId, msg) {
+    const el = document.getElementById('error-' + qId);
+    if (el) { el.textContent = msg; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 8000); }
+}
+
+function hideMicError(qId) {
+    const el = document.getElementById('error-' + qId);
+    if (el) el.classList.remove('show');
+}
+
+// ==========================================
+// CONDITIONAL LOGIC
+// ==========================================
+function checkConditionalQuestions() {
+    questions.forEach(function(q) {
+        if (!q.conditional) return;
+        const parentVal = responses[q.condition.question];
+        const card = document.getElementById('question-' + q.id);
+        if (parentVal === q.condition.value) {
+            card.classList.remove('conditional-hidden');
+        } else {
+            card.classList.add('conditional-hidden');
+            delete responses[q.id];
+        }
+    });
+}
+
+// ==========================================
+// PROGRESS & VALIDATION
+// ==========================================
+function updateProgress() {
+    const visible = questions.filter(function(q) {
+        if (!q.conditional) return true;
+        return responses[q.condition.question] === q.condition.value;
+    });
+
+    const answered = visible.filter(function(q) {
+        if (q.type === 'checkbox') return responses[q.id] && responses[q.id].length > 0;
+        return responses[q.id] && responses[q.id].toString().trim() !== '';
+    }).length;
+
+    const pct = visible.length ? Math.round((answered / visible.length) * 100) : 0;
+    document.getElementById('progressPercent').textContent = pct + '%';
+    document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function validateAll() {
+    const visible = questions.filter(function(q) {
+        if (!q.conditional) return true;
+        return responses[q.condition.question] === q.condition.value;
+    });
+
+    const missing = []; let firstCard = null;
+    visible.forEach(function(q) {
+        if (!q.required) return;
+        const has = q.type === 'checkbox'
+            ? (responses[q.id] && responses[q.id].length > 0)
+            : (responses[q.id] && responses[q.id].toString().trim() !== '');
+        const card = document.getElementById('question-' + q.id);
+        if (!has) { missing.push(q.text); card.classList.add('error'); if (!firstCard) firstCard = card; }
+        else card.classList.remove('error');
+    });
+    return { missing, firstCard };
+}
+
+// ==========================================
+// SUBMIT
+// ==========================================
+function submitSurvey() {
+    stopTTS();
+    const { missing, firstCard } = validateAll();
+    if (missing.length) {
+        alert('Please answer all required questions:\n\n• ' + missing.join('\n• '));
+        if (firstCard) firstCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+
+    document.getElementById('surveyContainer').style.display = 'none';
+    document.getElementById('loadingScreen').classList.add('active');
+    document.getElementById('loadingScreen').innerHTML =
+        '<div class="spinner"></div><h3>Submitting your response...</h3><p>Please do not close this window</p>';
+
+    const formData = { action: 'submitResponse', formData: Object.assign({}, responses, { language: currentLanguage }) };
+
+    // Submit via hidden iframe (handles CORS)
+    let iframe = document.getElementById('hidden-iframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.name = 'hidden-iframe';
+        iframe.id = 'hidden-iframe';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+    }
+
+    iframe.onload = function() {
+        try {
+            const txt = iframe.contentDocument.body.innerText;
+            const res = JSON.parse(txt);
+            showSuccess(res.responseId || ('BEL' + Date.now()));
+        } catch (e) {
+            showSuccess('BEL' + Date.now());
+        }
+    };
+
+    // Fallback if iframe never fires
+    setTimeout(() => { if (document.getElementById('loadingScreen').classList.contains('active')) showSuccess('BEL' + Date.now()); }, 7000);
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = CONFIG.API_URL;
+    form.target = 'hidden-iframe';
+    form.style.display = 'none';
+    const inp = document.createElement('input');
+    inp.name = 'data';
+    inp.value = JSON.stringify(formData);
+    form.appendChild(inp);
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+}
+
+function showSuccess(responseId) {
+    document.getElementById('loadingScreen').classList.remove('active');
+    document.getElementById('successScreen').classList.add('active');
+    document.getElementById('responseIdValue').textContent = responseId;
+}
+
+// ==========================================
+// INIT
+// ==========================================
+window.addEventListener('load', function() {
+    // Pre-warm speechSynthesis (English) — Chrome loads voices asynchronously
+    if (window.speechSynthesis) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = function() {
+            window.speechSynthesis.getVoices(); // cache
+        };
+    }
+});
+
+// Stop audio when tab goes background
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) { stopTTS(); stopRecording(); }
+});
+</script>
 </body>
 </html>
