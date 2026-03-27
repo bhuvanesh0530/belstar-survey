@@ -97,6 +97,33 @@
             z-index: 1;
         }
 
+        /* GPS Display */
+        .gps-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .gps-bar i {
+            margin-right: 8px;
+        }
+
+        .gps-coords {
+            font-family: monospace;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
         /* Language Selection */
         .lang-section {
             background: var(--white);
@@ -489,7 +516,7 @@
             box-shadow: 0 0 0 4px rgba(233, 30, 99, 0.1);
         }
 
-        /* Mic Button */
+        /* Mic Button - FIXED */
         .mic-section {
             margin-top: 20px;
             display: flex;
@@ -513,6 +540,8 @@
             gap: 10px;
             box-shadow: 0 5px 20px rgba(233, 30, 99, 0.3);
             -webkit-tap-highlight-color: transparent;
+            min-width: 160px;
+            justify-content: center;
         }
 
         .mic-btn:hover, .mic-btn:active {
@@ -528,6 +557,12 @@
         @keyframes pulseRecord {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
+        }
+
+        .mic-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .recording-status {
@@ -560,6 +595,7 @@
             background: #ffebee;
             border-radius: 10px;
             display: none;
+            width: 100%;
         }
 
         .mic-error.show {
@@ -709,6 +745,11 @@
                 justify-content: center;
                 padding: 16px 30px;
             }
+
+            .gps-bar {
+                font-size: 11px;
+                padding: 10px 15px;
+            }
         }
 
         /* Hidden */
@@ -796,9 +837,66 @@
         .audio-notice.show {
             display: block;
         }
+
+        /* Permission overlay */
+        .permission-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .permission-overlay.active {
+            display: flex;
+        }
+
+        .permission-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .permission-box h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .permission-box p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .permission-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
+    <!-- Permission Request Overlay -->
+    <div class="permission-overlay" id="permissionOverlay">
+        <div class="permission-box">
+            <h3>🎤 Microphone Access Required</h3>
+            <p id="permissionText">Please allow microphone access to use voice recording. This is needed for speech recognition.</p>
+            <button class="permission-btn" onclick="requestMicrophonePermission()">Allow Microphone</button>
+        </div>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <header class="main-header">
@@ -806,6 +904,12 @@
             <h1>Belstar SHG Women Training Completion Survey</h1>
             <p>Empowering Women Through Digital Literacy</p>
         </header>
+
+        <!-- GPS Bar -->
+        <div class="gps-bar" id="gpsBar" style="display: none;">
+            <span><i class="fas fa-map-marker-alt"></i> <span id="gpsText">Location: Capturing...</span></span>
+            <span class="gps-coords" id="gpsCoords">Lat: --, Long: --</span>
+        </div>
 
         <!-- Language Selection -->
         <section class="lang-section" id="langSection">
@@ -902,6 +1006,11 @@
                 'en': 'Please select your preferred language – English, Tamil, or Hindi',
                 'ta': 'உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும் – ஆங்கிலம், தமிழ், அல்லது இந்தி',
                 'hi': 'कृपया अपनी पसंदीदा भाषा चुनें – अंग्रेजी, तमिल, या हिंदी'
+            },
+            MIC_LABELS: {
+                'en': { speak: '🎤 Speak Answer', stop: '⏹ Stop', recording: '🔴 Recording...' },
+                'ta': { speak: '🎤 பேசி பதிவு செய்', stop: '⏹ நிறுத்து', recording: '🔴 பதிவாகிறது...' },
+                'hi': { speak: '🎤 बोलकर जवाब दें', stop: '⏹ रोकें', recording: '🔅 रिकॉर्डिंग...' }
             }
         };
 
@@ -919,6 +1028,94 @@
         let activeSpeakerId = null;
         let availableVoices = [];
         let voicesLoaded = false;
+        let gpsLatitude = null;
+        let gpsLongitude = null;
+        let micPermissionGranted = false;
+
+        // ==========================================
+        // GPS / LOCATION CAPTURE - FROM PREVIOUS PROJECT
+        // ==========================================
+        
+        function initGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        gpsLatitude = position.coords.latitude.toFixed(6);
+                        gpsLongitude = position.coords.longitude.toFixed(6);
+                        updateGPSDisplay();
+                    },
+                    function(error) {
+                        console.error('GPS Error:', error);
+                        document.getElementById('gpsText').textContent = 'Location: Unable to capture';
+                        document.getElementById('gpsCoords').textContent = 'Lat: --, Long: --';
+                    },
+                    { 
+                        enableHighAccuracy: true, 
+                        timeout: 10000, 
+                        maximumAge: 0 
+                    }
+                );
+            } else {
+                document.getElementById('gpsText').textContent = 'Location: Not supported';
+            }
+        }
+
+        function updateGPSDisplay() {
+            const gpsBar = document.getElementById('gpsBar');
+            const gpsText = document.getElementById('gpsText');
+            const gpsCoords = document.getElementById('gpsCoords');
+            
+            if (gpsLatitude && gpsLongitude) {
+                gpsBar.style.display = 'flex';
+                gpsText.textContent = 'Location captured successfully';
+                gpsCoords.textContent = `Lat: ${gpsLatitude}, Long: ${gpsLongitude}`;
+                
+                // Store in responses
+                responses.gps_lat = gpsLatitude;
+                responses.gps_lng = gpsLongitude;
+            }
+        }
+
+        // ==========================================
+        // MICROPHONE PERMISSION HANDLING
+        // ==========================================
+        
+        async function requestMicrophonePermission() {
+            try {
+                // First try getUserMedia to trigger permission prompt
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                // Permission granted
+                micPermissionGranted = true;
+                stream.getTracks().forEach(track => track.stop()); // Stop immediately, we just needed permission
+                
+                document.getElementById('permissionOverlay').classList.remove('active');
+                
+                // If we were trying to record, start now
+                if (currentRecordingField) {
+                    startRecording(currentRecordingField);
+                }
+            } catch (err) {
+                console.error('Microphone permission denied:', err);
+                showMicError(currentRecordingField, getMicErrorMessage('permission_denied'));
+            }
+        }
+
+        function checkMicrophonePermission() {
+            // Check if we're in a secure context
+            if (!window.isSecureContext) {
+                showMicError(currentRecordingField, 'Microphone requires HTTPS. Please use a secure connection.');
+                return false;
+            }
+            
+            // Check if browser supports getUserMedia
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                showMicError(currentRecordingField, 'Voice input not supported in this browser. Please use Chrome or Edge.');
+                return false;
+            }
+            
+            return true;
+        }
 
         // ==========================================
         // SPEECH SYNTHESIS - FIXED WITH PROPER VOICE LOADING
@@ -968,6 +1165,11 @@
             // Stop speech synthesis
             if (window.speechSynthesis) {
                 window.speechSynthesis.cancel();
+            }
+            
+            // Stop any recording
+            if (isRecording) {
+                stopRecording();
             }
             
             // Reset state
@@ -1191,6 +1393,14 @@
             // Update instruction text
             document.getElementById('instructionText').textContent = CONFIG.INSTRUCTION_TEXT[lang];
             
+            // Update permission text based on language
+            const permTexts = {
+                'en': 'Please allow microphone access to use voice recording. This is needed for speech recognition.',
+                'ta': 'குரல் பதிவைப் பயன்படுத்த மைக்ரோஃபோன் அணுகலை அனுமதிக்கவும். இது பேச்சு அங்கீகாரத்திற்கு தேவைப்படுகிறது.',
+                'hi': 'वॉइस रिकॉर्डिंग का उपयोग करने के लिए कृपया माइक्रोफ़ोन एक्सेस की अनुमति दें। यह स्पीच रिकग्निशन के लिए आवश्यक है।'
+            };
+            document.getElementById('permissionText').textContent = permTexts[lang];
+            
             // Stop any speech
             stopAllAudio();
             
@@ -1198,8 +1408,11 @@
             document.getElementById('langSection').style.display = 'none';
             document.getElementById('loadingScreen').classList.add('active');
             
-            // Initialize speech synthesis
+            // Initialize speech
             await initSpeechSynthesis();
+            
+            // Start GPS capture
+            initGPS();
             
             // Load questions
             loadQuestions(lang);
@@ -1237,6 +1450,9 @@
             // Hide loading, show survey
             document.getElementById('loadingScreen').classList.remove('active');
             document.getElementById('surveyContainer').classList.add('active');
+            
+            // Show GPS bar
+            document.getElementById('gpsBar').style.display = 'flex';
             
             // Render all questions
             renderAllQuestions();
@@ -1303,28 +1519,39 @@
         }
 
         function createShortAnswerHTML(q) {
+            const micLabels = CONFIG.MIC_LABELS[currentLanguage];
+            
             return `
                 <div class="text-input-wrapper">
                     <input type="text" 
                            class="text-input" 
                            id="input-${q.id}" 
-                           placeholder="${q.placeholder || 'Type your answer here...'}"
+                           placeholder="${q.placeholder || getPlaceholderText()}"
                            oninput="saveText('${q.id}'); checkConditionalQuestions(); updateProgress();">
                 </div>
                 ${q.micRecord ? `
                     <div class="mic-section">
                         <button class="mic-btn" id="mic-${q.id}" onclick="toggleRecording('${q.id}')">
                             <i class="fas fa-microphone"></i>
-                            <span>Speak Answer</span>
+                            <span>${micLabels.speak}</span>
                         </button>
                         <div class="recording-status hidden" id="status-${q.id}">
                             <span class="recording-dot"></span>
-                            <span>Recording... Tap to stop</span>
+                            <span>${micLabels.recording}</span>
                         </div>
                         <div class="mic-error" id="error-${q.id}"></div>
                     </div>
                 ` : ''}
             `;
+        }
+
+        function getPlaceholderText() {
+            const placeholders = {
+                'en': 'Type your answer here...',
+                'ta': 'உங்கள் பதிலை இங்கே தட்டச்சு செய்யவும்...',
+                'hi': 'अपना जवाब यहां टाइप करें...'
+            };
+            return placeholders[currentLanguage] || placeholders['en'];
         }
 
         function createMultipleChoiceHTML(q) {
@@ -1431,9 +1658,43 @@
         }
 
         // ==========================================
-        // MICROPHONE - IMPROVED CROSS-BROWSER
+        // MICROPHONE - FIXED FOR MOBILE/DESKTOP WITH PERMISSION HANDLING
         // ==========================================
         
+        function getMicErrorMessage(errorType) {
+            const messages = {
+                'en': {
+                    'not-allowed': 'Microphone permission denied. Please allow access in browser settings.',
+                    'service-not-allowed': 'Speech recognition service not available. Please try again or type your answer.',
+                    'no-speech': 'No speech detected. Please speak clearly and try again.',
+                    'network': 'Network error. Please check your internet connection.',
+                    'audio-capture': 'Could not capture audio. Please check your microphone.',
+                    'permission_denied': 'Please allow microphone access to use voice recording.',
+                    'not_supported': 'Voice input not supported in this browser. Please use Chrome or Edge.'
+                },
+                'ta': {
+                    'not-allowed': 'மைக்ரோஃபோன் அனுமதி மறுக்கப்பட்டது. உலாவி அமைப்புகளில் அணுகலை அனுமதிக்கவும்.',
+                    'service-not-allowed': 'பேச்சு அங்கீகார சேவை கிடைக்கவில்லை. மீண்டும் முயற்சிக்கவும் அல்லது தட்டச்சு செய்யவும்.',
+                    'no-speech': 'பேச்சு கண்டறியப்படவில்லை. தெளிவாகப் பேசி மீண்டும் முயற்சிக்கவும்.',
+                    'network': 'நெட்வொர்க் பிழை. உங்கள் இணைய இணைப்பைச் சரிபார்க்கவும்.',
+                    'audio-capture': 'ஆடியோவைப் பிடிக்க முடியவில்லை. உங்கள் மைக்ரோஃபோனைச் சரிபார்க்கவும்.',
+                    'permission_denied': 'குரல் பதிவைப் பயன்படுத்த மைக்ரோஃபோன் அணுகலை அனுமதிக்கவும்.',
+                    'not_supported': 'இந்த உலாவியில் குரல் உள்ளீடு ஆதரிக்கப்படவில்லை. Chrome அல்லது Edge ஐப் பயன்படுத்தவும்.'
+                },
+                'hi': {
+                    'not-allowed': 'माइक्रोफ़ोन अनुमति अस्वीकृत। कृपया ब्राउज़र सेटिंग्स में एक्सेस की अनुमति दें।',
+                    'service-not-allowed': 'स्पीच रिकग्निशन सेवा उपलब्ध नहीं। कृपया फिर से प्रयास करें या टाइप करें।',
+                    'no-speech': 'कोई भाषण का पता नहीं चला। कृपया स्पष्ट रूप से बोलें और पुनः प्रयास करें।',
+                    'network': 'नेटवर्क त्रुटि। कृपया अपना इंटरनेट कनेक्शन जांचें।',
+                    'audio-capture': 'ऑडियो कैप्चर नहीं हो सका। कृपया अपना माइक्रोफ़ोन जांचें।',
+                    'permission_denied': 'वॉइस रिकॉर्डिंग के लिए कृपया माइक्रोफ़ोन एक्सेस की अनुमति दें।',
+                    'not_supported': 'इस ब्राउज़र में वॉइस इनपुट समर्थित नहीं। कृपया Chrome या Edge का उपयोग करें।'
+                }
+            };
+            
+            return messages[currentLanguage][errorType] || messages['en'][errorType] || errorType;
+        }
+
         async function toggleRecording(questionId) {
             if (isRecording) {
                 stopRecording();
@@ -1446,32 +1707,30 @@
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             
             if (!SpeechRecognition) {
-                showMicError(questionId, 'Speech recognition not supported in this browser. Please use Chrome or Edge.');
+                showMicError(questionId, getMicErrorMessage('not_supported'));
                 return;
             }
             
-            // Check if secure context
+            // Check secure context
             if (!window.isSecureContext) {
-                showMicError(questionId, 'Microphone requires HTTPS. Please use a secure connection.');
+                showMicError(questionId, 'HTTPS required for microphone access.');
                 return;
             }
             
-            // Request permission explicitly
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                stream.getTracks().forEach(track => track.stop()); // Stop immediately, just checking permission
-            } catch (err) {
-                console.error('Mic permission error:', err);
-                let msg = 'Microphone access denied.';
+            // Check/get microphone permission first
+            if (!micPermissionGranted) {
+                currentRecordingField = questionId;
                 
-                if (err.name === 'NotAllowedError') {
-                    msg = 'Please allow microphone access in your browser settings. Tap the lock icon in the address bar.';
-                } else if (err.name === 'NotFoundError') {
-                    msg = 'No microphone found. Please connect a microphone.';
+                // Try to get permission silently first
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    stream.getTracks().forEach(track => track.stop());
+                    micPermissionGranted = true;
+                } catch (err) {
+                    // Show permission overlay
+                    document.getElementById('permissionOverlay').classList.add('active');
+                    return;
                 }
-                
-                showMicError(questionId, msg);
-                return;
             }
             
             // Setup recognition
@@ -1483,16 +1742,21 @@
             
             currentRecordingField = questionId;
             
+            const micBtn = document.getElementById(`mic-${questionId}`);
+            const status = document.getElementById(`status-${questionId}`);
+            const micLabels = CONFIG.MIC_LABELS[currentLanguage];
+            
             recognition.onstart = function() {
                 isRecording = true;
                 hideMicError(questionId);
                 
-                const btn = document.getElementById(`mic-${questionId}`);
-                const status = document.getElementById(`status-${questionId}`);
-                
-                btn.classList.add('recording');
-                btn.innerHTML = '<i class="fas fa-stop"></i><span>Stop</span>';
-                status.classList.remove('hidden');
+                if (micBtn) {
+                    micBtn.classList.add('recording');
+                    micBtn.innerHTML = `<i class="fas fa-stop"></i><span>${micLabels.stop}</span>`;
+                }
+                if (status) {
+                    status.classList.remove('hidden');
+                }
             };
             
             recognition.onresult = function(event) {
@@ -1509,29 +1773,13 @@
             recognition.onerror = function(event) {
                 console.error('Speech recognition error:', event.error);
                 
-                let msg = 'Recording error: ';
-                switch(event.error) {
-                    case 'no-speech':
-                        msg = 'No speech detected. Please speak clearly and try again.';
-                        break;
-                    case 'audio-capture':
-                        msg = 'Could not capture audio. Please check your microphone.';
-                        break;
-                    case 'not-allowed':
-                        msg = 'Microphone access denied. Please check browser permissions.';
-                        break;
-                    case 'network':
-                        msg = 'Network error. Please check your internet connection.';
-                        break;
-                    case 'aborted':
-                        // User cancelled, no need to show error
-                        stopRecording();
-                        return;
-                    default:
-                        msg += event.error;
+                let errorType = event.error;
+                // Map error types to our messages
+                if (event.error === 'service-not-allowed' || event.error === 'not-allowed') {
+                    micPermissionGranted = false; // Reset permission state
                 }
                 
-                showMicError(questionId, msg);
+                showMicError(questionId, getMicErrorMessage(errorType));
                 stopRecording();
             };
             
@@ -1543,7 +1791,7 @@
                 recognition.start();
             } catch (err) {
                 console.error('Start error:', err);
-                showMicError(questionId, 'Could not start recording. Please try again.');
+                showMicError(questionId, getMicErrorMessage('service-not-allowed'));
             }
         }
 
@@ -1556,6 +1804,7 @@
             }
             
             isRecording = false;
+            const micLabels = CONFIG.MIC_LABELS[currentLanguage];
             
             if (currentRecordingField) {
                 const btn = document.getElementById(`mic-${currentRecordingField}`);
@@ -1563,7 +1812,7 @@
                 
                 if (btn) {
                     btn.classList.remove('recording');
-                    btn.innerHTML = '<i class="fas fa-microphone"></i><span>Speak Answer</span>';
+                    btn.innerHTML = `<i class="fas fa-microphone"></i><span>${micLabels.speak}</span>`;
                 }
                 if (status) {
                     status.classList.add('hidden');
@@ -1699,7 +1948,10 @@
                 action: 'submitResponse',
                 formData: {
                     ...responses,
-                    language: currentLanguage
+                    language: currentLanguage,
+                    gps_lat: gpsLatitude,
+                    gps_lng: gpsLongitude,
+                    submitted_at: new Date().toISOString()
                 }
             };
             
